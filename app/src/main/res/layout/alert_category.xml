@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/linearCategory"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="100dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="50dp"
+        android:text="Category"
+        android:textColor="@color/black"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/edtCategory"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_regular"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:inputType="textCapWords"
+        android:textColor="@color/black"
+        android:hint="Category Name"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/border_round"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Save"
+        android:textColor="@color/white"
+        />
+
+</LinearLayout>

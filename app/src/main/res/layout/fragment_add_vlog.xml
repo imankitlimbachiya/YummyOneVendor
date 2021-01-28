@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Signup.DocumentUploader">
+
+    <LinearLayout
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Back"
+            android:textSize="16sp"
+            android:textColor="#444444"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Upload VLOG"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/black"
+        android:textSize="21dp"
+        app:layout_constraintTop_toBottomOf="@+id/back" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHeading">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linearSelect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <FrameLayout
+                        android:id="@+id/background"
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/vlog_bg">
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/image1"-->
+<!--                            android:layout_width="125dp"-->
+<!--                            android:layout_height="125dp"-->
+<!--                            android:rotation="-30"-->
+<!--                            android:layout_marginEnd="80dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/vlog_bg"/>-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/image2"-->
+<!--                            android:layout_width="125dp"-->
+<!--                            android:layout_height="125dp"-->
+<!--                            android:rotation="25"-->
+<!--                            android:layout_marginStart="75dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/logo_icon"/>-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="130dp"-->
+<!--                            android:background="@color/white"-->
+<!--                            android:layout_marginTop="50dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_height="140dp">-->
+
+<!--                            <ImageView-->
+<!--                                android:id="@+id/image3"-->
+<!--                                android:layout_width="125dp"-->
+<!--                                android:layout_height="125dp"-->
+<!--                                android:src="@drawable/logo_icon"/>-->
+
+<!--                        </LinearLayout>-->
+
+
+                    </FrameLayout>
+
+
+                    <TextView
+                        android:id="@+id/text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="4dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:gravity="center"
+                        android:text="We have many yummy choices out there,
+Help our users decide what to eat. We’ll monetise your vlog
+when a user places an order
+"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearUpload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <VideoView
+                        android:id="@+id/Video_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_border"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Upload Vlog"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnSelect"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_border"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Select Video"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

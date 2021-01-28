@@ -1,0 +1,1188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:onClick="setupUI"
+    android:layout_height="match_parent"
+    tools:context="Signup.RegisterDetails">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:onClick="setupUI"
+    android:scrollbars="none"
+    tools:context=".Signup.RegisterDetails">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:onClick="setupUI"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/imgBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="24dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/back_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Back"
+                    android:textSize="16sp"
+                    android:textColor="#444444"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:fontFamily="@font/roboto_bold"
+                android:textSize="28sp"
+                android:text="Vendor Details"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="11dp"
+                android:background="#ffffff"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Help us understand your business"
+                android:textColor="#444444"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Comments : Account Under Review"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/imagerow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/l1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/one" />
+
+                    <TextView
+                        android:id="@+id/txtHeading1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Details"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/line1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/line" />
+
+                <LinearLayout
+                    android:id="@+id/l2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Documents"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/line2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/line" />
+
+                <LinearLayout
+                    android:id="@+id/l3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/three"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/three" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Approvals"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stage1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/txtCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="31dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/edtRestaurantName"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="9dp"
+                    android:paddingStart="14dp"
+                    android:textColorHint="@color/colorDarkgrey"
+                    android:hint="Eg : New Hotel"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/border_round"
+                    android:backgroundTint="#F2F2F2"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Address Line 1 "
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/edtAddressLine1"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:layout_marginTop="9dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/border_round"
+                    android:backgroundTint="#F2F2F2"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColorHint="@color/colorDarkgrey"
+                    android:hint="Eg : 170 Building"
+                    android:inputType="textPostalAddress"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Email (optional)"
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="9dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/border_round"
+                    android:backgroundTint="#F2F2F2"
+                    android:textColorHint="@color/colorDarkgrey"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="Eg : example@gmail.com"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Landmark"
+                    android:textColor="@color/colorLabel"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/edtAddressLine2"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="textPostalAddress"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="City/Town"
+                    android:textColor="@color/colorLabel"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/edtCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="Select Address"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="State"
+                    android:textColor="@color/colorLabel"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/edtState"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="Select Address"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Postal Code"
+                    android:textColor="@color/colorLabel"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/edtPostcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto_regular"
+                    android:hint="Select Address"
+                    android:inputType="number"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="21dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Open Time"
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/edtOpentime"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="9dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/border_round"
+                    android:backgroundTint="#F2F2F2"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColorHint="@color/colorDarkgrey"
+                    android:hint="Eg : HH:MM"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="21dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Close Time"
+                    android:textColor="@color/colorPrimary" />
+
+                <EditText
+                    android:id="@+id/edtClosetime"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="9dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/border_round"
+                    android:backgroundTint="#F2F2F2"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColorHint="@color/colorDarkgrey"
+                    android:hint="Eg : HH:MM"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginBottom="32dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginEnd="64dp"
+                        android:background="@drawable/border_round"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:text="Save"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stage2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/doc1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/initial"
+                    android:orientation="vertical"                  >
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.75"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="ID Proof of the User"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="Aadhar / Voter ID / PAN / Driver's\nLicense "
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/comments1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/r1"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/right_circle" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/doc2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/initial"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:padding="15dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.75"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Food License"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="FSSAI License"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/comments2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/r2"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/right_circle" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/doc3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/initial"
+                    android:orientation="vertical">
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:padding="15dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.75"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Business Documents"
+                                android:textColor="@color/black"
+                                android:textSize="16dp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="GST Certificate"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/comments3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/r3"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/right_circle" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/doc6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/initial"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:padding="15dp"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.75"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Business Documents"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="Registeration Certificate"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/comments6"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/r6"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/right_circle" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/doc4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/initial"
+                    android:orientation="vertical">
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:padding="15dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.75"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Restaurant Storefront"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="Upload a Image"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/comments4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/r4"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/right_circle" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/doc7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/initial"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.75"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="Bank Documents"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Passbook/Cheque/Statement"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/comments7"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/r7"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/right_circle" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/doc5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/initial"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:padding="15dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.75"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="Bank Details"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="Account Number / Name / IFSC"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/comments5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text=""
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/r5"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/right_circle" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginBottom="32dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnNext1"
+                        android:layout_width="245dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:alpha="0.5"
+                        android:background="@drawable/border_round"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:text="Next"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stage3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/back_button" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Bank Name"
+                    android:textColor="@color/colorLabel" />
+
+                <EditText
+                    android:id="@+id/edtBankName"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Account Holder Name"
+                    android:textColor="@color/colorLabel" />
+
+                <EditText
+                    android:id="@+id/edtHolderName"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Account Number"
+                    android:textColor="@color/colorLabel" />
+
+                <EditText
+                    android:id="@+id/edtAccountNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#ffffff"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="IFSC Code"
+                    android:textColor="@color/colorLabel" />
+
+                <EditText
+                    android:id="@+id/edtIfsc"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="32dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnNext2"
+                        android:layout_width="245dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/border_round"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:text="Next"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

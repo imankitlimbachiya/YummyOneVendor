@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/linear"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:weightSum="3"
+    android:gravity="center"
+    android:layout_marginTop="18dp"
+    android:layout_marginStart="18dp"
+    android:layout_marginEnd="18dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_weight="0.3">
+        <ImageView
+            android:id="@+id/indicator"
+            android:layout_width="55dp"
+            android:layout_height="55dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="#222222"
+            android:fontFamily="@font/roboto_regular"
+            android:text=""
+            />
+
+        <TextView
+            android:id="@+id/details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:text=""
+            android:visibility="gone"
+            android:textColor="#666666"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/qty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:gravity="right"
+            android:layout_gravity="center"
+            android:textColor="#1C1C1E"
+            android:fontFamily="@font/roboto_medium"
+            android:text=""
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:gravity="right"
+            android:layout_gravity="center"
+            android:textColor="#1C1C1E"
+            android:fontFamily="@font/roboto_medium"
+            android:text=""
+            />
+
+    </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/pushid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:visibility="gone"
+            android:textColor="@color/quantum_black_secondary_text"
+            android:fontFamily="@font/roboto_regular"
+            />
+
+
+
+    </LinearLayout>
+
+
