@@ -16,25 +16,21 @@ public class PaymentHistory extends Fragment {
 
     ImageView imgBack;
 
-
     public PaymentHistory() {
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_payment_history, container, false);
+        View v = inflater.inflate(R.layout.fragment_payment_history, container, false);
 
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             LinearLayout bottomnavigation = getActivity().findViewById(R.id.bottomnavigation);
             bottomnavigation.setVisibility(View.GONE);
         }
@@ -43,12 +39,11 @@ public class PaymentHistory extends Fragment {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity()!=null){
+                if (getActivity() != null) {
                     getActivity().onBackPressed();
                 }
             }
         });
-
 
         return v;
     }

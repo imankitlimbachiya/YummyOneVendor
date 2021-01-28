@@ -283,7 +283,7 @@
                     android:layout_marginEnd="16dp"
                     android:background="#ffffff"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="Email (optional)"
+                    android:text="Email"
                     android:textColor="@color/colorPrimary" />
 
                 <EditText
@@ -300,7 +300,7 @@
                     android:backgroundTint="#F2F2F2"
                     android:textColorHint="@color/colorDarkgrey"
                     android:fontFamily="@font/roboto_regular"
-                    android:hint="Eg : example@gmail.com"
+                    android:hint="Eg : example@gmail.com  (optional)"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />

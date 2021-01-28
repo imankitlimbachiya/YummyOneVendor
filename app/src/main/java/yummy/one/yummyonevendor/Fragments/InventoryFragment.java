@@ -60,31 +60,29 @@ public class InventoryFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private Session sessions;
     private Button btnCategory;
-    private String a="";
+    private String a = "";
     private Category category;
     EditText edtCategory;
     Button btnSave;
     BottomSheetDialog bottomSheetDialog;
     ArrayList<CategoryData> categoryData = new ArrayList<CategoryData>();
+
     public InventoryFragment() {
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_inventory, container, false);
+        View v = inflater.inflate(R.layout.fragment_inventory, container, false);
 
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             LinearLayout bottomnavigation = getActivity().findViewById(R.id.bottomnavigation);
             bottomnavigation.setVisibility(View.VISIBLE);
         }
@@ -130,18 +128,16 @@ public class InventoryFragment extends Fragment {
 //        });
 
 
-
-
         btnCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                 final EditText input = new EditText(getActivity());
                 input.setSingleLine();
                 input.setHint("Enter Category Name");
                 input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                 FrameLayout container1 = new FrameLayout(getActivity());
-                FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
                 params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
                 params.topMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
@@ -152,20 +148,19 @@ public class InventoryFragment extends Fragment {
                 alert.setView(container1);
                 alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        if(TextUtils.isEmpty(input.getText().toString())){
+                        if (TextUtils.isEmpty(input.getText().toString())) {
                             input.setError("Enter Category Name");
                             input.requestFocus();
                             return;
-                        }
-                        else{
+                        } else {
                             input.setError(null);
                         }
 
-                        a+=input.getText().toString()+",";
+                        a += input.getText().toString() + ",";
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         Map<String, Object> data = new HashMap<>();
                         data.put("ItemCategory", a);
-                        data.put(input.getText().toString(),0);
+                        data.put(input.getText().toString(), 0);
                         db.collection("Vendor").document(sessions.getusername()).set(data, SetOptions.merge());
                         input.setText("");
                     }
@@ -185,7 +180,7 @@ public class InventoryFragment extends Fragment {
         return v;
     }
 
-    public void loadData(){
+    public void loadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final DocumentReference docRef = db.collection("Vendor").document(sessions.getusername());
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -198,16 +193,16 @@ public class InventoryFragment extends Fragment {
                 }
 
                 if (snapshot != null && snapshot.exists()) {
-                    String temp=snapshot.get("ItemCategory").toString();
-                    a=temp;
+                    String temp = snapshot.get("ItemCategory").toString();
+                    a = temp;
                     categoryData.clear();
-                    if(!TextUtils.isEmpty(a)) {
+                    if (!TextUtils.isEmpty(a)) {
                         ArrayList<String> category1 = new ArrayList<String>(Arrays.asList(temp.split(",")));
-                        for(String a:category1){
-                            if(snapshot.contains(a))
-                                categoryData.add(new CategoryData(a,snapshot.get(a).toString()));
+                        for (String a : category1) {
+                            if (snapshot.contains(a))
+                                categoryData.add(new CategoryData(a, snapshot.get(a).toString()));
                             else
-                                categoryData.add(new CategoryData(a,"0"));
+                                categoryData.add(new CategoryData(a, "0"));
                         }
                         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -218,7 +213,6 @@ public class InventoryFragment extends Fragment {
                 }
             }
         });
-
 
 
     }

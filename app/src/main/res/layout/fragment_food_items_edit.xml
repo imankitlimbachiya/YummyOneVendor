@@ -52,7 +52,6 @@
 
             </LinearLayout>
 
-
             <TextView
                 android:id="@+id/txtCategoryName"
                 android:layout_width="wrap_content"
@@ -64,7 +63,6 @@
                 android:textSize="20sp" />
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -155,7 +153,6 @@
 
         </LinearLayout>
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -198,7 +195,6 @@
             android:text="Item Category "
             android:textColor="@color/black"
             android:textSize="13sp" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -249,7 +245,6 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
 
         <LinearLayout
@@ -296,9 +291,7 @@
                     android:textColorHint="@color/black"
                     android:textSize="16sp" />
 
-
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -337,11 +330,9 @@
                     android:textColorHint="@color/black"
                     android:textSize="16sp" />
 
-
             </LinearLayout>
 
         </LinearLayout>
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -353,7 +344,6 @@
             android:text="Type of Food"
             android:textColor="@color/colorLabel"
             android:textSize="13sp" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -478,7 +468,6 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent" />
 
-
         <TextView
             android:id="@+id/t3"
             android:layout_width="match_parent"
@@ -498,7 +487,6 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent" />
 
-
         <Button
             android:id="@+id/plus"
             android:layout_width="wrap_content"
@@ -516,7 +504,6 @@
             android:text="+ Add Item Customisation"
             android:textColor="@color/colorPrimary" />
 
-
         <EditText
             android:id="@+id/mrp"
             android:layout_width="match_parent"
@@ -533,7 +520,6 @@
             android:textSize="16sp"
             android:visibility="gone" />
 
-
         <Button
             android:id="@+id/submit"
             android:layout_width="match_parent"
@@ -541,7 +527,7 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="64dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/border_round"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/roboto_regular"
@@ -549,7 +535,20 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/Delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="@color/colorPrimary"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Delete"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

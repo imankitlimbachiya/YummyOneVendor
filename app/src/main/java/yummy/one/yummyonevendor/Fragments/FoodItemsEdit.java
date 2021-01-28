@@ -13,11 +13,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -42,6 +44,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -85,19 +88,19 @@ import static android.app.Activity.RESULT_OK;
 
 public class FoodItemsEdit extends Fragment {
 
-    private EditText name,details,mrp,price,cuisine;
-    private TextView stime,etime,txtCategoryName;
+    private EditText name, details, mrp, price, cuisine;
+    private TextView stime, etime, txtCategoryName;
     private Spinner itemcategory;
-    private RecyclerView r1,r2,r3;
-    private TextView t1,t2,t3;
-    private Button submit,plus,cusinesSave;
-    private ImageView image,add;
+    private RecyclerView r1, r2, r3;
+    private TextView t1, t2, t3;
+    private Button submit, plus, cusinesSave;
+    private ImageView image, add;
     private ProductsAdapter productsAdapter;
     private ProductsAdapter productsAdapter1;
     private ProductsAdapter productsAdapter2;
-    private ArrayList<Product> products=new ArrayList<Product>();
-    private ArrayList<Product> products1=new ArrayList<Product>();
-    private ArrayList<Product> products2=new ArrayList<Product>();
+    private ArrayList<Product> products = new ArrayList<Product>();
+    private ArrayList<Product> products1 = new ArrayList<Product>();
+    private ArrayList<Product> products2 = new ArrayList<Product>();
     private ArrayList<String> itemcategory1 = new ArrayList<String>();
     private String a;
     private BottomSheetDialog bottomSheetDialog;
@@ -114,18 +117,18 @@ public class FoodItemsEdit extends Fragment {
     private final int RESULT_CROP = 400;
     private StorageReference mstorageReference;
     private ProgressBar progressBar2;
-    private String path="No",cuisines1="";
+    private String path = "No", cuisines1 = "";
     private RadioGroup radioGroup;
-    private RadioButton veg,nonveg,vegan,egg;
+    private RadioButton veg, nonveg, vegan, egg;
 
-    private String pushid="";
+    private String pushid = "";
 
     private int mHour;
     private int mMinute;
-    double gtot=0;
+    double gtot = 0;
 
-    private ArrayList<Cuisines> cuisinename= new ArrayList<Cuisines>();
-    private ArrayList<Cuisines> selectedcusinenames= new ArrayList<Cuisines>();
+    private ArrayList<Cuisines> cuisinename = new ArrayList<Cuisines>();
+    private ArrayList<Cuisines> selectedcusinenames = new ArrayList<Cuisines>();
     CuisinesAdapter cuisinesAdapter;
 
     private Category1 category1000;
@@ -134,7 +137,6 @@ public class FoodItemsEdit extends Fragment {
     public FoodItemsEdit() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -147,54 +149,54 @@ public class FoodItemsEdit extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_food_items_edit, container, false);
+        View v = inflater.inflate(R.layout.fragment_food_items_edit, container, false);
 
 
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             LinearLayout bottomnavigation = getActivity().findViewById(R.id.bottomnavigation);
             bottomnavigation.setVisibility(View.GONE);
         }
 
 
-        name=v.findViewById(R.id.name);
-        details=v.findViewById(R.id.details);
-        mrp=v.findViewById(R.id.mrp);
-        price=v.findViewById(R.id.price);
-        image=v.findViewById(R.id.doc1);
-        stime=v.findViewById(R.id.stime);
-        etime=v.findViewById(R.id.etime);
-        plus=v.findViewById(R.id.plus);
-        txtCategoryName=v.findViewById(R.id.txtCategoryName);
-        itemcategory=v.findViewById(R.id.itemcategory);
-        r1=v.findViewById(R.id.r1);
-        r2=v.findViewById(R.id.r2);
-        r3=v.findViewById(R.id.r3);
-        t1=v.findViewById(R.id.t1);
-        t2=v.findViewById(R.id.t2);
-        t3=v.findViewById(R.id.t3);
-        submit=v.findViewById(R.id.submit);
-        add=v.findViewById(R.id.add);
-        radioGroup=v.findViewById(R.id.radioGroup);
-        veg=v.findViewById(R.id.veg);
-        nonveg=v.findViewById(R.id.nonveg);
-        cuisine=v.findViewById(R.id.cuisine);
-        vegan=v.findViewById(R.id.vegan);
-        egg=v.findViewById(R.id.egg);
+        name = v.findViewById(R.id.name);
+        details = v.findViewById(R.id.details);
+        mrp = v.findViewById(R.id.mrp);
+        price = v.findViewById(R.id.price);
+        image = v.findViewById(R.id.doc1);
+        stime = v.findViewById(R.id.stime);
+        etime = v.findViewById(R.id.etime);
+        plus = v.findViewById(R.id.plus);
+        txtCategoryName = v.findViewById(R.id.txtCategoryName);
+        itemcategory = v.findViewById(R.id.itemcategory);
+        r1 = v.findViewById(R.id.r1);
+        r2 = v.findViewById(R.id.r2);
+        r3 = v.findViewById(R.id.r3);
+        t1 = v.findViewById(R.id.t1);
+        t2 = v.findViewById(R.id.t2);
+        t3 = v.findViewById(R.id.t3);
+        submit = v.findViewById(R.id.submit);
+        add = v.findViewById(R.id.add);
+        radioGroup = v.findViewById(R.id.radioGroup);
+        veg = v.findViewById(R.id.veg);
+        nonveg = v.findViewById(R.id.nonveg);
+        cuisine = v.findViewById(R.id.cuisine);
+        vegan = v.findViewById(R.id.vegan);
+        egg = v.findViewById(R.id.egg);
 
-        session=new Session(getActivity());
+        session = new Session(getActivity());
 
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             LinearLayout bottomnavigation = (getActivity()).findViewById(R.id.bottomnavigation);
             bottomnavigation.setVisibility(View.GONE);
         }
 
-        mstorageReference= FirebaseStorage.getInstance().getReference();
+        mstorageReference = FirebaseStorage.getInstance().getReference();
 
         submit.setVisibility(View.VISIBLE);
 
         String aitemcategory = getArguments().getString("category");
 
-        txtCategoryName.setText("Add items to "+aitemcategory);
+        txtCategoryName.setText("Edit items to " + aitemcategory);
 
         t1.setVisibility(View.GONE);
         t2.setVisibility(View.GONE);
@@ -221,7 +223,7 @@ public class FoodItemsEdit extends Fragment {
                     public void onClick(DialogInterface dialog, int item) {
 
                         if (items[item].equals("Take Photo")) {
-                            if(getContext()!=null) {
+                            if (getContext() != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                                         && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
                                         != PackageManager.PERMISSION_GRANTED) {
@@ -241,11 +243,12 @@ public class FoodItemsEdit extends Fragment {
                 builder.show();
             }
         });
+
         LinearLayout back = v.findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity()!=null)
+                if (getActivity() != null)
                     getActivity().onBackPressed();
             }
         });
@@ -253,7 +256,7 @@ public class FoodItemsEdit extends Fragment {
         veg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
+                if (b) {
                     veg.setChecked(true);
                     nonveg.setChecked(false);
                     vegan.setChecked(false);
@@ -265,7 +268,7 @@ public class FoodItemsEdit extends Fragment {
         nonveg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
+                if (b) {
                     nonveg.setChecked(true);
                     veg.setChecked(false);
                     vegan.setChecked(false);
@@ -277,7 +280,7 @@ public class FoodItemsEdit extends Fragment {
         egg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
+                if (b) {
                     egg.setChecked(true);
                     nonveg.setChecked(false);
                     vegan.setChecked(false);
@@ -289,7 +292,7 @@ public class FoodItemsEdit extends Fragment {
         vegan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
+                if (b) {
                     vegan.setChecked(true);
                     nonveg.setChecked(false);
                     veg.setChecked(false);
@@ -305,35 +308,25 @@ public class FoodItemsEdit extends Fragment {
                 final Calendar c = Calendar.getInstance();
                 mHour = c.get(Calendar.HOUR_OF_DAY);
                 mMinute = c.get(Calendar.MINUTE);
-
                 // Launch Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                         new TimePickerDialog.OnTimeSetListener() {
-
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
                                 mHour = hourOfDay;
                                 mMinute = minute;
-                                String h="",m="";
-                                if (mHour>=0 && mHour<=9)
+                                String h = "", m = "";
+                                if (mHour >= 0 && mHour <= 9)
                                     h = "0" + hourOfDay;
                                 else
-                                    h = ""+ hourOfDay;
-
-                                if(mMinute>=0 && mMinute <=9)
-                                    m = "0" +minute;
+                                    h = "" + hourOfDay;
+                                if (mMinute >= 0 && mMinute <= 9)
+                                    m = "0" + minute;
                                 else
-                                    m =""+ minute;
-
-
+                                    m = "" + minute;
                                 stime.setText(h + ":" + m);
-
-
                             }
                         }, mHour, mMinute, true);
-
-
                 timePickerDialog.show();
             }
         });
@@ -345,67 +338,56 @@ public class FoodItemsEdit extends Fragment {
                 final Calendar c = Calendar.getInstance();
                 mHour = c.get(Calendar.HOUR_OF_DAY);
                 mMinute = c.get(Calendar.MINUTE);
-
                 // Launch Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                         new TimePickerDialog.OnTimeSetListener() {
-
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
                                 mHour = hourOfDay;
                                 mMinute = minute;
-                                String h="",m="";
-                                if (mHour>=0 && mHour<=9)
+                                String h = "", m = "";
+                                if (mHour >= 0 && mHour <= 9)
                                     h = "0" + hourOfDay;
                                 else
-                                    h = ""+ hourOfDay;
-
-                                if(mMinute>=0 && mMinute <=9)
-                                    m = "0" +minute;
+                                    h = "" + hourOfDay;
+                                if (mMinute >= 0 && mMinute <= 9)
+                                    m = "0" + minute;
                                 else
-                                    m =""+ minute;
-
-
+                                    m = "" + minute;
                                 etime.setText(h + ":" + m);
-
-
                             }
                         }, mHour, mMinute, true);
-
-
                 timePickerDialog.show();
             }
         });
 
-        if(!TextUtils.isEmpty(session.gettemp())){
+        if (!TextUtils.isEmpty(session.gettemp())) {
             name.setText(session.gettemp());
         }
 
-        if(getArguments()!=null){
+        if (getArguments() != null) {
             pushid = getArguments().getString("pushid");
         }
 
-        if(!TextUtils.isEmpty(pushid)){
+        if (!TextUtils.isEmpty(pushid)) {
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection("Vendor").document(session.getusername());
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                        String temp=documentSnapshot.get("ItemCategory").toString();
-                        a=temp;
+                    if (documentSnapshot.exists()) {
+                        String temp = documentSnapshot.get("ItemCategory").toString();
+                        a = temp;
                         itemcategory1 = new ArrayList<String>(Arrays.asList(temp.split(",")));
-                        if(getContext()!=null) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),R.layout.spinner, itemcategory1);
+                        if (getContext() != null) {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner, itemcategory1);
                             itemcategory.setAdapter(adapter);
                         }
-                    }
-                    else{
+                    } else {
                         itemcategory1.clear();
                         itemcategory1.add("Select");
-                        if(getContext()!=null) {
+                        if (getContext() != null) {
                             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner, itemcategory1);
                             itemcategory.setAdapter(adapter);
                         }
@@ -415,18 +397,17 @@ public class FoodItemsEdit extends Fragment {
                     docRef1.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(documentSnapshot.exists()){
+                            if (documentSnapshot.exists()) {
                                 name.setText(documentSnapshot.get("ItemName").toString());
                                 details.setText(documentSnapshot.get("ItemDescription").toString());
-                                if(documentSnapshot.contains("SellingPrice"))
+                                if (documentSnapshot.contains("SellingPrice"))
                                     price.setText(documentSnapshot.get("SellingPrice").toString());
                                 price.setText(documentSnapshot.get("MarkettingPrice").toString());
                                 stime.setText(documentSnapshot.get("STime").toString());
                                 etime.setText(documentSnapshot.get("ETime").toString());
                                 path = documentSnapshot.get("FoodImage").toString();
-
-                                if(documentSnapshot.contains("Cuisines")){
-                                    String a[]=documentSnapshot.get("Cuisines").toString().split(",");
+                                if (documentSnapshot.contains("Cuisines")) {
+                                    String a[] = documentSnapshot.get("Cuisines").toString().split(",");
                                     try {
                                         cuisines1 = "";
                                         String b = "";
@@ -436,15 +417,14 @@ public class FoodItemsEdit extends Fragment {
                                         }
                                         cuisine.setText(b);
                                         bottomSheetDialog1.dismiss();
-                                    }
-                                    catch (Exception e){
+                                    } catch (Exception e) {
                                         cuisine.setText("");
                                         bottomSheetDialog1.dismiss();
                                     }
                                 }
                                 RequestOptions requestOptions = new RequestOptions();
                                 requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                if(!path.equalsIgnoreCase("No")){
+                                if (!path.equalsIgnoreCase("No")) {
                                     Glide.with(getActivity())
                                             .load(path)
                                             .apply(requestOptions)
@@ -453,19 +433,16 @@ public class FoodItemsEdit extends Fragment {
 
                                 ArrayList<String> category2 = new ArrayList<String>(Arrays.asList(a.split(",")));
 
-                                if(category2.indexOf(documentSnapshot.get("ItemCategory").toString())>-1)
+                                if (category2.indexOf(documentSnapshot.get("ItemCategory").toString()) > -1)
                                     itemcategory.setSelection(category2.indexOf(documentSnapshot.get("ItemCategory").toString()));
 
-                                if(documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Veg")){
+                                if (documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Veg")) {
                                     veg.setChecked(true);
-                                }
-                                else  if(documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Non-Veg")){
+                                } else if (documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Non-Veg")) {
                                     nonveg.setChecked(true);
-                                }
-                                else  if(documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Vegan")){
+                                } else if (documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Vegan")) {
                                     vegan.setChecked(true);
-                                }
-                                else  if(documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Egg")){
+                                } else if (documentSnapshot.get("FoodType").toString().equalsIgnoreCase("Egg")) {
                                     egg.setChecked(true);
                                 }
 
@@ -477,14 +454,10 @@ public class FoodItemsEdit extends Fragment {
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 products2.add(new Product((document.get("Name").toString()), "\u20b9" + document.get("Price").toString()));
                                             }
-
                                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                             r3.setLayoutManager(mLayoutManager);
-
                                             productsAdapter2 = new ProductsAdapter(products2);
-
                                             r3.setAdapter(productsAdapter2);
-
                                             if (productsAdapter2.getItemCount() > 0) {
                                                 t3.setVisibility(View.VISIBLE);
                                             }
@@ -500,38 +473,31 @@ public class FoodItemsEdit extends Fragment {
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 products1.add(new Product((document.get("Name").toString()), "\u20b9" + document.get("Price").toString()));
                                             }
-
                                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                             r2.setLayoutManager(mLayoutManager);
-
                                             productsAdapter1 = new ProductsAdapter(products1);
-
                                             r2.setAdapter(productsAdapter1);
-
                                             if (productsAdapter1.getItemCount() > 0) {
                                                 t2.setVisibility(View.VISIBLE);
                                             }
                                         }
                                     }
                                 });
-
                             }
                         }
                     });
-
                 }
             });
         }
 
         itemcategory1.add("Select");
-        if(getContext()!=null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),R.layout.spinner, itemcategory1);
+        if (getContext() != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner, itemcategory1);
             itemcategory.setAdapter(adapter);
         }
 
-
-        bottomSheetDialog1=new BottomSheetDialog(getContext());
-        final View bottomSheetDialogView1=getLayoutInflater().inflate(R.layout.bottom_cuisines,null);
+        bottomSheetDialog1 = new BottomSheetDialog(getContext());
+        final View bottomSheetDialogView1 = getLayoutInflater().inflate(R.layout.bottom_cuisines, null);
         bottomSheetDialog1.setContentView(bottomSheetDialogView1);
         r1 = bottomSheetDialogView1.findViewById(R.id.r1);
         cusinesSave = bottomSheetDialogView1.findViewById(R.id.add);
@@ -568,12 +534,12 @@ public class FoodItemsEdit extends Fragment {
             @Override
             public void onClick(View view) {
                 selectedcusinenames = cuisinesAdapter.listofselectedactivites();
-                String a="";
-                cuisines1="";
+                String a = "";
+                cuisines1 = "";
                 for (int i = 0; i < selectedcusinenames.size(); i++) {
                     Cuisines cuisines = selectedcusinenames.get(i);
-                    a+="\u2022"+cuisines.Name+" ";
-                    cuisines1+=cuisines.Name+",";
+                    a += "\u2022" + cuisines.Name + " ";
+                    cuisines1 += cuisines.Name + ",";
                 }
                 cuisine.setText(a);
                 bottomSheetDialog1.dismiss();
@@ -585,30 +551,25 @@ public class FoodItemsEdit extends Fragment {
             @Override
             public void onClick(View view) {
                 BottomSheetDialog bottomSheetDialog1;
-                bottomSheetDialog1=new BottomSheetDialog(getContext());
-                final View bottomSheetDialogView=getActivity().getLayoutInflater().inflate(R.layout.bottom_subcategory,null);
+                bottomSheetDialog1 = new BottomSheetDialog(getContext());
+                final View bottomSheetDialogView = getActivity().getLayoutInflater().inflate(R.layout.bottom_subcategory, null);
                 bottomSheetDialog1.setContentView(bottomSheetDialogView);
-                RecyclerView recyclerView=bottomSheetDialogView.findViewById(R.id.recyclerview);
-                ImageView submit=bottomSheetDialogView.findViewById(R.id.submit);;
-                EditText categoryname=bottomSheetDialogView.findViewById(R.id.category);
-
-
+                RecyclerView recyclerView = bottomSheetDialogView.findViewById(R.id.recyclerview);
+                ImageView submit = bottomSheetDialogView.findViewById(R.id.submit);
+                EditText categoryname = bottomSheetDialogView.findViewById(R.id.category);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 DocumentReference docRef = db.collection("Vendor").document(session.getusername());
                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()){
-                            String temp=documentSnapshot.get("ItemCategory").toString();
-                            a=temp;
-
+                        if (documentSnapshot.exists()) {
+                            String temp = documentSnapshot.get("ItemCategory").toString();
+                            a = temp;
                             ArrayList<String> category1 = new ArrayList<String>(Arrays.asList(temp.split(",")));
-
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                             recyclerView.setLayoutManager(mLayoutManager);
                             category1000 = new Category1(category1);
                             recyclerView.setAdapter(category1000);
-
                         }
                     }
                 });
@@ -617,82 +578,67 @@ public class FoodItemsEdit extends Fragment {
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-
-                        if(TextUtils.isEmpty(categoryname.getText().toString())){
+                        if (TextUtils.isEmpty(categoryname.getText().toString())) {
                             categoryname.setError("Enter Category");
                             categoryname.requestFocus();
                             return;
                         }
-
-                        a+=categoryname.getText().toString()+",";
-
+                        a += categoryname.getText().toString() + ",";
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         Map<String, Object> data = new HashMap<>();
                         data.put("ItemCategory", a);
                         db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
-
                         categoryname.setText("");
                         DocumentReference docRef = db.collection("Vendor").document(session.getusername());
                         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if(documentSnapshot.exists()){
-                                    String temp=documentSnapshot.get("ItemCategory").toString();
-                                    a=temp;
-                                    a=temp;
-
+                                if (documentSnapshot.exists()) {
+                                    String temp = documentSnapshot.get("ItemCategory").toString();
+                                    a = temp;
+                                    a = temp;
                                     ArrayList<String> category1 = new ArrayList<String>(Arrays.asList(temp.split(",")));
-
                                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                     recyclerView.setLayoutManager(mLayoutManager);
                                     category1000 = new Category1(category1);
                                     recyclerView.setAdapter(category1000);
-
                                 }
                             }
-
                         });
-
                     }
                 });
-
-
-
                 bottomSheetDialog1.show();
-
             }
         });
 
         productsAdapter = new ProductsAdapter(products);
         productsAdapter1 = new ProductsAdapter(products1);
         productsAdapter2 = new ProductsAdapter(products2);
-        bottomSheetDialog=new BottomSheetDialog(getContext());
+        bottomSheetDialog = new BottomSheetDialog(getContext());
 
-        final View bottomSheetDialogView=getLayoutInflater().inflate(R.layout.bottom_portions,null);
+        final View bottomSheetDialogView = getLayoutInflater().inflate(R.layout.bottom_portions, null);
         bottomSheetDialog.setContentView(bottomSheetDialogView);
 
-        EditText addons=bottomSheetDialogView.findViewById(R.id.addons);
-        TextView label=bottomSheetDialogView.findViewById(R.id.label);
-        EditText payment=bottomSheetDialogView.findViewById(R.id.payment);
-        Button add=bottomSheetDialogView.findViewById(R.id.add);
+        EditText addons = bottomSheetDialogView.findViewById(R.id.addons);
+        TextView label = bottomSheetDialogView.findViewById(R.id.label);
+        EditText payment = bottomSheetDialogView.findViewById(R.id.payment);
+        Button add = bottomSheetDialogView.findViewById(R.id.add);
         Spinner type = bottomSheetDialogView.findViewById(R.id.type);
-        ArrayList<String> type1= new ArrayList<String>();
+        ArrayList<String> type1 = new ArrayList<String>();
         type1.add("Portions");
         type1.add("Addons");
 
-        if(getContext()!=null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),R.layout.spinner, type1);
+        if (getContext() != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner, type1);
             type.setAdapter(adapter);
         }
 
         type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==0){
+                if (i == 0) {
                     label.setText("Portion");
-                }
-                else{
+                } else {
                     label.setText("Add On");
                 }
             }
@@ -706,19 +652,19 @@ public class FoodItemsEdit extends Fragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(TextUtils.isEmpty(addons.getText().toString())){
+                if (TextUtils.isEmpty(addons.getText().toString())) {
                     addons.setError("Enter Quantity");
                     addons.requestFocus();
                     return;
                 }
 
-                if(TextUtils.isEmpty(payment.getText().toString())){
+                if (TextUtils.isEmpty(payment.getText().toString())) {
                     payment.setError("Enter Price");
                     payment.requestFocus();
                     return;
                 }
 
-                if(label.getText().toString().equalsIgnoreCase("portion")) {
+                if (label.getText().toString().equalsIgnoreCase("portion")) {
                     int temp = 0, position = 0;
                     for (int i = 0; i < productsAdapter1.getItemCount(); i++) {
                         Product product = products1.get(i);
@@ -740,7 +686,7 @@ public class FoodItemsEdit extends Fragment {
                     productsAdapter1 = new ProductsAdapter(products1);
 
                     r2.setAdapter(productsAdapter1);
-                    if(productsAdapter1.getItemCount()>0){
+                    if (productsAdapter1.getItemCount() > 0) {
                         t2.setVisibility(View.VISIBLE);
                     }
 
@@ -757,8 +703,7 @@ public class FoodItemsEdit extends Fragment {
                     }
 
                     bottomSheetDialog.dismiss();
-                }
-                else{
+                } else {
                     int temp = 0, position = 0;
                     for (int i = 0; i < productsAdapter2.getItemCount(); i++) {
                         Product product = products2.get(i);
@@ -781,7 +726,7 @@ public class FoodItemsEdit extends Fragment {
 
                     r3.setAdapter(productsAdapter2);
 
-                    if(productsAdapter2.getItemCount()>0){
+                    if (productsAdapter2.getItemCount() > 0) {
                         t3.setVisibility(View.VISIBLE);
                     }
                     addons.setText("");
@@ -802,7 +747,6 @@ public class FoodItemsEdit extends Fragment {
         });
 
 
-
         final CharSequence[] items = {"Add Portions", "Add Addons",
                 "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), AlertDialog.THEME_HOLO_LIGHT);
@@ -815,7 +759,7 @@ public class FoodItemsEdit extends Fragment {
 
                 if (items[item].equals("Add Portions")) {
                     //Adding Portions
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                     final EditText input = new EditText(getActivity());
                     final EditText input1 = new EditText(getActivity());
                     input.setSingleLine();
@@ -823,10 +767,10 @@ public class FoodItemsEdit extends Fragment {
                     input.setHint("Enter Portion Quantity");
                     input1.setHint("Enter Portion Price");
                     input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                    input1.setInputType(InputType.TYPE_CLASS_NUMBER| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    input1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     FrameLayout container1 = new FrameLayout(getActivity());
                     FrameLayout container2 = new FrameLayout(getActivity());
-                    FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
                     params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
                     params.topMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
@@ -845,13 +789,13 @@ public class FoodItemsEdit extends Fragment {
                     alert.setView(layout);
                     alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            if(TextUtils.isEmpty(input.getText().toString())){
+                            if (TextUtils.isEmpty(input.getText().toString())) {
                                 input.setError("Enter Quantity");
                                 input.requestFocus();
                                 return;
                             }
 
-                            if(TextUtils.isEmpty(input1.getText().toString())){
+                            if (TextUtils.isEmpty(input1.getText().toString())) {
                                 input1.setError("Enter Price");
                                 input1.requestFocus();
                                 return;
@@ -878,7 +822,7 @@ public class FoodItemsEdit extends Fragment {
                             productsAdapter1 = new ProductsAdapter(products1);
 
                             r2.setAdapter(productsAdapter1);
-                            if(productsAdapter1.getItemCount()>0){
+                            if (productsAdapter1.getItemCount() > 0) {
                                 t2.setVisibility(View.VISIBLE);
                             }
 
@@ -905,10 +849,9 @@ public class FoodItemsEdit extends Fragment {
                     });
 
                     alert.show();
-                }
-                else if (items[item].equals("Add Addons")) {
+                } else if (items[item].equals("Add Addons")) {
                     //Adding Addons
-                    final AlertDialog.Builder alert1 = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
+                    final AlertDialog.Builder alert1 = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                     final EditText input2 = new EditText(getActivity());
                     final EditText input3 = new EditText(getActivity());
                     input2.setSingleLine();
@@ -916,10 +859,10 @@ public class FoodItemsEdit extends Fragment {
                     input2.setHint("Enter Addons Quantity");
                     input3.setHint("Enter Addons Price");
                     input2.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                    input3.setInputType(InputType.TYPE_CLASS_NUMBER| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    input3.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     FrameLayout container3 = new FrameLayout(getActivity());
                     FrameLayout container4 = new FrameLayout(getActivity());
-                    FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
                     params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
                     params.topMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
@@ -928,24 +871,21 @@ public class FoodItemsEdit extends Fragment {
                     input3.setLayoutParams(params);
                     container3.addView(input2);
                     container4.addView(input3);
-
                     LinearLayout layout1 = new LinearLayout(getActivity());
                     layout1.setOrientation(LinearLayout.VERTICAL);
                     layout1.addView(container3);
                     layout1.addView(container4);
-
                     alert1.setTitle("Addons");
                     alert1.setView(layout1);
                     alert1.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-
-                            if(TextUtils.isEmpty(input2.getText().toString())){
+                            if (TextUtils.isEmpty(input2.getText().toString())) {
                                 input2.setError("Enter Quantity");
                                 input2.requestFocus();
                                 return;
                             }
 
-                            if(TextUtils.isEmpty(input3.getText().toString())){
+                            if (TextUtils.isEmpty(input3.getText().toString())) {
                                 input3.setError("Enter Price");
                                 input3.requestFocus();
                                 return;
@@ -965,15 +905,12 @@ public class FoodItemsEdit extends Fragment {
                             else
                                 products2.set(position, new Product(input2.getText().toString(), "\u20b9" + input3.getText().toString()));
 
-
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                             r3.setLayoutManager(mLayoutManager);
-
                             productsAdapter2 = new ProductsAdapter(products2);
-
                             r3.setAdapter(productsAdapter2);
 
-                            if(productsAdapter2.getItemCount()>0){
+                            if (productsAdapter2.getItemCount() > 0) {
                                 t3.setVisibility(View.VISIBLE);
                             }
                             input2.setText("");
@@ -990,17 +927,13 @@ public class FoodItemsEdit extends Fragment {
                             dialog.dismiss();
                         }
                     });
-
                     alert1.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             dialog.dismiss();
-
                         }
                     });
-
                     alert1.show();
-                }
-                else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
             }
@@ -1013,57 +946,57 @@ public class FoodItemsEdit extends Fragment {
             }
         });
 
-        payment.setFilters(new InputFilter[] {new AddFood.DecimalDigitsInputFilter(10,2)});
-        price.setFilters(new InputFilter[] {new AddFood.DecimalDigitsInputFilter(10,2)});
-        mrp.setFilters(new InputFilter[] {new AddFood.DecimalDigitsInputFilter(10,2)});
+        payment.setFilters(new InputFilter[]{new AddFood.DecimalDigitsInputFilter(10, 2)});
+        price.setFilters(new InputFilter[]{new AddFood.DecimalDigitsInputFilter(10, 2)});
+        mrp.setFilters(new InputFilter[]{new AddFood.DecimalDigitsInputFilter(10, 2)});
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(name.getText().toString())){
+                if (TextUtils.isEmpty(name.getText().toString())) {
                     name.setError("Enter Item Name");
                     name.requestFocus();
                     return;
                 }
 
-                if (TextUtils.isEmpty(price.getText().toString())){
+                if (TextUtils.isEmpty(price.getText().toString())) {
                     price.setError("Enter Price");
                     price.requestFocus();
                     return;
                 }
 
-                if (TextUtils.isEmpty(details.getText().toString())){
+                if (TextUtils.isEmpty(details.getText().toString())) {
                     details.setError("Enter Item Details");
                     details.requestFocus();
                     return;
                 }
 
-                int count=0;
-                String selection="";
-                if(veg.isChecked()){
+                int count = 0;
+                String selection = "";
+                if (veg.isChecked()) {
                     count++;
-                    selection="Veg";
+                    selection = "Veg";
                 }
-                if(nonveg.isChecked()) {
+                if (nonveg.isChecked()) {
                     count++;
                     selection = "NonVeg";
                 }
-                if(egg.isChecked()) {
+                if (egg.isChecked()) {
                     count++;
                     selection = "Egg";
                 }
-                if(vegan.isChecked()) {
+                if (vegan.isChecked()) {
                     count++;
                     selection = "Vegan";
                 }
 
-                if(stime.getText().toString().equals("HH:MM")){
-                    Toast.makeText(getContext(),"Select Start Time of Item Availablity",Toast.LENGTH_LONG).show();
+                if (stime.getText().toString().equals("HH:MM")) {
+                    Toast.makeText(getContext(), "Select Start Time of Item Availablity", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                if(etime.getText().toString().equals("HH:MM")){
-                    Toast.makeText(getContext(),"Select End Time of Item Availablity",Toast.LENGTH_LONG).show();
+                if (etime.getText().toString().equals("HH:MM")) {
+                    Toast.makeText(getContext(), "Select End Time of Item Availablity", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -1071,19 +1004,19 @@ public class FoodItemsEdit extends Fragment {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 DocumentReference db1 = db.collection("Vendor").document(session.getusername()).collection("Products").document(pushid);
                 Map<String, Object> user = new HashMap<>();
-                user.put("PushId",pushid);
-                user.put("ItemName",name.getText().toString());
-                user.put("ItemDescription",details.getText().toString());
-                user.put("FoodType",selection);
-                user.put("ItemCategory",itemcategory.getSelectedItem().toString());
-                user.put("SellingPrice",price.getText().toString());
-                user.put("MarkettingPrice",price.getText().toString());
-                user.put("Cuisines",cuisines1);
-                user.put("STime",stime.getText().toString());
-                user.put("ETime",etime.getText().toString());
-                user.put("ApprovalStatus","Pending");
-                user.put("Status","Active");
-                user.put("FoodImage",path);
+                user.put("PushId", pushid);
+                user.put("ItemName", name.getText().toString());
+                user.put("ItemDescription", details.getText().toString());
+                user.put("FoodType", selection);
+                user.put("ItemCategory", itemcategory.getSelectedItem().toString());
+                user.put("SellingPrice", price.getText().toString());
+                user.put("MarkettingPrice", price.getText().toString());
+                user.put("Cuisines", cuisines1);
+                user.put("STime", stime.getText().toString());
+                user.put("ETime", etime.getText().toString());
+                user.put("ApprovalStatus", "Pending");
+                user.put("Status", "Active");
+                user.put("FoodImage", path);
 
                 CollectionReference docRef1 = db.collection("Vendor")
                         .document(session.getusername())
@@ -1125,31 +1058,31 @@ public class FoodItemsEdit extends Fragment {
                             Product product = products1.get(i);
                             String a = db1.collection("Portions").document().getId();
                             Map<String, Object> user1 = new HashMap<>();
-                            user1.put("PushId",a);
-                            user1.put("Name",product.PushId);
-                            user1.put("Price",product.Name.substring(1));
+                            user1.put("PushId", a);
+                            user1.put("Name", product.PushId);
+                            user1.put("Price", product.Name.substring(1));
                             db1.collection("Portions").document(a).set(user1);
-                            portionaarray[i] = product.PushId+","+product.Name.substring(1);
+                            portionaarray[i] = product.PushId + "," + product.Name.substring(1);
                         }
 
                         for (int i = 0; i < productsAdapter2.getItemCount(); i++) {
                             Product product = products2.get(i);
                             String a = db1.collection("Addons").document().getId();
                             Map<String, Object> user1 = new HashMap<>();
-                            user1.put("PushId",a);
-                            user1.put("Name",product.PushId);
-                            user1.put("Price",product.Name.substring(1));
+                            user1.put("PushId", a);
+                            user1.put("Name", product.PushId);
+                            user1.put("Price", product.Name.substring(1));
                             db1.collection("Addons").document(a).set(user1);
-                            addonsarray[i] = product.PushId+","+product.Name.substring(1);
+                            addonsarray[i] = product.PushId + "," + product.Name.substring(1);
                         }
 
-                        user.put("Addons",Arrays.asList(addonsarray));
-                        user.put("Portions",Arrays.asList(portionaarray));
+                        user.put("Addons", Arrays.asList(addonsarray));
+                        user.put("Portions", Arrays.asList(portionaarray));
                         db1.set(user);
 
-                        if(getContext()!=null) {
-                            final CharSequence[] items = {"Contact Support","Cancel"};
-                            final AlertDialog.Builder alert = new AlertDialog.Builder(getContext(),AlertDialog.THEME_HOLO_LIGHT);
+                        if (getContext() != null) {
+                            final CharSequence[] items = {"Contact Support", "Cancel"};
+                            final AlertDialog.Builder alert = new AlertDialog.Builder(getContext(), AlertDialog.THEME_HOLO_LIGHT);
                             final EditText input = new EditText(getContext());
                             alert.setTitle("Congrats!");
                             alert.setMessage("Item Added Successfully!");
@@ -1157,7 +1090,7 @@ public class FoodItemsEdit extends Fragment {
                             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     dialog.dismiss();
-                                    if(getActivity()!=null)
+                                    if (getActivity() != null)
                                         getActivity().onBackPressed();
                                 }
                             });
@@ -1165,7 +1098,7 @@ public class FoodItemsEdit extends Fragment {
                         }
 
                         session.settemp("");
-                        if(getActivity()!=null)
+                        if (getActivity() != null)
                             getActivity().onBackPressed();
                     }
                 });
@@ -1183,7 +1116,7 @@ public class FoodItemsEdit extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
 
@@ -1215,7 +1148,7 @@ public class FoodItemsEdit extends Fragment {
             if (imageHoldUri != null) {
                 final Date c = Calendar.getInstance().getTime();
                 System.out.println("Current time => " + c);
-                StorageReference riversRef = mstorageReference.child("FoodItems/" +c + ".jpg");
+                StorageReference riversRef = mstorageReference.child("FoodItems/" + c + ".jpg");
                 final ProgressDialog progressDialog = new ProgressDialog(getContext());
                 progressDialog.setTitle("Updating....!");
                 progressDialog.show();
@@ -1227,14 +1160,14 @@ public class FoodItemsEdit extends Fragment {
                                 // Get a URL to the uploaded content
                                 StorageReference storageRef = FirebaseStorage.getInstance().getReference();
                                 final String[] u = new String[1];
-                                storageRef.child("FoodItems/" +c + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                storageRef.child("FoodItems/" + c + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         u[0] = uri.toString();
-                                        path=u[0];
+                                        path = u[0];
                                         RequestOptions requestOptions = new RequestOptions();
                                         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if(getContext()!=null)
+                                        if (getContext() != null)
                                             Glide.with(getContext()).load(path).apply(requestOptions).into(image);
 
                                     }
@@ -1265,8 +1198,7 @@ public class FoodItemsEdit extends Fragment {
             } else {
                 Toast.makeText(getContext(), "File Path Null", Toast.LENGTH_SHORT).show();
             }
-        }
-        else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
 
 
             imageHoldUri = imageUri;
@@ -1296,7 +1228,7 @@ public class FoodItemsEdit extends Fragment {
                                             path = u[0];
                                             RequestOptions requestOptions = new RequestOptions();
                                             requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                            if(getContext()!=null)
+                                            if (getContext() != null)
                                                 Glide.with(getContext()).load(path).apply(requestOptions).into(image);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -1331,15 +1263,15 @@ public class FoodItemsEdit extends Fragment {
 
         Pattern mPattern;
 
-        public DecimalDigitsInputFilter(int digitsBeforeZero,int digitsAfterZero) {
-            mPattern=Pattern.compile("[0-9]{0," + (digitsBeforeZero-1) + "}+((\\.[0-9]{0," + (digitsAfterZero-1) + "})?)||(\\.)?");
+        public DecimalDigitsInputFilter(int digitsBeforeZero, int digitsAfterZero) {
+            mPattern = Pattern.compile("[0-9]{0," + (digitsBeforeZero - 1) + "}+((\\.[0-9]{0," + (digitsAfterZero - 1) + "})?)||(\\.)?");
         }
 
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
-            Matcher matcher=mPattern.matcher(dest);
-            if(!matcher.matches())
+            Matcher matcher = mPattern.matcher(dest);
+            if (!matcher.matches())
                 return "";
             return null;
         }

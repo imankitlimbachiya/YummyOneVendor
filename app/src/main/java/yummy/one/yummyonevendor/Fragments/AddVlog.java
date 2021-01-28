@@ -106,7 +106,7 @@ import static android.app.Activity.RESULT_OK;
 public class AddVlog extends Fragment {
 
 
-    Button btnUpload,btnSelect;
+    Button btnUpload, btnSelect;
 
     private VideoView videoView;
     private Uri videoUri;
@@ -115,9 +115,9 @@ public class AddVlog extends Fragment {
     private Session session;
     private LinearLayout back;
     private FrameLayout background;
-    private LinearLayout linearSelect,linearUpload;
+    private LinearLayout linearSelect, linearUpload;
     private RecyclerView recyclerView;
-    private ImageView image1,image2;
+    private ImageView image1, image2;
 
     private static final int PICK_VIDEO_REQUEST = 1;
 
@@ -131,14 +131,12 @@ public class AddVlog extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_add_vlog, container, false);
+        View v = inflater.inflate(R.layout.fragment_add_vlog, container, false);
 
         btnUpload = v.findViewById(R.id.btnUpload);
         btnSelect = v.findViewById(R.id.btnSelect);
@@ -148,9 +146,9 @@ public class AddVlog extends Fragment {
 //        image1 = v.findViewById(R.id.image1);
 //        image2 = v.findViewById(R.id.image2);
 
-        back=v.findViewById(R.id.back);
-        background=v.findViewById(R.id.background);
-        videoView=v.findViewById(R.id.Video_view);
+        back = v.findViewById(R.id.back);
+        background = v.findViewById(R.id.background);
+        videoView = v.findViewById(R.id.Video_view);
 
         session = new Session(getActivity());
 
@@ -158,7 +156,7 @@ public class AddVlog extends Fragment {
         linearUpload.setVisibility(View.GONE);
         loadcategories();
 
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             LinearLayout bottomnavigation = getActivity().findViewById(R.id.bottomnavigation);
             bottomnavigation.setVisibility(View.GONE);
         }
@@ -166,7 +164,7 @@ public class AddVlog extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity()!=null)
+                if (getActivity() != null)
                     getActivity().onBackPressed();
             }
         });
@@ -199,7 +197,7 @@ public class AddVlog extends Fragment {
         return v;
     }
 
-    private  void ChooseVideo(){
+    private void ChooseVideo() {
         requestMultiplePermissions();
     }
 
@@ -226,17 +224,18 @@ public class AddVlog extends Fragment {
             Cursor returnCursor = getActivity().getContentResolver().query(videoUri, null, null, null, null);
             int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
             returnCursor.moveToFirst();
-            long a=returnCursor.getLong(sizeIndex);
+            long a = returnCursor.getLong(sizeIndex);
 
-            if((a/1024)/1024>30){
-                Toast.makeText(getContext(),"Video Size is greather than 30 MB",Toast.LENGTH_SHORT).show();
+            if ((a / 1024) / 1024 > 30) {
+                Toast.makeText(getContext(), "Video Size is greather than 30 MB", Toast.LENGTH_SHORT).show();
                 background.setVisibility(View.VISIBLE);
                 videoView.setVisibility(View.GONE);
                 btnUpload.setVisibility(View.GONE);
                 btnSelect.setVisibility(View.VISIBLE);
             }
 
-        }}
+        }
+    }
 
     private String getFileExtension(Uri videoUri) {
         ContentResolver cR = getActivity().getContentResolver();
@@ -246,7 +245,7 @@ public class AddVlog extends Fragment {
 
     private void UploadVideo() {
 
-        if (videoUri != null){
+        if (videoUri != null) {
             StorageReference reference = mStorageRef.child(session.getusername());
 
 
@@ -268,7 +267,7 @@ public class AddVlog extends Fragment {
                                     String url = uri.toString();
 
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                    String id= db.collection("Videos").document().getId();
+                                    String id = db.collection("Videos").document().getId();
                                     DocumentReference db1 = db.collection("Videos").document(id);
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("Address", "Active");
@@ -276,10 +275,10 @@ public class AddVlog extends Fragment {
                                     data.put("City", "Active");
                                     data.put("Dp", session.getpp());
                                     data.put("Likes", 0);
-                                    data.put("Location", new GeoPoint(12.0,13.0));
+                                    data.put("Location", new GeoPoint(12.0, 13.0));
                                     data.put("Name", session.getname());
                                     data.put("StoreName", session.getstorename());
-                                    data.put("Pushid",id);
+                                    data.put("Pushid", id);
                                     data.put("Status", "Pending");
                                     data.put("Url", url);
                                     data.put("Userid", session.getusername());
@@ -292,7 +291,7 @@ public class AddVlog extends Fragment {
 
                                     for (int i = 0; i < subCategoryAdapter.getItemCount(); i++) {
                                         Sub subCategory = subcategory.get(i);
-                                        if(!subCategory.Image.equals("New")) {
+                                        if (!subCategory.Image.equals("New")) {
                                             String a = db1.collection("FoodItems").document().getId();
                                             Map<String, Object> user1 = new HashMap<>();
                                             user1.put("PushId", a);
@@ -315,11 +314,10 @@ public class AddVlog extends Fragment {
                                                             .collection("VideoTemp")
                                                             .document(document.getId()).delete();
                                                 }
-                                                if(getActivity()!=null)
+                                                if (getActivity() != null)
                                                     getActivity().onBackPressed();
-                                            }
-                                            else {
-                                                if(getActivity()!=null)
+                                            } else {
+                                                if (getActivity() != null)
                                                     getActivity().onBackPressed();
                                             }
                                         }
@@ -330,13 +328,12 @@ public class AddVlog extends Fragment {
                             });
 
 
-
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -348,8 +345,8 @@ public class AddVlog extends Fragment {
                     });
 
 
-        }else {
-            Toast.makeText(getContext(),"No file selected",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "No file selected", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -395,10 +392,10 @@ public class AddVlog extends Fragment {
                 .check();
     }
 
-    public void loadcategories(){
+    public void loadcategories() {
 
         subcategory.clear();
-        subCategoryAdapter=new SubCategory(subcategory);
+        subCategoryAdapter = new SubCategory(subcategory);
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -412,25 +409,24 @@ public class AddVlog extends Fragment {
                         if (e != null) {
                             return;
                         }
-                        if(value.isEmpty()){
+                        if (value.isEmpty()) {
                             subcategory.clear();
-                            subcategory.add(new Sub("New","New","New"));
-                            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(),3);
+                            subcategory.add(new Sub("New", "New", "New"));
+                            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 3);
                             recyclerView.setLayoutManager(mLayoutManager);
                             subCategoryAdapter = new SubCategory(subcategory);
                             recyclerView.setAdapter(subCategoryAdapter);
                             recyclerView.setVisibility(View.VISIBLE);
-                        }
-                        else {
+                        } else {
                             subcategory.clear();
                             for (QueryDocumentSnapshot document : value) {
-                                if(document.contains("ItemName")&&document.contains("FoodImage"))
+                                if (document.contains("ItemName") && document.contains("FoodImage"))
                                     subcategory.add(new Sub(document.get("ItemName").toString(),
                                             document.getId(),
                                             document.get("FoodImage").toString()));
                             }
-                            subcategory.add(new Sub("New","New","New"));
-                            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(),3);
+                            subcategory.add(new Sub("New", "New", "New"));
+                            GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 3);
                             recyclerView.setLayoutManager(mLayoutManager);
                             subCategoryAdapter = new SubCategory(subcategory);
                             recyclerView.setAdapter(subCategoryAdapter);

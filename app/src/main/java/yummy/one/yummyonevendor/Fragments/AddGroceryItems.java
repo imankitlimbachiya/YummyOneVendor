@@ -12,11 +12,9 @@ import yummy.one.yummyonevendor.R;
 
 public class AddGroceryItems extends Fragment {
 
-
     public AddGroceryItems() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,10 +22,9 @@ public class AddGroceryItems extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_add_grocery_items, container, false);
+        View v = inflater.inflate(R.layout.fragment_add_grocery_items, container, false);
         return v;
     }
 }

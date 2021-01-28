@@ -36,29 +36,28 @@ public class Category extends RecyclerView.Adapter<Category.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View v=(View) LayoutInflater.from(parent.getContext()).inflate(R.layout.category_row,parent,false);
+        View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.category_row, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final Category.ViewHolder holder, final int position) {
 
-        CategoryData data=category.get(position);
+        CategoryData data = category.get(position);
 
         session = new Session(holder.view.getContext());
 
         holder.txtName.setText(data.Name);
-        holder.txtNumber.setText(data.Count+" food items");
+        holder.txtNumber.setText(data.Count + " food items");
 
         holder.linearRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity mainActivity=(MainActivity) holder.view.getContext();
+                MainActivity mainActivity = (MainActivity) holder.view.getContext();
                 Fragment fragment = new FoodItemsFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("category",holder.txtName.getText().toString());
-                bundle.putString("index",""+position);
+                bundle.putString("category", holder.txtName.getText().toString());
+                bundle.putString("index", "" + position);
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
                 fragmentManager.beginTransaction()
@@ -66,7 +65,6 @@ public class Category extends RecyclerView.Adapter<Category.ViewHolder> {
                         .replace(R.id.frame_container, fragment).commit();
             }
         });
-
     }
 
     @Override
@@ -74,27 +72,27 @@ public class Category extends RecyclerView.Adapter<Category.ViewHolder> {
         return category.size();
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
         public final View view;
 
-        TextView txtName,txtNumber;
+        TextView txtName, txtNumber;
         LinearLayout linearRow;
 
         public ViewHolder(View mView) {
             super(mView);
             this.view = mView;
-            txtName=mView.findViewById(R.id.txtName);
-            txtNumber=mView.findViewById(R.id.txtNumber);
-            linearRow=mView.findViewById(R.id.linearRow);
-        }
 
+            txtName = mView.findViewById(R.id.txtName);
+            txtNumber = mView.findViewById(R.id.txtNumber);
+            linearRow = mView.findViewById(R.id.linearRow);
+        }
 
         @Override
         public void onClick(View v) {
+
         }
     }
-
 }
 
 

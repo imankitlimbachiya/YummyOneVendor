@@ -244,23 +244,17 @@ public class ProfileFragment extends Fragment {
         imgProfilepic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence[] items = {"Take Photo", "Choose from Library",
-                        "Cancel"};
+                final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), AlertDialog.THEME_HOLO_LIGHT);
                 builder.setTitle("Add Photo!");
-
                 //SET ITEMS AND THERE LISTENERS
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-
                         if (items[item].equals("Take Photo")) {
                             if (getContext() != null) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
-                                        != PackageManager.PERMISSION_GRANTED) {
-                                    requestPermissions(new String[]{Manifest.permission.CAMERA},
-                                            REQUEST_CAMERA_ACCESS_PERMISSION);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_ACCESS_PERMISSION);
                                 } else {
                                     cameraIntent();
                                 }
@@ -347,19 +341,34 @@ public class ProfileFragment extends Fragment {
         linearRow7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                session.setvendorname("");
-                session.setname("");
-                session.setapprovalstatus("");
-                session.setnumber("");
-                session.setcategory("");
-                session.setusername("");
-                session.setaddress("");
-                session.setstate("");
-                session.setcity("");
-                session.setpincode("");
-                session.setloc("");
-                Intent intent = new Intent(getActivity(), Login.class);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Logout");
+                builder.setMessage("Are you sure want to logout ?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        session.setvendorname("");
+                        session.setname("");
+                        session.setapprovalstatus("");
+                        session.setnumber("");
+                        session.setcategory("");
+                        session.setusername("");
+                        session.setaddress("");
+                        session.setstate("");
+                        session.setcity("");
+                        session.setpincode("");
+                        session.setloc("");
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(), Login.class);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
 
@@ -369,15 +378,12 @@ public class ProfileFragment extends Fragment {
     public void getVideos() {
         video.clear();
         videosAdapter = new VideosAdapter(video);
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Videos")
                 .whereEqualTo("Userid", session.getusername())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
                             return;
                         }
@@ -386,7 +392,8 @@ public class ProfileFragment extends Fragment {
                         } else {
                             video.clear();
                             for (QueryDocumentSnapshot document : value) {
-                                if (document.contains("Url") && document.contains("Name") && document.contains("StoreName") && document.contains("Userid"))
+                                if (document.contains("Url") && document.contains("Name") && document.contains("StoreName")
+                                        && document.contains("Userid"))
                                     video.add(new Video(document.get("Url").toString(),
                                             document.get("Name").toString(),
                                             document.get("StoreName").toString(),
@@ -408,10 +415,9 @@ public class ProfileFragment extends Fragment {
         requestMultiplePermissions();
     }
 
-
     private void galleryIntent() {
-        //CHOOSE IMAGE FROM GALLERY
-//        Log.d("gola", "entered here");
+        // CHOOSE IMAGE FROM GALLERY
+        // Log.d("gola", "entered here");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_CODE);
@@ -420,13 +426,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         //SAVE URI FROM GALLERY
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             imageHoldUri = data.getData();
             if (imageHoldUri != null) {
                 final Date c = Calendar.getInstance().getTime();
-
                 StorageReference riversRef = mstorageReference.child("Profile/" + session.getusername() + ".jpg");
                 final ProgressDialog progressDialog = new ProgressDialog(getContext());
                 progressDialog.setTitle("Updating....!");
@@ -540,7 +544,6 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-
     private void requestMultiplePermissions() {
         Dexter.withActivity(getActivity())
                 .withPermissions(
@@ -584,5 +587,4 @@ public class ProfileFragment extends Fragment {
                 .onSameThread()
                 .check();
     }
-
 }
