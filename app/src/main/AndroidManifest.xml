@@ -3,6 +3,7 @@
     package="yummy.one.yummyonevendor">
 
     <application
+        android:name=".VolleySupport.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,15 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme1">
 
-        <activity android:name=".Signup.BankDetails"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name=".Signup.DocumentUploader5"
+            android:name=".SignUp.BankDetails"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Signup.DocumentUploader4"
+            android:name=".SignUp.DocumentUploader5"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".SignUp.DocumentUploader4"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -34,30 +36,30 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Signup.DocumentUploader3"
+            android:name=".SignUp.DocumentUploader3"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Signup.DocumentUploader2"
+            android:name=".SignUp.DocumentUploader2"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Signup.DocumentUploader1"
+            android:name=".SignUp.DocumentUploader1"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Signup.DocumentUploader"
+            android:name=".SignUp.DocumentUploader"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Signup.LocationDetection"
+            android:name=".SignUp.LocationDetection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".Signup.Signup"
+            android:name=".SignUp.SignUp"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".Signup.CategorySelection"
+            android:name=".SignUp.CategorySelection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
@@ -68,10 +70,13 @@
             android:name=".Login.OtpActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".Signup.RegisterDetails"
+            android:name=".SignUp.RegisterDetails"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".Login.Login"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".Login.AccountSuspendedActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".Splash.SplashScreen"
@@ -131,7 +136,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
 </manifest>

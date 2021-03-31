@@ -57,9 +57,12 @@
 
     <Button
         android:id="@+id/btnCategory"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/border_round"
         android:backgroundTint="@color/colorPrimary"
         android:text="Add Category"

@@ -1,287 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Fragments.AccountDetails">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context=".Fragments.AccountDetails">
-
     <LinearLayout
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="24dp"
-        android:paddingEnd="24dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="20dp">
+        android:orientation="vertical"
+        tools:context=".Fragments.AccountDetails">
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back_button"/>
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="20dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Back"
+                android:textColor="#444444"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Account Details"
+            android:textColor="@color/colorPrimary"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/txtRName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#ffffff"
+            android:text="Name"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/edtRestaurantName"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="#F2F2F2"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="Eg : New Udupi Grand"
+            android:inputType="textCapCharacters"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="#444444"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Back"
-            android:textSize="16sp"
-            android:textColor="#444444"/>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="#ffffff"
+            android:text="Name"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/edtFullName"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="#F2F2F2"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="Eg : John Steve"
+            android:inputType="textCapCharacters"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="#444444"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="#ffffff"
+            android:text="Vendor ID"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/edtVendor"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="#F2F2F2"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:fontFamily="@font/roboto_regular"
+            android:hint=""
+            android:inputType="textCapCharacters"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="#444444"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="#ffffff"
+            android:text="Mobile Number"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/edtMobile"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="#F2F2F2"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:fontFamily="@font/roboto_regular"
+            android:hint=""
+            android:inputType="textCapCharacters"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="#444444"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="#ffffff"
+            android:text="EmailId"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="#F2F2F2"
+            android:fontFamily="@font/roboto_regular"
+            android:hint=""
+            android:inputType="textEmailAddress"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="#444444"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#ffffff"
+            android:text="Open Time"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/edtOpentime"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="#F2F2F2"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="HH : MM"
+            android:inputType="textCapCharacters"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="#444444"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#ffffff"
+            android:text="Close Time"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/edtClosetime"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="#F2F2F2"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="HH : MM"
+            android:inputType="textCapCharacters"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="#444444"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/border_round"
+            android:backgroundTint="@color/colorPrimary"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="SAVE"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txtHeading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:text="Account Details"
-        android:textColor="#55565b"
-        android:textSize="21sp"
-        />
-
-
-    <TextView
-        android:id="@+id/txtRName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="#ffffff"
-        android:textSize="13sp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Name"
-        android:textColor="@color/colorLabel" />
-
-    <EditText
-        android:id="@+id/edtRestaurantName"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="#444444"
-        android:focusableInTouchMode="false"
-        android:focusable="false"
-        android:paddingStart="14dp"
-        android:hint="Eg : New Udupi Grand"
-        android:paddingEnd="14dp"
-        android:background="@drawable/border_round"
-        android:backgroundTint="#F2F2F2"
-        android:fontFamily="@font/roboto_regular"
-        android:inputType="textCapCharacters"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="#ffffff"
-        android:textSize="13sp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Name"
-        android:textColor="@color/colorLabel" />
-
-    <EditText
-        android:id="@+id/edtFullName"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="#444444"
-        android:paddingStart="14dp"
-        android:hint="Eg : John Steve"
-        android:paddingEnd="14dp"
-        android:background="@drawable/border_round"
-        android:backgroundTint="#F2F2F2"
-        android:fontFamily="@font/roboto_regular"
-        android:inputType="textCapCharacters"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="#ffffff"
-        android:textSize="13sp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Vendor ID"
-        android:textColor="@color/colorLabel" />
-
-    <EditText
-        android:id="@+id/edtVendor"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:focusableInTouchMode="false"
-        android:focusable="false"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="#444444"
-        android:paddingStart="14dp"
-        android:hint=""
-        android:paddingEnd="14dp"
-        android:background="@drawable/border_round"
-        android:backgroundTint="#F2F2F2"
-        android:fontFamily="@font/roboto_regular"
-        android:inputType="textCapCharacters"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="#ffffff"
-        android:textSize="13sp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Mobile Number"
-        android:textColor="@color/colorLabel" />
-
-    <EditText
-        android:id="@+id/edtMobile"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:focusableInTouchMode="false"
-        android:focusable="false"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="#444444"
-        android:paddingStart="14dp"
-        android:hint=""
-        android:paddingEnd="14dp"
-        android:background="@drawable/border_round"
-        android:backgroundTint="#F2F2F2"
-        android:fontFamily="@font/roboto_regular"
-        android:inputType="textCapCharacters"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="#ffffff"
-        android:textSize="13sp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="EmailId"
-        android:textColor="@color/colorLabel" />
-
-    <EditText
-        android:id="@+id/edtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="#444444"
-        android:paddingStart="14dp"
-        android:hint=""
-        android:paddingEnd="14dp"
-        android:background="@drawable/border_round"
-        android:backgroundTint="#F2F2F2"
-        android:fontFamily="@font/roboto_regular"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Open Time"
-        android:textColor="@color/colorLabel" />
-
-    <EditText
-        android:id="@+id/edtOpentime"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="#444444"
-        android:paddingStart="14dp"
-        android:hint="HH : MM"
-        android:paddingEnd="14dp"
-        android:background="@drawable/border_round"
-        android:backgroundTint="#F2F2F2"
-        android:fontFamily="@font/roboto_regular"
-        android:inputType="textCapCharacters"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Close Time"
-        android:textColor="@color/colorLabel" />
-
-    <EditText
-        android:id="@+id/edtClosetime"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="#444444"
-        android:paddingStart="14dp"
-        android:hint="HH : MM"
-        android:paddingEnd="14dp"
-        android:background="@drawable/border_round"
-        android:backgroundTint="#F2F2F2"
-        android:inputType="textCapCharacters"
-        android:textColor="@color/colorPrimary"
-        android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="64dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="SAVE"
-        android:textColor="@color/white"
-        android:background="@drawable/border_round"
-        android:backgroundTint="@color/colorPrimary"/>
-
-</LinearLayout>
 </ScrollView>

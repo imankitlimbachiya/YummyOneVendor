@@ -50,11 +50,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import yummy.one.yummyonevendor.Functionality.Session;
-import yummy.one.yummyonevendor.Login.OtpActivity;
 import yummy.one.yummyonevendor.R;
-import yummy.one.yummyonevendor.Signup.RegisterDetails;
+import yummy.one.yummyonevendor.SignUp.RegisterDetails;
 
 public class LocationDetection extends AppCompatActivity
         implements

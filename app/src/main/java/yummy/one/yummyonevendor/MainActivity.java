@@ -20,12 +20,6 @@ import android.widget.ProgressBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,20 +30,18 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import yummy.one.yummyonevendor.Fragments.ApprovalPages;
 import yummy.one.yummyonevendor.Fragments.InventoryFragment;
 import yummy.one.yummyonevendor.Fragments.OrdersFragment;
 import yummy.one.yummyonevendor.Fragments.ProfileFragment;
-import yummy.one.yummyonevendor.Fragments.Registration;
 import yummy.one.yummyonevendor.Functionality.Session;
-import yummy.one.yummyonevendor.Login.Login;
-import yummy.one.yummyonevendor.Signup.CategorySelection;
-import yummy.one.yummyonevendor.Signup.RegisterDetails;
+import yummy.one.yummyonevendor.Login.AccountSuspendedActivity;
+import yummy.one.yummyonevendor.SignUp.CategorySelection;
+import yummy.one.yummyonevendor.SignUp.RegisterDetails;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout b1,b2,b3;
-    private ImageView i1,i2,i3;
+    LinearLayout b1, b2, b3;
+    private ImageView i1, i2, i3;
     Session session;
     ProgressBar progressBar;
     private static final String TAG = "MyFirebaseMsgService";
@@ -63,15 +55,15 @@ public class MainActivity extends AppCompatActivity {
         b2 = findViewById(R.id.b2);
         b3 = findViewById(R.id.b3);
 
-        i1=findViewById(R.id.i1);
-        i2=findViewById(R.id.i2);
-        i3=findViewById(R.id.i3);
-        progressBar=findViewById(R.id.progressbar);
+        i1 = findViewById(R.id.i1);
+        i2 = findViewById(R.id.i2);
+        i3 = findViewById(R.id.i3);
+        progressBar = findViewById(R.id.progressbar);
 
         session = new Session(MainActivity.this);
         session.setisfirsttime("no");
 
-        LinearLayout bottomnavigation=findViewById(R.id.bottomnavigation);
+        LinearLayout bottomnavigation = findViewById(R.id.bottomnavigation);
         bottomnavigation.setVisibility(View.GONE);
 
         FirebaseMessaging.getInstance().setAutoInitEnabled(true);
@@ -98,39 +90,37 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
 
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("Vendor").document(session.getusername())
                 .collection("VideoTemp")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            db.collection("Vendor")
-                                    .document(session.getusername())
-                                    .collection("VideoTemp")
-                                    .document(document.getId()).delete();
-                        }
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        db.collection("Vendor")
+                                .document(session.getusername())
+                                .collection("VideoTemp")
+                                .document(document.getId()).delete();
                     }
                 }
-            });
+            }
+        });
 
         DocumentReference docRef = db.collection("Vendor").document(session.getusername());
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    if(documentSnapshot.contains("Category")){
-                        if(TextUtils.isEmpty(documentSnapshot.get("Category").toString())){
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.contains("Category")) {
+                        if (TextUtils.isEmpty(documentSnapshot.get("Category").toString())) {
                             Intent intent = new Intent(MainActivity.this, CategorySelection.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
-                        }
-                        else{
+                        } else {
                             session.setapprovalstatus(documentSnapshot.get("ApprovalStatus").toString());
-                            if(documentSnapshot.get("ApprovalStatus").toString().equals("Approved")){
+                            if (documentSnapshot.get("ApprovalStatus").toString().equals("Approved")) {
                                 Fragment fragment = new OrdersFragment();
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 fragmentManager.beginTransaction()
@@ -138,17 +128,19 @@ public class MainActivity extends AppCompatActivity {
                                         .replace(R.id.frame_container, fragment).commit();
                                 progressBar.setVisibility(View.GONE);
                                 bottomnavigation.setVisibility(View.VISIBLE);
-                            }
-                            else{
+                            } else if (documentSnapshot.get("ApprovalStatus").toString().equals("Pending")) {
                                 Intent intent = new Intent(MainActivity.this, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(MainActivity.this, AccountSuspendedActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();
                             }
                         }
-                    }
-                    else{
+                    } else {
                         session.setapprovalstatus(documentSnapshot.get("ApprovalStatus").toString());
-                        if(documentSnapshot.get("ApprovalStatus").toString().equals("Approved")){
+                        if (documentSnapshot.get("ApprovalStatus").toString().equals("Approved")) {
                             Fragment fragment = new OrdersFragment();
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             fragmentManager.beginTransaction()
@@ -156,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                     .replace(R.id.frame_container, fragment).commit();
                             progressBar.setVisibility(View.GONE);
                             bottomnavigation.setVisibility(View.VISIBLE);
-                        }
-                        else{
+                        } else {
                             Intent intent = new Intent(MainActivity.this, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
@@ -347,8 +338,7 @@ public class MainActivity extends AppCompatActivity {
 //                    public void onCancelled(@NonNull DatabaseError databaseError) {
 //                    }
 //                });
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

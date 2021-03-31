@@ -1,52 +1,42 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/touch"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/touch"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="@color/colorPrimaryDark"
         android:minHeight="?attr/actionBarSize"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:gravity="center">
+            android:gravity="center"
+            android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10sp"
-                android:layout_weight="0.3">
-
-
-
-            </LinearLayout>
-
+                android:layout_weight="0.3"
+                android:paddingLeft="10sp"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.7">
-
-
-            </LinearLayout>
-
+                android:layout_weight="1.7"/>
 
         </LinearLayout>
-
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -58,7 +48,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" >
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -73,10 +63,10 @@
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/circular_back"/>
+            android:src="@drawable/circular_back" />
 
         <ImageView
             android:id="@+id/pin"
@@ -92,8 +82,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:orientation="vertical"
         android:gravity="bottom|end"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -120,12 +110,12 @@
                 android:layout_below="@+id/textlocation"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:focusable="false"
-                android:text="Loading......"
-                android:focusableInTouchMode="false"
                 android:ellipsize="end"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:inputType="text"
                 android:maxLines="1"
+                android:text="Loading......"
                 android:textColor="@color/colorBlack" />
 
             <TextView
@@ -136,10 +126,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:ellipsize="end"
-                android:visibility="gone"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textColor="@color/colorBlack" />
+                android:textColor="@color/colorBlack"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/save"

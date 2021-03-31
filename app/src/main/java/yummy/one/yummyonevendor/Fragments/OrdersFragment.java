@@ -47,15 +47,15 @@ import yummy.one.yummyonevendor.R;
 
 public class OrdersFragment extends Fragment {
 
-    private TextView txtNeworders,txtPastorders,txtCount,txtStatus,txtCurrentDate;
-    private LinearLayout linearBlock1,linearBlock2,linearNew;
+    private TextView txtNeworders, txtPastorders, txtCount, txtStatus, txtCurrentDate;
+    private LinearLayout linearBlock1, linearBlock2, linearNew;
     private Session sessions;
     private ToggleButton toggleStatus;
 
-    private ArrayList<OrdersData> orders=new ArrayList<OrdersData>();
+    private ArrayList<OrdersData> orders = new ArrayList<OrdersData>();
     private OrderAdapter orderAdapter;
     private RecyclerView recyclerView;
-    int count = 0 ;
+    int count = 0;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -70,9 +70,9 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_orders, container, false);
+        View v = inflater.inflate(R.layout.fragment_orders, container, false);
 
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             LinearLayout bottomnavigation = getActivity().findViewById(R.id.bottomnavigation);
             bottomnavigation.setVisibility(View.VISIBLE);
         }
@@ -98,7 +98,7 @@ public class OrdersFragment extends Fragment {
         txtCurrentDate.setText(date2);
 
 
-        if(TextUtils.isEmpty(sessions.getselection())) {
+        if (TextUtils.isEmpty(sessions.getselection())) {
             txtNeworders.setTextColor(getResources().getColor(R.color.white));
             txtNeworders.setBackgroundResource(R.drawable.button_border);
             txtNeworders.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
@@ -107,9 +107,8 @@ public class OrdersFragment extends Fragment {
             linearNew.setVisibility(View.VISIBLE);
             sessions.setselection("1");
             OnGoing();
-        }
-        else{
-            if(sessions.getselection().equals("1")){
+        } else {
+            if (sessions.getselection().equals("1")) {
                 txtNeworders.setTextColor(getResources().getColor(R.color.white));
                 txtNeworders.setBackgroundResource(R.drawable.button_border);
                 txtNeworders.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
@@ -117,8 +116,7 @@ public class OrdersFragment extends Fragment {
                 txtPastorders.setBackgroundResource(0);
                 linearNew.setVisibility(View.VISIBLE);
                 OnGoing();
-            }
-            else{
+            } else {
                 txtPastorders.setTextColor(getResources().getColor(R.color.white));
                 txtPastorders.setBackgroundResource(R.drawable.button_border);
                 txtPastorders.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
@@ -158,36 +156,37 @@ public class OrdersFragment extends Fragment {
             }
         });
 
-        toggleStatus.setToggleOn(true);
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                toggleStatus.setToggleOff(true);
-            }
-        }, 100);
-
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                if(sessions.getstatus().equals("Active")){
-                    toggleStatus.setToggleOn(true);
-                    txtStatus.setText("ONLINE");
-                    txtStatus.setTextColor(Color.parseColor("#6BD505"));
-                }
-                else{
-                    toggleStatus.setToggleOff(true);
-                    txtStatus.setText("OFFLINE");
-                    txtStatus.setTextColor(Color.parseColor("#FF0000"));
-                }
-            }
-        }, 500);
-
+//        toggleStatus.setToggleOn(true);
+//
+//        toggleStatus.setVisibility(View.GONE);
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                toggleStatus.setToggleOff(true);
+//            }
+//        }, 100);
+//
+//
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+        if (sessions.getstatus().equals("Active")) {
+            toggleStatus.setToggleOn(true);
+            txtStatus.setText("ONLINE");
+            txtStatus.setTextColor(Color.parseColor("#6BD505"));
+            toggleStatus.setVisibility(View.VISIBLE);
+        } else {
+            toggleStatus.setToggleOff(true);
+            txtStatus.setText("OFFLINE");
+            txtStatus.setTextColor(Color.parseColor("#FF0000"));
+            toggleStatus.setVisibility(View.VISIBLE);
+        }
+//            }
+//        }, 500);
 
 
         toggleStatus.setOnToggleChanged(new ToggleButton.OnToggleChanged() {
             @Override
             public void onToggle(boolean on) {
-                if(on){
+                if (on) {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> data = new HashMap<>();
                     data.put("Status", "Active");
@@ -195,8 +194,7 @@ public class OrdersFragment extends Fragment {
                     sessions.setstatus("Active");
                     txtStatus.setText("ONLINE");
                     txtStatus.setTextColor(Color.parseColor("#6BD505"));
-                }
-                else{
+                } else {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> data = new HashMap<>();
                     data.put("Status", "InActive");
@@ -211,7 +209,7 @@ public class OrdersFragment extends Fragment {
         linearNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity()!=null) {
+                if (getActivity() != null) {
                     Fragment fragment = new NewOrder();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction()
@@ -223,8 +221,8 @@ public class OrdersFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference docRef = db.collection("Orders");
-        docRef.whereEqualTo("VendorStatus",sessions.getusername())
-                .whereEqualTo("Status","1")
+        docRef.whereEqualTo("VendorStatus", sessions.getusername())
+                .whereEqualTo("Status", "1")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -232,30 +230,27 @@ public class OrdersFragment extends Fragment {
                         if (e != null) {
                             return;
                         }
-                        if(value.isEmpty()){
+                        if (value.isEmpty()) {
                             count = 0;
                             txtCount.setText("0");
-                        }
-                        else {
+                        } else {
                             count = 0;
                             for (QueryDocumentSnapshot document : value) {
                                 count++;
                             }
-                            txtCount.setText(""+count);
+                            txtCount.setText("" + count);
                         }
                     }
                 });
 
 
-
-
         return v;
     }
 
-    public void OnGoing(){
+    public void OnGoing() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference docRef = db.collection("Orders");
-        docRef.whereEqualTo("VendorStatus",sessions.getusername()).whereIn("Status", Arrays.asList("2", "3"))
+        docRef.whereEqualTo("VendorStatus", sessions.getusername()).whereIn("Status", Arrays.asList("2", "3"))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -263,10 +258,9 @@ public class OrdersFragment extends Fragment {
                         if (e != null) {
                             return;
                         }
-                        if(value.isEmpty()){
+                        if (value.isEmpty()) {
                             recyclerView.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             orders.clear();
                             for (QueryDocumentSnapshot document : value) {
                                 orders.add(new OrdersData(
@@ -336,10 +330,10 @@ public class OrdersFragment extends Fragment {
 //                });
     }
 
-    public void PastOrders(){
+    public void PastOrders() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference docRef = db.collection("Orders");
-        docRef.whereEqualTo("Vendor",sessions.getusername()).whereIn("Status", Arrays.asList("4", "5","10","100"))
+        docRef.whereEqualTo("Vendor", sessions.getusername()).whereIn("Status", Arrays.asList("4", "5", "10", "100"))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -347,10 +341,9 @@ public class OrdersFragment extends Fragment {
                         if (e != null) {
                             return;
                         }
-                        if(value.isEmpty()){
+                        if (value.isEmpty()) {
                             recyclerView.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             orders.clear();
                             for (QueryDocumentSnapshot document : value) {
                                 orders.add(new OrdersData(

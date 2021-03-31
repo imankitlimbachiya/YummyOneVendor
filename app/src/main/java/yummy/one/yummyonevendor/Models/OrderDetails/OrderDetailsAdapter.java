@@ -43,7 +43,7 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v=(View) LayoutInflater.from(parent.getContext()).inflate(R.layout.orders_details_row,parent,false);
+        View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.orders_details_row, parent, false);
         return new ViewHolder(v);
     }
 
@@ -55,8 +55,8 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
 
         holder.name.setText(orderDetails.Name);
         holder.details.setText(orderDetails.Details);
-        holder.price.setText("\u20b9"+orderDetails.Price);
-        holder.qty.setText("X"+orderDetails.Qty);
+        holder.price.setText("\u20b9" + orderDetails.Price);
+        holder.qty.setText(orderDetails.Qty);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(10));
@@ -69,10 +69,9 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
 
     @Override
     public int getItemCount() {
-        if(inventoriesfilterable!=null){
+        if (inventoriesfilterable != null) {
             return inventoriesfilterable.size();
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -96,15 +95,18 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
         };
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         public final View view;
 
         ImageView indicator;
-        TextView name,details,price,pushid,qty;
+        TextView name, details, price, pushid, qty;
 
         public ViewHolder(View view) {
             super(view);
+
             this.view = view;
+
             indicator = view.findViewById(R.id.indicator);
             name = view.findViewById(R.id.name);
             details = view.findViewById(R.id.details);
@@ -112,11 +114,12 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
             pushid = view.findViewById(R.id.pushid);
             qty = view.findViewById(R.id.qty);
         }
+
         @Override
         public void onClick(View v) {
+
         }
     }
-
 }
 
 

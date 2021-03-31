@@ -1,55 +1,43 @@
-package yummy.one.yummyonevendor.Signup;
+package yummy.one.yummyonevendor.SignUp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import yummy.one.yummyonevendor.Functionality.Session;
-import yummy.one.yummyonevendor.Login.Login;
-import yummy.one.yummyonevendor.Login.OtpActivity;
-import yummy.one.yummyonevendor.MainActivity;
 import yummy.one.yummyonevendor.R;
 
 public class CategorySelection extends AppCompatActivity {
 
-    Button imgC1,imgC2,imgC3,imgC4;
+    Button imgC1, imgC2, imgC3, imgC4;
     Session session;
-    String mobileNumber="",status="",userid="",name="",dob="",category="";
+    String mobileNumber = "", status = "", userid = "", name = "", dob = "", category = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_selection);
 
-        imgC1=findViewById(R.id.imgC1);
-        imgC2=findViewById(R.id.imgC2);
-        imgC3=findViewById(R.id.imgC3);
-        imgC4=findViewById(R.id.imgC4);
+        imgC1 = findViewById(R.id.imgC1);
+        imgC2 = findViewById(R.id.imgC2);
+        imgC3 = findViewById(R.id.imgC3);
+        imgC4 = findViewById(R.id.imgC4);
         session = new Session(getApplicationContext());
 
-        if(getIntent().getStringExtra("mobilenumber")!=null){
+        if (getIntent().getStringExtra("mobilenumber") != null) {
             mobileNumber = getIntent().getStringExtra("mobilenumber");
         }
 
-        if(getIntent().getStringExtra("status")!=null){
+        if (getIntent().getStringExtra("status") != null) {
             status = getIntent().getStringExtra("status");
             name = getIntent().getStringExtra("name");
             dob = getIntent().getStringExtra("dob");
@@ -61,7 +49,7 @@ public class CategorySelection extends AppCompatActivity {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Map<String, Object> data = new HashMap<>();
                 data.put("Category", "Restaurant");
-                db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                 session.setcategory("Restaurant");
                 Intent intent = new Intent(CategorySelection.this, RegisterDetails.class);
                 startActivity(intent);
@@ -87,7 +75,7 @@ public class CategorySelection extends AppCompatActivity {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Map<String, Object> data = new HashMap<>();
                 data.put("Category", "Fastfood");
-                db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                 session.setcategory("Fastfood");
                 Intent intent = new Intent(CategorySelection.this, RegisterDetails.class);
                 startActivity(intent);
@@ -108,7 +96,7 @@ public class CategorySelection extends AppCompatActivity {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Map<String, Object> data = new HashMap<>();
                 data.put("Category", "Grocery");
-                db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                 session.setcategory("Grocery");
                 Intent intent = new Intent(CategorySelection.this, RegisterDetails.class);
                 startActivity(intent);
@@ -118,9 +106,9 @@ public class CategorySelection extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-            Intent a = new Intent(Intent.ACTION_MAIN);
-            a.addCategory(Intent.CATEGORY_HOME);
-            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(a);
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 }

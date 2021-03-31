@@ -1,682 +1,386 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="@color/white"
     tools:context=".Fragments.PastOrderDetails">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <RelativeLayout
+        android:id="@+id/TitleLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
+        android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:orientation="horizontal">
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_gravity="center"
+                android:layout_marginTop="1dp"
+                android:src="@drawable/back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingTop="24dp"
-                    android:paddingEnd="24dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingBottom="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/back_button"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Back"
-                        android:textSize="16sp"
-                        android:textColor="#444444"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/orderid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:paddingStart="16dp"
-                    android:text=""
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
-
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Back"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/orderid"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text=""
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="24sp"
-                    android:visibility="visible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:id="@+id/BelowTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitleLayout">
 
-            </LinearLayout>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text=""
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            android:visibility="visible" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="right">
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_left_round"
+            android:backgroundTint="@color/preparing"
+            android:fontFamily="@font/roboto_bold"
+            android:paddingStart="20dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:text="Preparing"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_left_round"
-                    android:backgroundTint="@color/preparing"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="25dp"
-                    android:paddingBottom="8dp"
-                    android:textSize="14dp"
-                    android:text="Preparing"
-                    android:textColor="@color/white" />
+    </RelativeLayout>
 
-            </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/OrderInformationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BelowTitleLayout">
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="78dp"
+            android:layout_height="78dp" />
+        <TextView
+            android:id="@+id/txtAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toRightOf="@id/map"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Delivering To\nBehind the rainbow \nApartment,\nSector 43, 122002 Gurgaon"
+            android:textColor="@color/black"
+            android:textSize="13dp" />
 
-        </LinearLayout>
-
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/OrderInformationLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="200dp"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/border"
-                android:backgroundTint="#F5F5F5"
-                android:orientation="vertical"
-                >
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
                     android:fontFamily="@font/roboto_bold"
+                    android:gravity="left"
                     android:text="Order Details"
-                    android:gravity="center"
-                    android:textColor="#1C1C1E"
-                    android:textSize="16dp"
-                    android:visibility="visible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:nestedScrollingEnabled="true"
-                    android:overScrollMode="never"
-                    android:scrollbars="none"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="match_parent"
-                    android:layout_height="3.5dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="#D9D9D9"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
-
-
-                <LinearLayout
-                    android:id="@+id/linearLayout3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:paddingBottom="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Total"
-                                android:textSize="14sp"
-                                android:fontFamily="@font/roboto_bold"
-                                android:textColor="#222222" />
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/qtyitems"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="2 Items"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:textSize="14sp"
-                                android:fontFamily="@font/roboto_bold"
-                                android:textColor="#222222" />
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="right"
-                            android:paddingEnd="10dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/subtotal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="\u20b9 0.00"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/roboto_bold"
-                                android:textColor="#222222" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="6dp"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Promo"
-                                android:textSize="14sp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="#222222" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:paddingStart="4dp"
-                                android:src="@drawable/info"/>
-
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="right"
-                            android:paddingEnd="10dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/discount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="\u20b9 0.00"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="#222222" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="6dp"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="YummyOne Fee"
-                                android:textSize="14sp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="#222222" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:paddingStart="4dp"
-                                android:src="@drawable/info"/>
-
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="right"
-                            android:paddingEnd="10dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/commision"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="\u20b9 0.00"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="#222222" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="6dp"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="GST  "
-                                android:textSize="14sp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="#222222" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:paddingStart="4dp"
-                                android:src="@drawable/info"/>
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="right"
-                            android:paddingEnd="10dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/taxes"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="\u20b9 0.00"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/roboto_medium"
-                                android:textColor="#222222" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="3.5dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#D9D9D9"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Settlement Value"
-                                android:fontFamily="@font/roboto_bold"
-                                android:textColor="@color/black"
-                                android:textSize="14sp" />
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="right"
-                            android:paddingEnd="10dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/grandtotal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="\u20b9 0.00"
-                                android:fontFamily="@font/roboto_bold"
-                                android:textColor="#222222"
-                                android:textSize="15sp" />
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="3.5dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#D9D9D9"/>
-
-
-
-
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/deliveryrow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:visibility="gone"
-                android:background="@drawable/border"
-                android:backgroundTint="@color/white"
-                android:orientation="vertical"
-                >
+                    android:textColor="@color/theme"
+                    android:textSize="16sp"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="DELIVERY EXECUTIVE"
-                    android:textColor="#666666"
-                    android:textSize="14dp"
-                    android:visibility="visible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:paddingBottom="16dp"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7">
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto_bold"
+                    android:gravity="right"
+                    android:text="Items"
+                    android:textColor="@color/theme"
+                    android:textSize="16sp"
+                    android:visibility="visible" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/border"
+                android:backgroundTint="#F5F5F5"
+                android:nestedScrollingEnabled="true"
+                android:overScrollMode="never"
+                android:padding="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:scrollbars="none" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="left"
+                android:text="Settlement Breakdown"
+                android:textColor="@color/theme"
+                android:textSize="16dp"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/border"
+                android:backgroundTint="#F5F5F5"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3">
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Sub Total"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/pp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/subtotal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1.4">
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="\u20b9 0.00"
+                        android:textColor="#222222"
+                        android:textSize="16sp" />
 
-                        <TextView
-                            android:id="@+id/drivername"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            android:fontFamily="@font/roboto_medium"
-                            android:text="Driver Name"
-                            android:textColor="@color/colorPrimary"/>
+                </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/drivernumber"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
-                            android:text="Driver Name"
-                            android:textColor="@color/colorDarkgrey"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
 
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3">
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Promo"
+                        android:textColor="#222222"
+                        android:textSize="12sp" />
 
-                        <ImageView
-                            android:id="@+id/call"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/call"/>
+                    <TextView
+                        android:id="@+id/discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="\u20b9 0.00"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
 
-                    </LinearLayout>
+                </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
 
-                </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="YummyOne Fee"
+                        android:textColor="#222222"
+                        android:textSize="12sp" />
 
+                    <TextView
+                        android:id="@+id/commision"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="\u20b9 0.00"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
 
+                </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Settlement Value"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/grandtotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="\u20b9 0.00"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <com.ncorti.slidetoact.SlideToActView
                 android:id="@+id/accept"
                 android:layout_width="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="16dp"
-                app:outer_color="#15AA05"
-                app:inner_color="@color/white"
-                android:layout_marginEnd="16dp"
-                app:text_color="@color/white"
-                app:text_size="16sp"
-                app:slider_height="52dp"
                 android:layout_height="wrap_content"
-                app:text="Slide to Accept" />
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="30dp"
+                app:inner_color="@color/white"
+                app:outer_color="#15AA05"
+                app:slider_height="52dp"
+                app:text="Slide to Accept"
+                app:text_color="@color/white"
+                app:text_size="16sp" />
 
             <TextView
                 android:id="@+id/reject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginTop="16dp"
-                android:background="@null"
-                android:fontFamily="@font/roboto_bold"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="20dp"
+                android:background="@null"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
                 android:text="Can't Accept the order?"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/red"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.ncorti.slidetoact.SlideToActView
                 android:id="@+id/ready"
                 android:layout_width="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="16dp"
-                app:outer_color="#15AA05"
-                app:inner_color="@color/white"
-                android:layout_marginEnd="16dp"
-                app:text_color="@color/white"
-                app:text_size="16sp"
-                app:slider_height="52dp"
                 android:layout_height="wrap_content"
-                app:text="Slide to Mark Ready" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:inner_color="@color/white"
+                app:outer_color="#15AA05"
+                app:slider_height="52dp"
+                app:text="Slide to Mark Ready"
+                app:text_color="@color/white"
+                app:text_size="16sp" />
 
             <com.ncorti.slidetoact.SlideToActView
                 android:id="@+id/handover"
                 android:layout_width="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="16dp"
-                app:outer_color="#15AA05"
-                app:inner_color="@color/white"
-                android:layout_marginEnd="16dp"
-                app:text_color="@color/white"
-                app:text_size="16sp"
-                app:slider_height="52dp"
                 android:layout_height="wrap_content"
-                app:text="Slide to Handover" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:inner_color="@color/white"
+                app:outer_color="#15AA05"
+                app:slider_height="52dp"
+                app:text="Slide to Handover"
+                app:text_color="@color/white"
+                app:text_size="16sp" />
 
         </LinearLayout>
 
-
     </androidx.core.widget.NestedScrollView>
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

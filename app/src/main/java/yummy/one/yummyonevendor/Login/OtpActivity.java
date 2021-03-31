@@ -2,9 +2,8 @@ package yummy.one.yummyonevendor.Login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.cardview.widget.CardView;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,14 +11,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,9 +32,9 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,38 +64,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import in.aabhasjindal.otptextview.OTPListener;
-import in.aabhasjindal.otptextview.OtpTextView;
 import yummy.one.yummyonevendor.Functionality.Session;
 import yummy.one.yummyonevendor.MainActivity;
 import yummy.one.yummyonevendor.Models.Users;
 import yummy.one.yummyonevendor.R;
-import yummy.one.yummyonevendor.Signup.CategorySelection;
-import yummy.one.yummyonevendor.Signup.DocumentUploader;
+import yummy.one.yummyonevendor.SignUp.CategorySelection;
 
 public class OtpActivity extends AppCompatActivity {
 
+    Context mContext;
     Button btnSubmit;
-    TextView txtResend, txtTimer, txtAccess, txtNumber, txtOtp;
-    LinearLayout imgBack;
+    TextView txtResend, txtTimer, txtAccess, txtNumber;
+    RelativeLayout BackLayout;
     String mobileNumber = "", status = "", userid = "", name = "", dob = "", email = "";
     Users users;
-    EditText o1, o2, o3, o4, o5, o6;
-    LinearLayout otpView;
-    String otp = "";
-    // private OtpTextView Tverify;
-    public boolean verified = false;
     SmsVerifyCatcher smsVerifyCatcher;
     long id = 0;
     private static final String TAG = "PhoneAuthActivity";
     private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
-    private static final int STATE_INITIALIZED = 1;
-    private static final int STATE_CODE_SENT = 2;
-    private static final int STATE_VERIFY_FAILED = 3;
-    private static final int STATE_VERIFY_SUCCESS = 4;
-    private static final int STATE_SIGNIN_FAILED = 5;
-    private static final int STATE_SIGNIN_SUCCESS = 6;
     private FirebaseAuth mAuth;
     private boolean mVerificationInProgress = false;
     private String mVerificationId;
@@ -108,7 +92,6 @@ public class OtpActivity extends AppCompatActivity {
 
     LinearLayout loader;
     LottieAnimationView animation;
-
     EditText edtOtpFirstNumber, edtOtpSecondNumber, edtOtpThirdNumber, edtOtpFourthNumber, edtOtpFifthNumber, edtOtpSixthNumber;
     EditText[] editTexts;
 
@@ -117,8 +100,9 @@ public class OtpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
 
-        btnSubmit = findViewById(R.id.btnSubmit);
+        mContext = this;
 
+        btnSubmit = findViewById(R.id.btnSubmit);
 
         edtOtpFirstNumber = findViewById(R.id.edtOtpFirstNumber);
         edtOtpSecondNumber = findViewById(R.id.edtOtpSecondNumber);
@@ -155,26 +139,17 @@ public class OtpActivity extends AppCompatActivity {
         txtResend = findViewById(R.id.txtResend);
         txtNumber = findViewById(R.id.txtNumber);
         progressBar = findViewById(R.id.progressBar);
-        o1 = findViewById(R.id.o1);
-        o2 = findViewById(R.id.o2);
-        o3 = findViewById(R.id.o3);
-        o4 = findViewById(R.id.o4);
-        o5 = findViewById(R.id.o5);
-        o6 = findViewById(R.id.o6);
-        otpView = findViewById(R.id.otpView);
         txtTimer = findViewById(R.id.txtTimer);
-        // Tverify = findViewById(R.id.otp_view);
         txtAccess = findViewById(R.id.txtAccess);
         loader = findViewById(R.id.loader);
         animation = findViewById(R.id.animation);
-        txtOtp = findViewById(R.id.otp);
 
         progressBar.setVisibility(View.GONE);
         loader.setVisibility(View.GONE);
         animation.pauseAnimation();
 
-        imgBack = findViewById(R.id.back);
-        imgBack.setOnClickListener(new View.OnClickListener() {
+        BackLayout = findViewById(R.id.BackLayout);
+        BackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
@@ -182,17 +157,12 @@ public class OtpActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-        session = new Session(OtpActivity.this);
-
-        // Tverify.requestFocus();
-        // Tverify.setFocusableInTouchMode(true);
+        session = new Session(mContext);
 
         txtAccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence[] items = {"Contact Support", "Cancel"};
-                final AlertDialog.Builder alert = new AlertDialog.Builder(OtpActivity.this, AlertDialog.THEME_HOLO_LIGHT);
-                final EditText input = new EditText(OtpActivity.this);
+                final AlertDialog.Builder alert = new AlertDialog.Builder(mContext, AlertDialog.THEME_HOLO_LIGHT);
                 alert.setTitle("Recover your Account");
                 alert.setMessage("Our support team can help you regain access to your account");
                 // alert.setView(input);
@@ -223,194 +193,18 @@ public class OtpActivity extends AppCompatActivity {
             }
         });
 
-        o1.requestFocus();
-        o2.clearFocus();
-        o3.clearFocus();
-        o4.clearFocus();
-        o5.clearFocus();
-        o6.clearFocus();
-
-        txtResend.setVisibility(View.GONE);
-        // txtResend.setText(Html.fromHtml("<p><span style='color:#001B38'>RESEND OTP</p>"));
+        txtResend.setVisibility(View.INVISIBLE);
 
         new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
-                txtTimer.setText("Resend Code in " + millisUntilFinished / 1000 + "s");
-                //here you can have your logic to set text to edittext
+                txtTimer.setText(millisUntilFinished / 1000 + "s");
             }
 
             public void onFinish() {
-                txtTimer.setVisibility(View.GONE);
+                txtTimer.setVisibility(View.INVISIBLE);
                 txtResend.setVisibility(View.VISIBLE);
             }
         }.start();
-
-
-        o1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence)) {
-                    o1.clearFocus();
-                    o2.requestFocus();
-                    otp += charSequence;
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        o2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence)) {
-                    o2.clearFocus();
-                    o3.requestFocus();
-                    otp += charSequence;
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() == 0) {
-                    o2.clearFocus();
-                    o1.requestFocus();
-                    otp = otp.substring(0, otp.length() - 1);
-                }
-            }
-        });
-
-        o3.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence)) {
-                    o3.clearFocus();
-                    o4.requestFocus();
-                    otp += charSequence;
-                } else {
-                    o3.clearFocus();
-                    o2.requestFocus();
-                    otp = otp.substring(0, otp.length() - 1);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        o4.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence)) {
-                    o4.clearFocus();
-                    o5.requestFocus();
-                    otp += charSequence;
-                } else {
-                    o4.clearFocus();
-                    o3.requestFocus();
-                    otp = otp.substring(0, otp.length() - 1);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        o5.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence)) {
-                    o5.clearFocus();
-                    o6.requestFocus();
-                    otp += charSequence;
-                } else {
-                    o5.clearFocus();
-                    o4.requestFocus();
-                    otp = otp.substring(0, otp.length() - 1);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        o6.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!TextUtils.isEmpty(charSequence)) {
-                    o6.clearFocus();
-                    otp += charSequence;
-                    if (otp.length() == 6) {
-                        progressBar.setVisibility(View.GONE);
-                        verifyPhoneNumberWithCode(mVerificationId, otp);
-                    }
-                } else {
-                    o6.clearFocus();
-                    o5.requestFocus();
-                    otp = otp.substring(0, otp.length() - 1);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        /*Tverify.setOtpListener(new OTPListener() {
-            @Override
-            public void onInteractionListener() {
-
-            }
-
-            @Override
-            public void onOTPComplete(String otp) {
-                *//*progressBar.setVisibility(View.GONE);
-                verifyPhoneNumberWithCode(mVerificationId, otp);
-                if (OtpActivity.this.getApplicationContext() != null) {
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                }*//*
-            }
-        });*/
-
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -424,7 +218,6 @@ public class OtpActivity extends AppCompatActivity {
                 //     user action.
                 Log.d(TAG, "onVerificationCompleted:" + credential);
 //                signInWithPhoneAuthCredential(credential);
-
             }
 
             @Override
@@ -446,8 +239,7 @@ public class OtpActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCodeSent(String verificationId,
-                                   PhoneAuthProvider.ForceResendingToken token) {
+            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
                 // The SMS verification code has been sent to the provided phone number, we
                 // now need to ask the user to enter the code and then construct a credential
                 // by combining the code with a verification ID.
@@ -464,7 +256,6 @@ public class OtpActivity extends AppCompatActivity {
         if (getIntent().getStringExtra("mobilenumber") != null) {
             mobileNumber = getIntent().getStringExtra("mobilenumber");
             txtNumber.setText(mobileNumber);
-            txtOtp.setText(Html.fromHtml("<p style='font-size:14px'>Please enter the verfication code we just sent to <b>" + mobileNumber.substring(0, 2) + "******" + mobileNumber.substring(8, 10) + "</b></p>"));
         }
 
         if (getIntent().getStringExtra("status") != null) {
@@ -485,15 +276,17 @@ public class OtpActivity extends AppCompatActivity {
             @Override
             public void onSmsCatch(String message) {
                 String code = parseCode(message);//Parse verification code
-                // Tverify.setOTP(code);//set code in edit text
-                //then you can send verification code to server
-                String[] Code = code.split("");
-                edtOtpFirstNumber.setText(Code[1]);
-                edtOtpSecondNumber.setText(Code[2]);
-                edtOtpThirdNumber.setText(Code[3]);
-                edtOtpFourthNumber.setText(Code[4]);
-                edtOtpFifthNumber.setText(Code[5]);
-                edtOtpSixthNumber.setText(Code[5]);
+                try {
+                    String[] Code = code.split("");
+                    edtOtpFirstNumber.setText(Code[1]);
+                    edtOtpSecondNumber.setText(Code[2]);
+                    edtOtpThirdNumber.setText(Code[3]);
+                    edtOtpFourthNumber.setText(Code[4]);
+                    edtOtpFifthNumber.setText(Code[5]);
+                    edtOtpSixthNumber.setText(Code[6]);
+                } catch (Exception e) {
+                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -501,37 +294,33 @@ public class OtpActivity extends AppCompatActivity {
             if (getIntent().getStringExtra("id") != null) {
                 userid = getIntent().getStringExtra("id");
             } else {
-                Toast.makeText(getApplicationContext(), "Technical Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Technical Error", Toast.LENGTH_LONG).show();
                 return;
             }
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("Vendor")
-                    .document(userid)
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            users = documentSnapshot.toObject(Users.class);
-                        }
-                    });
+            db.collection("Vendor").document(userid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    users = documentSnapshot.toObject(Users.class);
+                }
+            });
         }
 
         txtResend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resendVerificationCode("+91" + mobileNumber, mResendToken);
-                txtTimer.setVisibility(View.VISIBLE);
-                txtResend.setVisibility(View.GONE);
+                txtTimer.setVisibility(View.INVISIBLE);
+                txtResend.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), "OTP Resent", Toast.LENGTH_LONG).show();
                 new CountDownTimer(30000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         txtTimer.setText("Resend Code in " + millisUntilFinished / 1000 + "s");
-                        //here you can have your logic to set text to edittext
                     }
 
                     public void onFinish() {
-                        txtTimer.setVisibility(View.GONE);
+                        txtTimer.setVisibility(View.INVISIBLE);
                         txtResend.setVisibility(View.VISIBLE);
                     }
                 }.start();
@@ -549,7 +338,6 @@ public class OtpActivity extends AppCompatActivity {
                 String OtpSixthNumber = edtOtpSixthNumber.getText().toString();
 
                 String Otp = OtpFirstNumber + OtpSecondNumber + OtpThirdNumber + OtpFourthNumber + OtpFifthNumber + OtpSixthNumber;
-                // Toast.makeText(mContext, otp, Toast.LENGTH_SHORT).show();
 
                 /*if (OtpFirstNumber.equals("")) {
                     Toast.makeText(OtpActivity.this, "Please Enter Your Otp First Number", Toast.LENGTH_SHORT).show();
@@ -579,26 +367,10 @@ public class OtpActivity extends AppCompatActivity {
                         //deprecated in API 26
                         v.vibrate(500);
                     }
-                    Animation shake = AnimationUtils.loadAnimation(OtpActivity.this, R.anim.shake);
-                    otpView.startAnimation(shake);
                     return;
                 }
-
-                /*if (TextUtils.isEmpty(Tverify.getOTP())) {
-                    Toast.makeText(getApplicationContext(), "Cannot be empty", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                    } else {
-                        //deprecated in API 26
-                        v.vibrate(500);
-                    }
-                    Animation shake = AnimationUtils.loadAnimation(OtpActivity.this, R.anim.shake);
-                    otpView.startAnimation(shake);
-                    return;
-                }*/
                 progressBar.setVisibility(View.GONE);
+
                 verifyPhoneNumberWithCode(mVerificationId, Otp);
                 if (OtpActivity.this.getApplicationContext() != null) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -657,7 +429,7 @@ public class OtpActivity extends AppCompatActivity {
             signInWithPhoneAuthCredential(credential);
         } catch (Exception e) {
             btnSubmit.setVisibility(View.VISIBLE);
-            Toast toast = Toast.makeText(this, "Verification Code is wrong", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(mContext, "Verification Code is wrong", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -667,9 +439,7 @@ public class OtpActivity extends AppCompatActivity {
                 v.vibrate(500);
             }
             toast.show();
-            o6.requestFocus();
         }
-
     }
 
     private void resendVerificationCode(String phoneNumber, PhoneAuthProvider.ForceResendingToken token) {
@@ -683,172 +453,144 @@ public class OtpActivity extends AppCompatActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+        mAuth.signInWithCredential(credential).addOnCompleteListener(OtpActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success");
 
-                            if (TextUtils.isEmpty(mobileNumber)) {
-                                Toast.makeText(OtpActivity.this, "Technical Error.Error Code #1200. Try after sometime or contact admin", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                    if (TextUtils.isEmpty(mobileNumber)) {
+                        Toast.makeText(mContext, "Technical Error.Error Code #1200. Try after sometime or contact admin", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
+                    btnSubmit.setVisibility(View.GONE);
+                    animation.playAnimation();
+                    loader.setVisibility(View.VISIBLE);
 
-                            btnSubmit.setVisibility(View.GONE);
-                            animation.playAnimation();
-                            loader.setVisibility(View.VISIBLE);
+                    animation.addAnimatorListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animator) {
 
-                            animation.addAnimatorListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
+                        }
 
-                                }
+                        @Override
+                        public void onAnimationEnd(Animator animator) {
+                            if (status.equals("notregistered")) {
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                final DocumentReference sfDocRef = db.collection("CategoryIdentity").document("Vendors");
 
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    if (status.equals("notregistered")) {
+                                db.runTransaction(new Transaction.Function<Void>() {
+                                    @Override
+                                    public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                                        DocumentSnapshot snapshot = transaction.get(sfDocRef);
+
+                                        // Note: this could be done without a transaction
+                                        //       by updating the population using FieldValue.increment()
+                                        long newValue = snapshot.getLong("entity") + 1;
+                                        id = newValue;
+                                        transaction.update(sfDocRef, "entity", newValue);
+                                        // Success
+                                        return null;
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                        final DocumentReference sfDocRef = db.collection("CategoryIdentity").document("Vendors");
+                                        DocumentReference db1 = db.collection("Vendor").document("YO" + id);
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("ApprovalStatus", "Pending");
+                                        user.put("AccountNumber", "");
+                                        user.put("AccountName", "");
+                                        user.put("Address", "");
+                                        user.put("BranchAddress", "");
+                                        user.put("BranchName", "");
+                                        user.put("VendorName", "");
+                                        user.put("Category", "");
+                                        user.put("City", "");
+                                        user.put("CityPushId", "");
+                                        user.put("CloseTime", "");
+                                        user.put("OpenTime", "");
+                                        user.put("Commission", "");
+                                        user.put("Cuisines", "");
+                                        user.put("DiscountType", "");
+                                        user.put("Email", "");
+                                        user.put("FSSAIAddress", "");
+                                        user.put("FSSAIExpiryDate", "");
+                                        user.put("FSSAIImage", "");
+                                        user.put("FSSAINumber", "");
+                                        user.put("GSTImage", "");
+                                        user.put("GSTNumber", "");
+                                        user.put("IFSCCode", "");
+                                        user.put("ItemCategory", "");
+                                        user.put("Location", "");
+                                        user.put("LICImage", "");
+                                        user.put("MobileNumber", mobileNumber);
+                                        user.put("Name", name);
+                                        user.put("OfferAmount", "");
+                                        user.put("POC", "");
+                                        user.put("Location", "");
+                                        user.put("PackingCharges", "");
+                                        user.put("PancardImage", "");
+                                        user.put("PassbookImage", "");
+                                        user.put("Password", "");
+                                        user.put("PreperationTime", "");
+                                        user.put("POC", "");
+                                        user.put("Status", "Active");
+                                        user.put("VendorImage", "");
+                                        user.put("Zone", "");
+                                        user.put("ZonePushId", "");
+                                        user.put("UserId", "YO" + id);
+                                        user.put("Dob", dob);
+                                        db1.set(user);
 
-                                        db.runTransaction(new Transaction.Function<Void>() {
-                                            @Override
-                                            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-                                                DocumentSnapshot snapshot = transaction.get(sfDocRef);
-
-                                                // Note: this could be done without a transaction
-                                                //       by updating the population using FieldValue.increment()
-                                                long newValue = snapshot.getLong("entity") + 1;
-                                                id = newValue;
-                                                transaction.update(sfDocRef, "entity", newValue);
-                                                // Success
-                                                return null;
-                                            }
-                                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                DocumentReference db1 = db.collection("Vendor").document("YO" + id);
-                                                Map<String, Object> user = new HashMap<>();
-                                                user.put("ApprovalStatus", "Pending");
-                                                user.put("AccountNumber", "");
-                                                user.put("AccountName", "");
-                                                user.put("Address", "");
-                                                user.put("BranchAddress", "");
-                                                user.put("BranchName", "");
-                                                user.put("VendorName", "");
-                                                user.put("Category", "");
-                                                user.put("City", "");
-                                                user.put("CityPushId", "");
-                                                user.put("CloseTime", "");
-                                                user.put("OpenTime", "");
-                                                user.put("Commission", "");
-                                                user.put("Cuisines", "");
-                                                user.put("DiscountType", "");
-                                                user.put("Email", email);
-                                                user.put("FSSAIAddress", "");
-                                                user.put("FSSAIExpiryDate", "");
-                                                user.put("FSSAIImage", "");
-                                                user.put("FSSAINumber", "");
-                                                user.put("GSTImage", "");
-                                                user.put("GSTNumber", "");
-                                                user.put("IFSCCode", "");
-                                                user.put("ItemCategory", "");
-                                                user.put("Location", "");
-                                                user.put("LICImage", "");
-                                                user.put("MobileNumber", mobileNumber);
-                                                user.put("Name", name);
-                                                user.put("OfferAmount", "");
-                                                user.put("POC", "");
-                                                user.put("Location", "");
-                                                user.put("PackingCharges", "");
-                                                user.put("PancardImage", "");
-                                                user.put("PassbookImage", "");
-                                                user.put("Password", "");
-                                                user.put("PreperationTime", "");
-                                                user.put("POC", "");
-                                                user.put("Status", "Active");
-                                                user.put("VendorImage", "");
-                                                user.put("Zone", "");
-                                                user.put("ZonePushId", "");
-                                                user.put("UserId", "YO" + id);
-                                                user.put("Dob", dob);
-                                                db1.set(user);
-
-
-                                                session.setusername("YO" + id);
-                                                session.setname(name);
-                                                session.setnumber(mobileNumber);
-                                                session.setemail("");
-                                                session.setcategory("");
-                                                startActivity(new Intent(OtpActivity.this,
-                                                        CategorySelection.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                                finish();
-
-                                            }
-                                        })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(getApplicationContext(), "Technical Error, Try Once again after some time", Toast.LENGTH_LONG).show();
-                                                    }
-                                                });
-
-                                    } else {
-                                        session.setusername(users.UserId);
-                                        session.setname(users.Name);
-                                        session.setnumber(users.MobileNumber);
-                                        session.setemail(users.Email);
-                                        session.setpp(users.VendorImage);
-                                        session.setcategory(users.Category);
-                                        session.setvendorname(users.RestaurantName);
-                                        Intent intent = new Intent(OtpActivity.this, MainActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
+                                        session.setusername("YO" + id);
+                                        session.setname(name);
+                                        session.setnumber(mobileNumber);
+                                        session.setemail("");
+                                        session.setcategory("");
+                                        startActivity(new Intent(mContext, CategorySelection.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                                         finish();
                                     }
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-
-                                }
-                            });
-
-                            // [END_EXCLUDE]
-                        } else {
-                            progressBar.setVisibility(View.GONE);
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast toast = Toast.makeText(OtpActivity.this, "Dail", Toast.LENGTH_SHORT);
-                                toast.setGravity(Gravity.CENTER, 0, 0);
-                                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                                } else {
-                                    //deprecated in API 26
-                                    v.vibrate(500);
-                                }
-                                Animation shake = AnimationUtils.loadAnimation(OtpActivity.this, R.anim.shake);
-                                otpView.startAnimation(shake);
-                                toast.show();
-                                o6.requestFocus();
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getApplicationContext(), "Technical Error, Try Once again after some time", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            } else {
+                                session.setusername(users.UserId);
+                                session.setname(users.Name);
+                                session.setnumber(users.MobileNumber);
+                                session.setemail(users.Email);
+                                session.setpp(users.VendorImage);
+                                session.setcategory(users.Category);
+                                session.setvendorname(users.RestaurantName);
+                                Intent intent = new Intent(mContext, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
                             }
                         }
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast toast = Toast.makeText(OtpActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+
+                        @Override
+                        public void onAnimationCancel(Animator animator) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animator) {
+
+                        }
+                    });
+
+                    // [END_EXCLUDE]
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    Log.w(TAG, "signInWithCredential:failure", task.getException());
+                    if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                        Toast toast = Toast.makeText(mContext, "Dail", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -857,12 +599,27 @@ public class OtpActivity extends AppCompatActivity {
                             //deprecated in API 26
                             v.vibrate(500);
                         }
-                        Animation shake = AnimationUtils.loadAnimation(OtpActivity.this, R.anim.shake);
-                        otpView.startAnimation(shake);
                         toast.show();
-                        o6.requestFocus();
                     }
-                });
+                }
+            }
+        }).addOnFailureListener(OtpActivity.this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressBar.setVisibility(View.GONE);
+                Toast toast = Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    //deprecated in API 26
+                    v.vibrate(500);
+                }
+                Animation shake = AnimationUtils.loadAnimation(mContext, R.anim.shake);
+                toast.show();
+            }
+        });
     }
 
     private boolean validatePhoneNumber() {
@@ -910,9 +667,6 @@ public class OtpActivity extends AppCompatActivity {
         smsVerifyCatcher.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
-
-
     public class GenericTextWatcher implements TextWatcher {
 
         private View view;
@@ -931,7 +685,7 @@ public class OtpActivity extends AppCompatActivity {
                     if (text.length() == 1) {
                         edtOtpSecondNumber.requestFocus();
                         setRequestFocus(edtOtpSecondNumber);
-                        removeRequestFocus(edtOtpFirstNumber);
+                        // removeRequestFocus(edtOtpFirstNumber);
                     } else {
                         edtOtpFirstNumber.requestFocus();
                         setRequestFocus(edtOtpFirstNumber);
@@ -941,7 +695,7 @@ public class OtpActivity extends AppCompatActivity {
                     if (text.length() == 1) {
                         edtOtpThirdNumber.requestFocus();
                         setRequestFocus(edtOtpThirdNumber);
-                        removeRequestFocus(edtOtpSecondNumber);
+                        // removeRequestFocus(edtOtpSecondNumber);
                     } else if (text.length() == 0) {
                         edtOtpSecondNumber.requestFocus();
                         setRequestFocus(edtOtpSecondNumber);
@@ -951,7 +705,7 @@ public class OtpActivity extends AppCompatActivity {
                     if (text.length() == 1) {
                         edtOtpFourthNumber.requestFocus();
                         setRequestFocus(edtOtpFourthNumber);
-                        removeRequestFocus(edtOtpThirdNumber);
+                        // removeRequestFocus(edtOtpThirdNumber);
                     } else if (text.length() == 0) {
                         edtOtpThirdNumber.requestFocus();
                         setRequestFocus(edtOtpThirdNumber);
@@ -961,7 +715,7 @@ public class OtpActivity extends AppCompatActivity {
                     if (text.length() == 1) {
                         edtOtpFifthNumber.requestFocus();
                         setRequestFocus(edtOtpFifthNumber);
-                        removeRequestFocus(edtOtpFourthNumber);
+                        // removeRequestFocus(edtOtpFourthNumber);
                     } else if (text.length() == 0) {
                         edtOtpFourthNumber.requestFocus();
                         setRequestFocus(edtOtpFourthNumber);
@@ -971,7 +725,7 @@ public class OtpActivity extends AppCompatActivity {
                     if (text.length() == 1) {
                         edtOtpSixthNumber.requestFocus();
                         setRequestFocus(edtOtpSixthNumber);
-                        removeRequestFocus(edtOtpFifthNumber);
+                        // removeRequestFocus(edtOtpFifthNumber);
                     } else if (text.length() == 0) {
                         edtOtpFifthNumber.requestFocus();
                         setRequestFocus(edtOtpFifthNumber);
@@ -980,7 +734,7 @@ public class OtpActivity extends AppCompatActivity {
                 case R.id.edtOtpSixthNumber:
                     if (text.length() == 1) {
                         hideSoftKeyboard(edtOtpSixthNumber);
-                        removeRequestFocus(edtOtpSixthNumber);
+                        // removeRequestFocus(edtOtpSixthNumber);
                     } else {
                         edtOtpSixthNumber.requestFocus();
                         setRequestFocus(edtOtpSixthNumber);
@@ -1004,19 +758,6 @@ public class OtpActivity extends AppCompatActivity {
         editText.setFocusableInTouchMode(true);
         editText.setFocusable(true);
         editText.requestFocus();
-        editText.setBackground(getResources().getDrawable(R.drawable.radius_otp));
-    }
-
-    protected void removeRequestFocus(EditText editText) {
-        editText.setFocusableInTouchMode(true);
-        editText.setFocusable(true);
-        editText.requestFocus();
-        editText.setBackground(getResources().getDrawable(R.drawable.shadow_bg));
-    }
-
-    protected void showSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     protected void hideSoftKeyboard(EditText editText) {
@@ -1025,7 +766,7 @@ public class OtpActivity extends AppCompatActivity {
         editText.setFocusableInTouchMode(true);
         editText.setFocusable(true);
         editText.requestFocus();
-        editText.setBackground(getResources().getDrawable(R.drawable.shadow_bg));
+        editText.setBackgroundColor(Color.TRANSPARENT);
     }
 
     public class PinTextWatcher implements TextWatcher {
@@ -1106,7 +847,7 @@ public class OtpActivity extends AppCompatActivity {
 
     public class PinOnKeyListener implements View.OnKeyListener {
 
-        private int currentIndex;
+        private final int currentIndex;
 
         PinOnKeyListener(int currentIndex) {
             this.currentIndex = currentIndex;

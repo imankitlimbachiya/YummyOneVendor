@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Signup.DocumentUploader">
+    tools:context=".SignUp.DocumentUploader">
 
     <LinearLayout
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingTop="24dp"
         android:paddingEnd="24dp"
-        android:gravity="center"
-        android:orientation="horizontal"
         android:paddingBottom="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +22,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back_button"
+            android:src="@drawable/back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,8 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Back"
-            android:textSize="16sp"
-            android:textColor="#444444"/>
+            android:textColor="#444444"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -41,11 +40,12 @@
         android:id="@+id/txtHeading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Upload VLOG"
         android:layout_marginStart="16dp"
-        android:textColor="@color/black"
-        android:textSize="21dp"
+        android:layout_margin="15dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Upload Vlog"
+        android:textColor="#343f57"
+        android:textSize="28sp"
         app:layout_constraintTop_toBottomOf="@+id/back" />
 
     <LinearLayout
@@ -60,8 +60,7 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,65 +72,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <FrameLayout
                         android:id="@+id/background"
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/vlog_bg">
+                        android:layout_margin="20dp">
 
-<!--                        <ImageView-->
-<!--                            android:id="@+id/image1"-->
-<!--                            android:layout_width="125dp"-->
-<!--                            android:layout_height="125dp"-->
-<!--                            android:rotation="-30"-->
-<!--                            android:layout_marginEnd="80dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:src="@drawable/vlog_bg"/>-->
-
-<!--                        <ImageView-->
-<!--                            android:id="@+id/image2"-->
-<!--                            android:layout_width="125dp"-->
-<!--                            android:layout_height="125dp"-->
-<!--                            android:rotation="25"-->
-<!--                            android:layout_marginStart="75dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:src="@drawable/logo_icon"/>-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="130dp"-->
-<!--                            android:background="@color/white"-->
-<!--                            android:layout_marginTop="50dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_height="140dp">-->
-
-<!--                            <ImageView-->
-<!--                                android:id="@+id/image3"-->
-<!--                                android:layout_width="125dp"-->
-<!--                                android:layout_height="125dp"-->
-<!--                                android:src="@drawable/logo_icon"/>-->
-
-<!--                        </LinearLayout>-->
-
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@color/black"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            app:lottie_rawRes="@raw/add_vlog_lottie" />
 
                     </FrameLayout>
-
 
                     <TextView
                         android:id="@+id/text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="10dp"
                         android:fontFamily="@font/roboto_regular"
                         android:gravity="center"
-                        android:text="We have many yummy choices out there,
-Help our users decide what to eat. We’ll monetise your vlog
-when a user places an order
-"
+                        android:text="We have many yummy choices out there,\nHelp our users decide what to eat.\nWe’ll monetise your vlog when a user places an order"
                         android:textColor="@color/black"
                         android:textSize="14dp" />
 
@@ -143,22 +113,88 @@ when a user places an order
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <VideoView
-                        android:id="@+id/Video_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp" />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="190dp"
+                            android:layout_margin="15dp">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_height="wrap_content" />
+                            <VideoView
+                                android:id="@+id/Video_view"
+                                android:layout_width="120dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/edt_bg" />
+
+                            <TextView
+                                android:id="@+id/txtTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@id/Video_view"
+                                android:fontFamily="@font/roboto_bold"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:text="Title"
+                                android:textColor="#343f57"
+                                android:textSize="13sp" />
+
+                            <EditText
+                                android:id="@+id/edtTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_below="@id/txtTitle"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_toRightOf="@id/Video_view"
+                                android:background="@drawable/edt_bg"
+                                android:fontFamily="@font/roboto_regular"
+                                android:hint="Title"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/txtDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/edtTitle"
+                                android:layout_marginTop="20dp"
+                                android:layout_toRightOf="@id/Video_view"
+                                android:fontFamily="@font/roboto_bold"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:text="Description"
+                                android:textColor="@color/black"
+                                android:textSize="13sp" />
+
+                            <EditText
+                                android:id="@+id/edtDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_below="@id/txtDescription"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_toRightOf="@id/Video_view"
+                                android:background="@drawable/edt_bg"
+                                android:fontFamily="@font/roboto_regular"
+                                android:gravity="left"
+                                android:hint="Description"
+                                android:paddingLeft="10dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </RelativeLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="16dp" />
 
                 </LinearLayout>
 

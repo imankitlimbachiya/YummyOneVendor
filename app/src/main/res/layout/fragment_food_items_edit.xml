@@ -38,7 +38,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/back_button"
+                    android:src="@drawable/back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,7 +84,7 @@
                     android:layout_marginEnd="19dp"
                     android:fontFamily="@font/roboto_regular"
                     android:text="Item Name "
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -113,7 +113,7 @@
                     android:layout_marginEnd="19dp"
                     android:fontFamily="@font/roboto_regular"
                     android:text="Price "
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -161,7 +161,7 @@
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Description "
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <EditText
@@ -192,8 +192,8 @@
             android:layout_marginTop="14dp"
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
-            android:text="Item Category "
-            android:textColor="@color/black"
+            android:text="Item Menu "
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <LinearLayout
@@ -268,7 +268,7 @@
                     android:layout_marginEnd="19dp"
                     android:fontFamily="@font/roboto_regular"
                     android:text="Start Time "
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -307,7 +307,7 @@
                     android:layout_marginEnd="19dp"
                     android:fontFamily="@font/roboto_regular"
                     android:text="End Time "
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -342,7 +342,7 @@
             android:background="#ffffff"
             android:fontFamily="@font/roboto_regular"
             android:text="Type of Food"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <LinearLayout
@@ -431,7 +431,7 @@
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Cuisines"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <EditText
@@ -458,7 +458,7 @@
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Portion's"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -477,7 +477,7 @@
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Add On(s)"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -531,12 +531,12 @@
             android:background="@drawable/border_round"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/roboto_regular"
-            android:text="Confirm"
+            android:text="Update"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/Delete"
+            android:id="@+id/delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"

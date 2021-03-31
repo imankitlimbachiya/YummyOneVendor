@@ -1,15 +1,19 @@
-package yummy.one.yummyonevendor.Signup;
+package yummy.one.yummyonevendor.SignUp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,18 +76,18 @@ public class RegisterDetails extends AppCompatActivity {
     Button btnLogin, btnNext2, btnNext1, btnNext;
     ImageView one, two, three;
     ImageView line1, line2, back;
-    ImageView r1, r2, r3, r4, r5,r6,r7;
-    LinearLayout stage1, stage2, stage3,imgBack;
-    LinearLayout doc1, doc2, doc3, doc4, doc5, doc6,doc7,imagerow;
-    TextView txtCategory, txtHeading,txtHeading1;
-    TextView comments1, comments2, comments3, comments4, comments5,comments6,comments7;
+    ImageView r1, r2, r3, r4, r5, r6, r7;
+    LinearLayout stage1, stage2, stage3, imgBack;
+    LinearLayout doc1, doc2, doc3, doc4, doc5, doc6, doc7, imagerow;
+    TextView txtCategory, txtHeading, txtHeading1, txtContactSupportTeam;
+    TextView comments1, comments2, comments3, comments4, comments5, comments6, comments7;
     ProgressBar progressBar;
-    EditText edtRestaurantName, edtAddressLine1, edtAddressLine2, edtCity, edtState, edtPostcode, edtBankName, edtHolderName, edtAccountNumber, edtIfsc, edtOpentime, edtClosetime,edtEmail;
+    EditText edtRestaurantName, edtAddressLine1, edtAddressLine2, edtCity, edtState, edtPostcode, edtBankName, edtHolderName, edtAccountNumber, edtIfsc, edtOpentime, edtClosetime, edtEmail;
     private Session session;
     long id;
     private int selection = 0;
     private int currentselection = 1;
-    private String path1 = "", path2 = "", path3 = "", path4 = "", path5 = "" , path6="" ,path7="";
+    private String path1 = "", path2 = "", path3 = "", path4 = "", path5 = "", path6 = "", path7 = "";
     private String open = "", close = "";
 
     private Uri imageUri;
@@ -100,13 +104,12 @@ public class RegisterDetails extends AppCompatActivity {
     private int mHour;
     private int mMinute;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_details);
 
-        Log.e("Activity","RegisterDetails");
+        Log.e("Activity", "RegisterDetails");
 
         btnLogin = findViewById(R.id.btnLogin);
         progressBar = findViewById(R.id.progressbar);
@@ -160,6 +163,7 @@ public class RegisterDetails extends AppCompatActivity {
         comments6 = findViewById(R.id.comments6);
         comments7 = findViewById(R.id.comments7);
         imagerow = findViewById(R.id.imagerow);
+        txtContactSupportTeam = findViewById(R.id.txtContactSupportTeam);
         back = findViewById(R.id.back);
         session = new Session(getApplication());
 
@@ -183,7 +187,7 @@ public class RegisterDetails extends AppCompatActivity {
         txtHeading.setText(session.getcategory() + " Details");
         txtHeading1.setText(session.getcategory() + " Details");
 
-        if(RegisterDetails.this.getApplicationContext()!=null) {
+        if (RegisterDetails.this.getApplicationContext() != null) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
 
@@ -210,8 +214,10 @@ public class RegisterDetails extends AppCompatActivity {
 
         comments5.setVisibility(View.GONE);
 
-        if(!TextUtils.isEmpty(session.getdocument())){
+        if (!TextUtils.isEmpty(session.getdocument())) {
             currentselection = 2;
+            txtHeading.setText("Documents");
+            txtHeading1.setText("Documents");
             session.setdocument("");
             stage1.setVisibility(View.GONE);
             stage2.setVisibility(View.VISIBLE);
@@ -224,6 +230,25 @@ public class RegisterDetails extends AppCompatActivity {
             three.setImageResource(R.drawable.three);
         }
 
+        txtContactSupportTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterDetails.this);
+                builder.setTitle("YummyOne Vendor");
+                builder.setMessage("Contact our support team if any query.");
+                builder.setPositiveButton("Contact Support", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
 
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,8 +268,7 @@ public class RegisterDetails extends AppCompatActivity {
                     two.setImageResource(R.drawable.two);
                     line2.setImageResource(R.drawable.line);
                     three.setImageResource(R.drawable.three);
-                }
-                else if(currentselection == 3){
+                } else if (currentselection == 3) {
                     currentselection = 2;
                     stage1.setVisibility(View.GONE);
                     stage2.setVisibility(View.VISIBLE);
@@ -293,7 +317,6 @@ public class RegisterDetails extends AppCompatActivity {
                                 formatter = new SimpleDateFormat("h:mm a");
                                 edtOpentime.setText("" + formatter.format(tme));
                                 open = h + ":" + m;
-
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.updateTime(06, 0);
@@ -380,7 +403,7 @@ public class RegisterDetails extends AppCompatActivity {
                     edtAddressLine1.setError(null);
                 }
 
-                if(TextUtils.isEmpty(session.getloc())){
+                if (TextUtils.isEmpty(session.getloc())) {
                     edtAddressLine1.setError("Select Address");
                     edtAddressLine1.requestFocus();
                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -473,7 +496,7 @@ public class RegisterDetails extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-                    try {
+//                    try {
                         int count = 0;
                         if (documentSnapshot.contains("RestaurantName")) {
                             if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("RestaurantName")).toString())) {
@@ -493,7 +516,7 @@ public class RegisterDetails extends AppCompatActivity {
                         }
 
                         if (documentSnapshot.contains("Email")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("Email")).toString())) {
+                            if (!TextUtils.isEmpty(documentSnapshot.get("Email").toString())) {
                                 String a = Objects.requireNonNull(documentSnapshot.get("Email")).toString();
                                 edtEmail.setText(a);
                                 count++;
@@ -527,8 +550,8 @@ public class RegisterDetails extends AppCompatActivity {
 
                         if (documentSnapshot.contains("Location")) {
                             if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("Location")).toString())) {
-                                GeoPoint geoPoint =documentSnapshot.getGeoPoint("Location");
-                                session.setloc(geoPoint.getLatitude()+","+geoPoint.getLongitude());
+                                GeoPoint geoPoint = documentSnapshot.getGeoPoint("Location");
+                                session.setloc(geoPoint.getLatitude() + "," + geoPoint.getLongitude());
                             }
                         }
 
@@ -559,7 +582,6 @@ public class RegisterDetails extends AppCompatActivity {
                                 count++;
                             }
                         }
-
 
                         if (documentSnapshot.contains("IFSCCode")) {
                             if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("IFSCCode")).toString())) {
@@ -617,12 +639,16 @@ public class RegisterDetails extends AppCompatActivity {
                             }
                         }
 
-                        if (documentSnapshot.contains("FSSAIImage1") && documentSnapshot.contains("FSSAIImageApproval") && documentSnapshot.contains("FSSAIImageComments")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString())) {
-                                path2 = Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString();
+
+                        if (documentSnapshot.contains("FSSAIImageApproval")) {
+
+                            if(documentSnapshot.contains("FSSAIImage1")) {
+                                if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString())) {
+                                    path2 = Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString();
+                                }
                             }
 
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("FSSAIImageApproval")).toString())) {
+                            if (!TextUtils.isEmpty(documentSnapshot.get("FSSAIImageApproval").toString())) {
                                 if (documentSnapshot.get("FSSAIImageApproval").toString().equalsIgnoreCase("Pending")) {
                                     comments2.setVisibility(View.GONE);
                                     doc2.setBackgroundResource(R.color.pending);
@@ -781,15 +807,16 @@ public class RegisterDetails extends AppCompatActivity {
                         }
 
                         if (count == 6 && temp == 1) {
-                            btnNext1.setAlpha(1.0f);
-                        } else {
-                            btnNext1.setAlpha(0.5f);
+                            btnNext1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#c8c8dc")));
+                        }
+                        else {
+                            btnNext1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#808080")));
                         }
 
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        //                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+//                    }
                 }
             }
         });
@@ -1017,7 +1044,7 @@ public class RegisterDetails extends AppCompatActivity {
             }
         });
 
-           doc6.setOnClickListener(new View.OnClickListener() {
+        doc6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -1066,7 +1093,7 @@ public class RegisterDetails extends AppCompatActivity {
             }
         });
 
-           doc7.setOnClickListener(new View.OnClickListener() {
+        doc7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -1118,16 +1145,16 @@ public class RegisterDetails extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    currentselection = 2;
-                    stage1.setVisibility(View.GONE);
-                    stage2.setVisibility(View.VISIBLE);
-                    stage3.setVisibility(View.GONE);
-                    imagerow.setVisibility(View.VISIBLE);
-                    one.setImageResource(R.drawable.sone);
-                    line1.setImageResource(R.drawable.sline);
-                    two.setImageResource(R.drawable.two);
-                    line2.setImageResource(R.drawable.line);
-                    three.setImageResource(R.drawable.three);
+                currentselection = 2;
+                stage1.setVisibility(View.GONE);
+                stage2.setVisibility(View.VISIBLE);
+                stage3.setVisibility(View.GONE);
+                imagerow.setVisibility(View.VISIBLE);
+                one.setImageResource(R.drawable.sone);
+                line1.setImageResource(R.drawable.sline);
+                two.setImageResource(R.drawable.two);
+                line2.setImageResource(R.drawable.line);
+                three.setImageResource(R.drawable.three);
             }
         });
 
@@ -1521,8 +1548,7 @@ public class RegisterDetails extends AppCompatActivity {
         if (currentselection == 1) {
             Intent intent = new Intent(RegisterDetails.this, CategorySelection.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-        }
-        else if (currentselection == 2) {
+        } else if (currentselection == 2) {
             currentselection = 1;
             stage1.setVisibility(View.VISIBLE);
             stage2.setVisibility(View.GONE);
@@ -1533,8 +1559,7 @@ public class RegisterDetails extends AppCompatActivity {
             two.setImageResource(R.drawable.two);
             line2.setImageResource(R.drawable.line);
             three.setImageResource(R.drawable.three);
-        }
-        else if(currentselection == 3){
+        } else if (currentselection == 3) {
             currentselection = 2;
             stage1.setVisibility(View.GONE);
             stage2.setVisibility(View.VISIBLE);
@@ -1545,8 +1570,7 @@ public class RegisterDetails extends AppCompatActivity {
             two.setImageResource(R.drawable.two);
             line2.setImageResource(R.drawable.line);
             three.setImageResource(R.drawable.three);
-        }
-        else {
+        } else {
             Intent a = new Intent(Intent.ACTION_MAIN);
             a.addCategory(Intent.CATEGORY_HOME);
             a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

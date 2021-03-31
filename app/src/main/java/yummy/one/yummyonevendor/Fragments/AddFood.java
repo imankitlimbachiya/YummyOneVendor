@@ -56,21 +56,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -85,18 +76,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import yummy.one.yummyonevendor.Cuisines.Cuisines;
 import yummy.one.yummyonevendor.Cuisines.CuisinesAdapter;
 import yummy.one.yummyonevendor.FoodCategory.Category1;
 import yummy.one.yummyonevendor.Functionality.Session;
-import yummy.one.yummyonevendor.Inventory.Inventory;
-import yummy.one.yummyonevendor.Inventory.InventoryAdapter;
-import yummy.one.yummyonevendor.Login.OtpActivity;
 import yummy.one.yummyonevendor.Product.Product;
 import yummy.one.yummyonevendor.Product.ProductsAdapter;
 import yummy.one.yummyonevendor.R;
-import yummy.one.yummyonevendor.Signup.CategorySelection;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -266,16 +252,13 @@ public class AddFood extends Fragment {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence[] items = {"Take Photo", "Choose from Library",
-                        "Cancel"};
+                final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), AlertDialog.THEME_HOLO_LIGHT);
                 builder.setTitle("Add Photo!");
-
                 //SET ITEMS AND THERE LISTENERS
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-
                         if (items[item].equals("Take Photo")) {
                             if (getContext() != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -297,6 +280,7 @@ public class AddFood extends Fragment {
                 builder.show();
             }
         });
+
         LinearLayout back = v.findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -314,14 +298,11 @@ public class AddFood extends Fragment {
                 final Calendar c = Calendar.getInstance();
                 mHour = c.get(Calendar.HOUR_OF_DAY);
                 mMinute = c.get(Calendar.MINUTE);
-
                 // Launch Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                         new TimePickerDialog.OnTimeSetListener() {
-
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
                                 mHour = hourOfDay;
                                 mMinute = minute;
                                 String h = "", m = "";
@@ -329,20 +310,13 @@ public class AddFood extends Fragment {
                                     h = "0" + hourOfDay;
                                 else
                                     h = "" + hourOfDay;
-
                                 if (mMinute >= 0 && mMinute <= 9)
                                     m = "0" + minute;
                                 else
                                     m = "" + minute;
-
-
                                 stime.setText(h + ":" + m);
-
-
                             }
                         }, mHour, mMinute, true);
-
-
                 timePickerDialog.show();
             }
         });
@@ -354,14 +328,11 @@ public class AddFood extends Fragment {
                 final Calendar c = Calendar.getInstance();
                 mHour = c.get(Calendar.HOUR_OF_DAY);
                 mMinute = c.get(Calendar.MINUTE);
-
                 // Launch Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                         new TimePickerDialog.OnTimeSetListener() {
-
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
                                 mHour = hourOfDay;
                                 mMinute = minute;
                                 String h = "", m = "";
@@ -369,20 +340,13 @@ public class AddFood extends Fragment {
                                     h = "0" + hourOfDay;
                                 else
                                     h = "" + hourOfDay;
-
                                 if (mMinute >= 0 && mMinute <= 9)
                                     m = "0" + minute;
                                 else
                                     m = "" + minute;
-
-
                                 etime.setText(h + ":" + m);
-
-
                             }
                         }, mHour, mMinute, true);
-
-
                 timePickerDialog.show();
             }
         });
@@ -613,13 +577,11 @@ public class AddFood extends Fragment {
                     addons.requestFocus();
                     return;
                 }
-
                 if (TextUtils.isEmpty(payment.getText().toString())) {
                     payment.setError("Enter Price");
                     payment.requestFocus();
                     return;
                 }
-
                 if (label.getText().toString().equalsIgnoreCase("portion")) {
                     int temp = 0, position = 0;
                     for (int i = 0; i < productsAdapter1.getItemCount(); i++) {
@@ -702,17 +664,13 @@ public class AddFood extends Fragment {
             }
         });
 
-
-        final CharSequence[] items = {"Add Portions", "Add Addons",
-                "Cancel"};
+        final CharSequence[] items = {"Add Portions", "Add Addons", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle("Add Item Customisation!");
-
         //SET ITEMS AND THERE LISTENERS
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-
                 if (items[item].equals("Add Portions")) {
                     //Adding Portions
                     final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
@@ -771,7 +729,6 @@ public class AddFood extends Fragment {
                             else
                                 products1.set(position, new Product(input.getText().toString(), "\u20b9" + input1.getText().toString()));
 
-
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                             r2.setLayoutManager(mLayoutManager);
 
@@ -793,7 +750,6 @@ public class AddFood extends Fragment {
                                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                                 }
                             }
-
                             dialog.dismiss();
                         }
                     });
@@ -970,7 +926,6 @@ public class AddFood extends Fragment {
                     return;
                 }
 
-
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 String id = db.collection("Vendor").document(session.getusername()).collection("Products").document().getId();
                 DocumentReference db1 = db.collection("Vendor").document(session.getusername()).collection("Products").document(id);
@@ -988,7 +943,6 @@ public class AddFood extends Fragment {
                 user.put("Status", "Active");
                 user.put("Cuisines", cuisines1);
                 user.put("FoodImage", path);
-
 
                 String portionaarray[] = new String[productsAdapter1.getItemCount()];
                 for (int i = 0; i < productsAdapter1.getItemCount(); i++) {
@@ -1014,14 +968,20 @@ public class AddFood extends Fragment {
                     addonsarray[i] = product.PushId + "," + product.Name.substring(1);
                 }
 
-
                 user.put("Addons", Arrays.asList(addonsarray));
                 user.put("Portions", Arrays.asList(portionaarray));
                 db1.set(user);
 
-
                 DocumentReference washingtonRef = db.collection("Vendor").document(session.getusername());
                 washingtonRef.update(itemcategory, FieldValue.increment(1));
+
+                DocumentReference db2 = db.collection("FoodApprovals").document(session.getusername());
+                Map<String, Object> user1 = new HashMap<>();
+                user1.put("Category", itemcategory);
+                user1.put("Email", session.getemail());
+                user1.put("Number", session.getnumber());
+                user1.put("RestarauntName", session.getname());
+                db2.set(user1);
 
                 if (getContext() != null) {
                     final CharSequence[] items = {"Contact Support", "Cancel"};
@@ -1039,7 +999,6 @@ public class AddFood extends Fragment {
                     });
                     alert.show();
                 }
-
             }
         });
 
@@ -1067,8 +1026,8 @@ public class AddFood extends Fragment {
     }
 
     private void galleryIntent() {
-        //CHOOSE IMAGE FROM GALLERY
-//        Log.d("gola", "entered here");
+        // CHOOSE IMAGE FROM GALLERY
+        // Log.d("gola", "entered here");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_CODE);
@@ -1077,8 +1036,7 @@ public class AddFood extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        //SAVE URI FROM GALLERY
+        // SAVE URI FROM GALLERY
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             imageHoldUri = data.getData();
             if (imageHoldUri != null) {
@@ -1089,47 +1047,43 @@ public class AddFood extends Fragment {
                 progressDialog.setTitle("Updating....!");
                 progressDialog.show();
                 progressDialog.setCancelable(false);
-                riversRef.putFile(imageHoldUri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                riversRef.putFile(imageHoldUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                        final String[] u = new String[1];
+                        storageRef.child("FoodItems/" + c + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Get a URL to the uploaded content
-                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                                final String[] u = new String[1];
-                                storageRef.child("FoodItems/" + c + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        u[0] = uri.toString();
-                                        path = u[0];
-                                        RequestOptions requestOptions = new RequestOptions();
-                                        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if (getContext() != null)
-                                            Glide.with(getContext()).load(path).apply(requestOptions).into(image);
-
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        // Handle any errors
-                                    }
-                                });
-                                progressDialog.dismiss();
+                            public void onSuccess(Uri uri) {
+                                u[0] = uri.toString();
+                                path = u[0];
+                                RequestOptions requestOptions = new RequestOptions();
+                                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+                                if (getContext() != null)
+                                    Glide.with(getContext()).load(path).apply(requestOptions).into(image);
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
+                        }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                                progressDialog.setMessage((int) progress + "%Uploaded");
+                                // Handle any errors
                             }
                         });
+                        progressDialog.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        progressDialog.setMessage((int) progress + "%Uploaded");
+                    }
+                });
 
             } else {
                 Toast.makeText(getContext(), "File Path Null", Toast.LENGTH_SHORT).show();

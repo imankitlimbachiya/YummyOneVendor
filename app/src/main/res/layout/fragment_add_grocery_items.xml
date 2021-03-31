@@ -38,7 +38,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/back_button"
+                    android:src="@drawable/back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,7 +58,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:text="Add item to"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -80,13 +79,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="19dp"
                     android:fontFamily="@font/roboto_regular"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
-                    android:text="Item Name "
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:paddingLeft="5dp"
+                    android:text="Item Name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13sp" />
 
                 <EditText
                     android:id="@+id/name"
@@ -102,20 +102,22 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="19dp"
                     android:fontFamily="@font/roboto_regular"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:text="Price "
-                    android:textColor="@color/black"
-                    android:textSize="14dp" />
+                    android:paddingLeft="5dp"
+                    android:text="Quantity"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13sp" />
 
                 <EditText
-                    android:id="@+id/price"
+                    android:id="@+id/qty"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -124,14 +126,15 @@
                     android:layout_marginEnd="19dp"
                     android:background="@drawable/edt_bg"
                     android:fontFamily="@font/roboto_regular"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="10dp"
+                    android:inputType="textCapSentences"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -150,42 +153,122 @@
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="19dp"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:paddingLeft="5dp"
+                    android:text="Mrp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/mrp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edt_bg"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:paddingLeft="5dp"
+                    android:text="Price"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edt_bg"
+                    android:fontFamily="@font/roboto_regular"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
             android:text="Description "
-            android:textColor="@color/black"
-            android:textSize="14dp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginStart="19dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="19dp"
-            android:background="@drawable/border"
+            android:background="@drawable/edt_bg"
             android:fontFamily="@font/roboto_regular"
-            android:maxLines="10"
-            android:minLines="5"
-            android:paddingStart="10dp"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:maxLines="6"
+            android:minLines="3"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
             android:textColor="@color/black"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
-            android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:text="Item Category "
             android:textColor="@color/black"
-            android:textSize="14dp"
+            android:textSize="13sp"
             android:visibility="gone" />
 
         <LinearLayout
@@ -212,7 +295,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:inputType="textCapSentences"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -236,297 +319,26 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:text="Start Time "
-                    android:textColor="@color/black"
-                    android:textSize="14dp" />
-
-                <EditText
-                    android:id="@+id/stime"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="19dp"
-                    android:layout_marginEnd="19dp"
-                    android:background="@drawable/edt_bg"
-                    android:layout_marginTop="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center_vertical"
-                    android:paddingEnd="10dp"
-                    android:hint="HH:MM"
-                    android:textColorHint="@color/black"
-                    android:textColor="@color/black"
-                    android:textSize="16dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:paddingStart="16dp"
-                    android:paddingTop="8dp"
-                    android:text="End Time "
-                    android:textColor="@color/black"
-                    android:textSize="14dp" />
-
-                <EditText
-                    android:id="@+id/etime"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="19dp"
-                    android:layout_marginEnd="19dp"
-                    android:background="@drawable/edt_bg"
-                    android:layout_marginTop="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center_vertical"
-                    android:paddingEnd="10dp"
-                    android:hint="HH:MM"
-                    android:textColorHint="@color/black"
-                    android:textColor="@color/black"
-                    android:textSize="16dp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="16dp"
-            android:background="#ffffff"
-            android:fontFamily="@font/roboto_regular"
-            android:text="Type of Food"
-            android:textColor="@color/black" />
-
-        <LinearLayout
+            android:id="@+id/txtQty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginStart="19dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="19dp"
-            android:orientation="vertical"
-            android:paddingTop="8dp">
-
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="2">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
-
-                                <RadioButton
-                                    android:id="@+id/veg"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_weight="1"
-                                    android:checked="false"
-                                    android:text="Veg"
-                                    android:textSize="16sp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
-
-                                <RadioButton
-                                    android:id="@+id/nonveg"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_weight="1"
-                                    android:checked="false"
-                                    android:text="Non-Veg"
-                                    android:textSize="16sp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="2">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
-
-                                <RadioButton
-                                    android:id="@+id/egg"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_weight="1"
-                                    android:checked="false"
-                                    android:text="Egg"
-                                    android:textSize="16sp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1">
-
-                                <RadioButton
-                                    android:id="@+id/vegan"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:layout_weight="1"
-                                    android:checked="false"
-                                    android:text="Vegan"
-                                    android:textSize="16sp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/t1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto_regular"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:text="Cuisines"
-            android:textColor="#55565b"
-            android:textSize="14dp" />
-
-        <EditText
-            android:id="@+id/cuisine"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="19dp"
-            android:background="@drawable/edt_bg"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:fontFamily="@font/roboto_regular"
-            android:hint="Select Cuisines"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/t2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/roboto_regular"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:text="Portion's"
-            android:textColor="#55565b"
-            android:textSize="14dp" />
+            android:text="Quantity"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/r2"
+            android:id="@+id/r1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/t3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/roboto_regular"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:text="Add On(s)"
-            android:textColor="#55565b"
-            android:textSize="14dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/r3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/plus"
@@ -536,7 +348,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/border_transparent"
+            android:background="@drawable/edt_bg"
             android:gravity="center"
             android:paddingStart="16dp"
             android:paddingTop="4dp"
@@ -545,26 +357,10 @@
             android:text="+ Add Item Customisation"
             android:textColor="@color/colorPrimary" />
 
-        <EditText
-            android:id="@+id/mrp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="19dp"
-            android:layout_marginEnd="19dp"
-            android:fontFamily="@font/roboto_regular"
-            android:inputType="textCapWords"
-            android:paddingStart="10dp"
-            android:text="0"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            android:visibility="gone" />
-
         <Button
             android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/landmark"
             android:layout_marginStart="64dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="64dp"

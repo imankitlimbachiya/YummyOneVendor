@@ -80,6 +80,7 @@ import yummy.one.yummyonevendor.Cuisines.Cuisines;
 import yummy.one.yummyonevendor.Cuisines.CuisinesAdapter;
 import yummy.one.yummyonevendor.FoodCategory.Category1;
 import yummy.one.yummyonevendor.Functionality.Session;
+import yummy.one.yummyonevendor.Login.OtpActivity;
 import yummy.one.yummyonevendor.Product.Product;
 import yummy.one.yummyonevendor.Product.ProductsAdapter;
 import yummy.one.yummyonevendor.R;
@@ -93,7 +94,7 @@ public class FoodItemsEdit extends Fragment {
     private Spinner itemcategory;
     private RecyclerView r1, r2, r3;
     private TextView t1, t2, t3;
-    private Button submit, plus, cusinesSave;
+    private Button submit, plus, cusinesSave,delete;
     private ImageView image, add;
     private ProductsAdapter productsAdapter;
     private ProductsAdapter productsAdapter1;
@@ -175,6 +176,7 @@ public class FoodItemsEdit extends Fragment {
         t2 = v.findViewById(R.id.t2);
         t3 = v.findViewById(R.id.t3);
         submit = v.findViewById(R.id.submit);
+        delete = v.findViewById(R.id.delete);
         add = v.findViewById(R.id.add);
         radioGroup = v.findViewById(R.id.radioGroup);
         veg = v.findViewById(R.id.veg);
@@ -546,6 +548,13 @@ public class FoodItemsEdit extends Fragment {
             }
         });
 
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -950,6 +959,36 @@ public class FoodItemsEdit extends Fragment {
         price.setFilters(new InputFilter[]{new AddFood.DecimalDigitsInputFilter(10, 2)});
         mrp.setFilters(new InputFilter[]{new AddFood.DecimalDigitsInputFilter(10, 2)});
 
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final CharSequence[] items = {"Yes", "No"};
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getContext(), AlertDialog.THEME_HOLO_LIGHT);
+                final EditText input = new EditText(getContext());
+                alert.setTitle("Are you sure");
+                alert.setMessage("You want to delte the food item");
+                // alert.setView(input);
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                        FirebaseFirestore.getInstance().collection("Vendor").document(session.getusername()).collection("Products").document(pushid).delete();
+                        if(getActivity()!=null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+
+            }
+        });
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1079,6 +1118,14 @@ public class FoodItemsEdit extends Fragment {
                         user.put("Addons", Arrays.asList(addonsarray));
                         user.put("Portions", Arrays.asList(portionaarray));
                         db1.set(user);
+
+                        DocumentReference db2 = db.collection("FoodApprovals").document(session.getusername());
+                        Map<String, Object> user1 = new HashMap<>();
+                        user1.put("Category", itemcategory.getSelectedItem().toString());
+                        user1.put("Email", session.getemail());
+                        user1.put("Number", session.getnumber());
+                        user1.put("RestarauntName", session.getname());
+                        db2.set(user1);
 
                         if (getContext() != null) {
                             final CharSequence[] items = {"Contact Support", "Cancel"};

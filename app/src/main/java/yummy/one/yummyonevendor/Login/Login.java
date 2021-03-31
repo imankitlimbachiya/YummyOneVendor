@@ -3,8 +3,6 @@ package yummy.one.yummyonevendor.Login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 
 import android.animation.Animator;
 import android.app.Activity;
@@ -41,7 +39,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import yummy.one.yummyonevendor.Functionality.Session;
 import yummy.one.yummyonevendor.R;
-import yummy.one.yummyonevendor.Signup.Signup;
+import yummy.one.yummyonevendor.SignUp.SignUp;
 
 public class Login extends AppCompatActivity {
 
@@ -53,11 +51,12 @@ public class Login extends AppCompatActivity {
     ConstraintLayout mainview;
 
     boolean isKeyboardShowing = false;
-    boolean temp=false;
+    boolean temp = false;
     LinearLayout loader;
     LottieAnimationView animation;
-    String status="";
+    String status = "";
     String id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +79,7 @@ public class Login extends AppCompatActivity {
 
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
             int count;
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -87,10 +87,9 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int i1, int i2) {
-                count=i2;
+                count = i2;
 
-
-                if(charSequence.length()>4) {
+                if (charSequence.length() > 4) {
                     if (!TextUtils.isDigitsOnly(charSequence.subSequence(4, charSequence.length()))) {
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -105,8 +104,6 @@ public class Login extends AppCompatActivity {
                         edtPhoneNumber.setSelection(charSequence.length() - 1);
                     }
                 }
-
-
 
                 if (charSequence.toString().length() == 14) {
                     edtPhoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.tick, 0);
@@ -126,23 +123,21 @@ public class Login extends AppCompatActivity {
 //                }
 
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-
-                if(!s.toString().startsWith("+91 ")){
+                if (!s.toString().startsWith("+91 ")) {
                     edtPhoneNumber.setText("+91 ");
                     edtPhoneNumber.setSelection(edtPhoneNumber.getText().length());
                 }
-
-
             }
         });
 
         edtPhoneNumber.setSelection(edtPhoneNumber.getText().length());
 
-
         Session session = new Session(getApplication());
         session.setisfirsttime("false");
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,56 +183,57 @@ public class Login extends AppCompatActivity {
                 loader.setVisibility(View.VISIBLE);
                 animation.playAnimation();
 
-                db.collection("Vendor")
-                        .whereEqualTo("MobileNumber", edtPhoneNumber.getText().toString().substring(4))
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                                if (task.isSuccessful()) {
-                                    if (task.getResult().isEmpty()) {
-                                        status = "notregistered";
-                                    } else {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            id = document.getId();
-                                            break;
-                                        }
-                                        status = "registered";
-                                    }
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "" + task.getException(), Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
 
 
                 animation.addAnimatorListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
+
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
                         progressBar.setVisibility(View.GONE);
                         btnLogin.setEnabled(true);
-                            if(status.equals("notregistered")){
-                                Intent intent = new Intent(Login.this, Signup.class);
-                                intent.putExtra("status", "notregistered");
-                                intent.putExtra("id", "");
-                                intent.putExtra("mobilenumber", edtPhoneNumber.getText().toString().substring(4));
-                                startActivity(intent);
-                            }
-                            else{
-                                Intent intent = new Intent(Login.this, OtpActivity.class);
-                                intent.putExtra("status", "registered");
-                                intent.putExtra("id", id);
-                                intent.putExtra("mobilenumber", edtPhoneNumber.getText().toString().substring(4));
-                                intent.putExtra("name", "");
-                                intent.putExtra("dob", "");
-                                intent.putExtra("category", "");
-                                startActivity(intent);
-                            }
+
+                        db.collection("Vendor")
+                                .whereEqualTo("MobileNumber", edtPhoneNumber.getText().toString().substring(4)).get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            if (task.getResult().isEmpty()) {
+                                                status = "notregistered";
+                                            } else {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    id = document.getId();
+                                                    break;
+                                                }
+                                                status = "registered";
+                                            }
+
+                                            if (status.equals("notregistered")) {
+                                                Intent intent = new Intent(Login.this, SignUp.class);
+                                                intent.putExtra("status", "notregistered");
+                                                intent.putExtra("id", "");
+                                                intent.putExtra("mobilenumber", edtPhoneNumber.getText().toString().substring(4));
+                                                startActivity(intent);
+                                            } else {
+                                                Intent intent = new Intent(Login.this, OtpActivity.class);
+                                                intent.putExtra("status", "registered");
+                                                intent.putExtra("id", id);
+                                                intent.putExtra("mobilenumber", edtPhoneNumber.getText().toString().substring(4));
+                                                intent.putExtra("name", "");
+                                                intent.putExtra("dob", "");
+                                                intent.putExtra("category", "");
+                                                startActivity(intent);
+                                            }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "" + task.getException(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+
                     }
 
                     @Override
@@ -250,43 +246,37 @@ public class Login extends AppCompatActivity {
 
                     }
                 });
-
-
             }
         });
 
+        mainview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                mainview.getWindowVisibleDisplayFrame(r);
+                int screenHeight = mainview.getRootView().getHeight();
 
-        mainview.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
+                // r.bottom is the position above soft keypad or device button.
+                // if keypad is shown, the r.bottom is smaller than that before.
+                int keypadHeight = screenHeight - r.bottom;
 
-                        Rect r = new Rect();
-                        mainview.getWindowVisibleDisplayFrame(r);
-                        int screenHeight = mainview.getRootView().getHeight();
+                Log.d("TAG", "keypadHeight = " + keypadHeight);
 
-                        // r.bottom is the position above soft keypad or device button.
-                        // if keypad is shown, the r.bottom is smaller than that before.
-                        int keypadHeight = screenHeight - r.bottom;
-
-                        Log.d("TAG", "keypadHeight = " + keypadHeight);
-
-                        if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
-                            // keyboard is opened
-                            if (!isKeyboardShowing) {
-                                isKeyboardShowing = true;
-                                onKeyboardVisibilityChanged(true,r.bottom);
-                            }
-                        }
-                        else {
-                            // keyboard is closed
-                            if (isKeyboardShowing) {
-                                isKeyboardShowing = false;
-                                onKeyboardVisibilityChanged(false,r.bottom);
-                            }
-                        }
+                if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                    // keyboard is opened
+                    if (!isKeyboardShowing) {
+                        isKeyboardShowing = true;
+                        onKeyboardVisibilityChanged(true, r.bottom);
                     }
-                });
+                } else {
+                    // keyboard is closed
+                    if (isKeyboardShowing) {
+                        isKeyboardShowing = false;
+                        onKeyboardVisibilityChanged(false, r.bottom);
+                    }
+                }
+            }
+        });
     }
 
     public void setupUI(View view) {
@@ -317,7 +307,7 @@ public class Login extends AppCompatActivity {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    void onKeyboardVisibilityChanged(boolean opened,int a) {
+    void onKeyboardVisibilityChanged(boolean opened, int a) {
 //        if(opened){
 //            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) edtPhoneNumber.getLayoutParams();
 //            final float scale = getCurrentFocus().getResources().getDisplayMetrics().density;
@@ -344,10 +334,8 @@ public class Login extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         loader.setVisibility(View.GONE);
     }
-
-
 }

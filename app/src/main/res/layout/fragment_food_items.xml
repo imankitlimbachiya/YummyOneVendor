@@ -45,7 +45,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/back_button"
+                    android:src="@drawable/back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -120,8 +120,11 @@
 
     <Button
         android:id="@+id/btnFooditems"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginStart="64dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/border_round"
         android:backgroundTint="@color/colorPrimary"

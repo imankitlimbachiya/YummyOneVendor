@@ -45,15 +45,15 @@ public class FoodItemsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private Session sessions;
-    private Button btnFooditems,btnRemove;
-    private ArrayList<Inventory> inventories=new ArrayList<Inventory>();
+    private Button btnFooditems, btnRemove;
+    private ArrayList<Inventory> inventories = new ArrayList<Inventory>();
     private InventoryAdapter inventoryAdapter;
-    private String category="";
+    private String category = "";
     private LinearLayout imgBack;
     private TextView txtCategoryName;
     int index = 0;
-
     ArrayList<String> categoryc;
+
     public FoodItemsFragment() {
         // Required empty public constructor
     }
@@ -64,12 +64,11 @@ public class FoodItemsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_food_items, container, false);
+        View v = inflater.inflate(R.layout.fragment_food_items, container, false);
 
-        if(getActivity()!=null){
+        if (getActivity() != null) {
             LinearLayout bottomnavigation = getActivity().findViewById(R.id.bottomnavigation);
             bottomnavigation.setVisibility(View.GONE);
         }
@@ -78,7 +77,7 @@ public class FoodItemsFragment extends Fragment {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity()!=null){
+                if (getActivity() != null) {
                     getActivity().onBackPressed();
                 }
             }
@@ -91,7 +90,7 @@ public class FoodItemsFragment extends Fragment {
         sessions = new Session(getActivity());
 
         inventories.clear();
-        inventoryAdapter=new InventoryAdapter(inventories);
+        inventoryAdapter = new InventoryAdapter(inventories);
 
         category = getArguments().getString("category");
         index = Integer.parseInt(getArguments().getString("index"));
@@ -101,16 +100,29 @@ public class FoodItemsFragment extends Fragment {
         btnFooditems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity()!=null) {
-                    if(getActivity()!=null) {
-                        Fragment fragment = new AddFood();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("category",category);
-                        fragment.setArguments(bundle);
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        fragmentManager.beginTransaction()
-                                .addToBackStack(null)
-                                .replace(R.id.frame_container, fragment).commit();
+                if (getActivity() != null) {
+                    if (sessions.getcategory().equals("Grocery")) {
+                        if (getActivity() != null) {
+                            Fragment fragment = new AddGroceryItems();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("category", category);
+                            fragment.setArguments(bundle);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            fragmentManager.beginTransaction()
+                                    .addToBackStack(null)
+                                    .replace(R.id.frame_container, fragment).commit();
+                        }
+                    } else {
+                        if (getActivity() != null) {
+                            Fragment fragment = new AddFood();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("category", category);
+                            fragment.setArguments(bundle);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            fragmentManager.beginTransaction()
+                                    .addToBackStack(null)
+                                    .replace(R.id.frame_container, fragment).commit();
+                        }
                     }
                 }
             }
@@ -121,10 +133,10 @@ public class FoodItemsFragment extends Fragment {
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    String temp=documentSnapshot.get("ItemCategory").toString();
-                    String a=temp;
-                    if(!TextUtils.isEmpty(a)) {
+                if (documentSnapshot.exists()) {
+                    String temp = documentSnapshot.get("ItemCategory").toString();
+                    String a = temp;
+                    if (!TextUtils.isEmpty(a)) {
                         categoryc = new ArrayList<String>(Arrays.asList(temp.split(",")));
                     }
                 }
@@ -134,22 +146,21 @@ public class FoodItemsFragment extends Fragment {
         btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(inventoryAdapter.getItemCount() <= 0){
+                if (inventoryAdapter.getItemCount() <= 0) {
                     categoryc.remove(index);
-                    String a="";
-                    for(int i=0;i<categoryc.size();i++){
-                        a+=categoryc.get(i)+",";
+                    String a = "";
+                    for (int i = 0; i < categoryc.size(); i++) {
+                        a += categoryc.get(i) + ",";
                     }
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> data = new HashMap<>();
                     data.put("ItemCategory", a);
                     db.collection("Vendor").document(sessions.getusername()).set(data, SetOptions.merge());
-                    Toast.makeText(getContext(),"Category Deleted Successfully",Toast.LENGTH_LONG).show();
-                    if(getActivity()!=null)
+                    Toast.makeText(getContext(), "Category Deleted Successfully", Toast.LENGTH_LONG).show();
+                    if (getActivity() != null)
                         getActivity().onBackPressed();
-                }
-                else{
-                    Toast.makeText(getContext(),"Delete or move food items to delete the category",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getContext(), "Delete or move food items to delete the category", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -157,36 +168,50 @@ public class FoodItemsFragment extends Fragment {
         CollectionReference docRef1 = db.collection("Vendor")
                 .document(sessions.getusername())
                 .collection("Products");
-        docRef1.whereEqualTo("ItemCategory",category).get() .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        docRef1.whereEqualTo("ItemCategory", category).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                                inventories.clear();
-                                mRecyclerView.setVisibility(View.VISIBLE);
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                            String foodtype = "";
-                                                foodtype = document.get("FoodImage").toString();
-                                                inventories.add(new Inventory(
-                                                        document.get("ItemName").toString(),
-                                                        document.getId(),
-                                                        document.get("Status").toString(),
-                                                        foodtype,
-                                                        document.get("ApprovalStatus").toString(),
-                                                        document.get("MarkettingPrice").toString(),
-                                                        category
-                                                ));
-                                }
-                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-                                mRecyclerView.setLayoutManager(mLayoutManager);
-                                inventoryAdapter = new InventoryAdapter(inventories);
-                                mRecyclerView.setAdapter(inventoryAdapter);
-                            }
-                            else{
-                                mRecyclerView.setVisibility(View.GONE);
-                            }
+                    inventories.clear();
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    if (sessions.getcategory().equals("Grocery")) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String foodtype = "";
+                            foodtype = document.get("FoodImage").toString();
+                            inventories.add(new Inventory(
+                                    document.get("ItemName").toString(),
+                                    document.getId(),
+                                    document.get("Status").toString(),
+                                    foodtype,
+                                    document.get("ApprovalStatus").toString(),
+                                    document.get("Mrp").toString(),
+                                    category
+                            ));
+                        }
+                    } else {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String foodtype = "";
+                            foodtype = document.get("FoodImage").toString();
+                            inventories.add(new Inventory(
+                                    document.get("ItemName").toString(),
+                                    document.getId(),
+                                    document.get("Status").toString(),
+                                    foodtype,
+                                    document.get("ApprovalStatus").toString(),
+                                    document.get("MarkettingPrice").toString(),
+                                    category
+                            ));
+                        }
                     }
-                });
-
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    inventoryAdapter = new InventoryAdapter(inventories);
+                    mRecyclerView.setAdapter(inventoryAdapter);
+                } else {
+                    mRecyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
 
         return v;
     }

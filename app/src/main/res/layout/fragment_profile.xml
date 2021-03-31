@@ -39,17 +39,18 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgProfilepic"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:src="@drawable/logo_icon"
-                android:background="@drawable/shadow_roung_bg"/>
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:background="@drawable/profile_bg"
+                android:padding="3dp"
+                android:src="@drawable/user" />
 
             <TextView
                 android:id="@+id/txtVendorname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="Vendor Name"
                 android:textColor="@color/black"
@@ -85,6 +86,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -156,7 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/linearRow1"
@@ -387,6 +389,63 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearRow50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/border"
+                android:backgroundTint="@color/white"
+                android:padding="20dp"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/p5" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2.3">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Notifications"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.3"
+                    android:gravity="right">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/right_arrow" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/linearRow5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -500,7 +559,6 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
 
         <LinearLayout
@@ -514,12 +572,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/border"
                 android:backgroundTint="@color/white"
                 android:gravity="center"
                 android:weightSum="3">
-
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -539,18 +598,19 @@
                         android:paddingEnd="20dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/img"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/logo_icon" />
+                            android:src="@drawable/user" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_bold"
+                            android:fontFamily="@font/roboto_regular"
                             android:gravity="center_vertical"
                             android:paddingStart="24dp"
                             android:paddingEnd="24dp"
-                            android:text="Whats on your mind ?"
+                            android:text="Upload a vlog of your Yummy Creation"
                             android:textColor="@color/black" />
 
                     </LinearLayout>
@@ -564,7 +624,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:orientation="horizontal"
                         android:weightSum="3">
 
@@ -574,11 +633,11 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.4"
                             android:orientation="horizontal"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="10dp">
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
@@ -586,7 +645,7 @@
                                 android:gravity="center"
                                 android:text="Capture a Video"
                                 android:textColor="@color/black"
-                                android:textSize="16dp" />
+                                android:textSize="12sp" />
 
 
                         </LinearLayout>
@@ -600,7 +659,7 @@
 
                             <View
                                 android:layout_width="2dp"
-                                android:layout_height="20dp"
+                                android:layout_height="15dp"
                                 android:layout_gravity="center"
                                 android:background="@color/grey" />
 
@@ -611,8 +670,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.4"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="10dp">
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -623,7 +682,7 @@
                                 android:gravity="center"
                                 android:text="Upload a Video"
                                 android:textColor="@color/black"
-                                android:textSize="16dp" />
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 

@@ -1,4 +1,4 @@
-package yummy.one.yummyonevendor.Signup;
+package yummy.one.yummyonevendor.SignUp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,7 +7,6 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -21,8 +20,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,17 +28,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -65,10 +57,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import org.apache.http.Consts;
-
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -81,15 +70,15 @@ import yummy.one.yummyonevendor.R;
 
 public class DocumentUploader extends AppCompatActivity {
 
-    ImageView doc1,doc2,doc3,close1,close2,close3;
-    ProgressBar progressBar1,progressBar2,progressBar3;
-    TextView txtHeading,txtHeading1,txtDocName,txtComments,txtComments1;
+    ImageView doc1, doc2, doc3, close1, close2, close3;
+    ProgressBar progressBar1, progressBar2, progressBar3;
+    TextView txtHeading, txtHeading1, txtApprovedHeading, txtDocName, txtComments, txtComments1, approvedComment;
     EditText edtDocumentNumber;
-    Button btnUpload;
-    LinearLayout l1,l2,l3,imgBack,imgBack1;
-    RelativeLayout r1,r2,r3;
+    Button btnUpload, btnOK;
+    LinearLayout l1, l2, l3, imgBack, imgBack1, imgBack2;
+    RelativeLayout r1, r2, r3;
     Session session;
-    ScrollView pendinglayout;
+    ScrollView pendinglayout, ApprovedLayout, mainLayout;
     private Uri imageUri;
     private Uri imageHoldUri = null;
     private static final int REQUEST_CAMERA = 3;
@@ -100,12 +89,12 @@ public class DocumentUploader extends AppCompatActivity {
     private static final int SELECT_FILE = 2;
     private final int RESULT_CROP = 400;
     private StorageReference mstorageReference;
-    int selection=0;
-    private String path1="",path2="",path3="";
+    int selection = 0;
+    private String path1 = "", path2 = "", path3 = "";
 
     RequestOptions requestOptions;
     RelativeLayout imageLayout;
-    ImageView image,close;
+    ImageView image, close, imgApproved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,14 +103,18 @@ public class DocumentUploader extends AppCompatActivity {
 
         imgBack = findViewById(R.id.imgBack);
         imgBack1 = findViewById(R.id.imgBack1);
+        imgBack2 = findViewById(R.id.imgBack2);
         txtHeading = findViewById(R.id.txtHeading);
         txtHeading1 = findViewById(R.id.txtHeading1);
+        txtApprovedHeading = findViewById(R.id.txtApprovedHeading);
         txtDocName = findViewById(R.id.txtDocName);
         txtComments = findViewById(R.id.comments);
         txtComments1 = findViewById(R.id.comments1);
+        approvedComment = findViewById(R.id.approvedComment);
         edtDocumentNumber = findViewById(R.id.edtDocumentNumber);
         btnUpload = findViewById(R.id.btnUpload);
         image = findViewById(R.id.image);
+        imgApproved = findViewById(R.id.imgApproved);
         doc1 = findViewById(R.id.doc1);
         doc2 = findViewById(R.id.doc2);
         doc3 = findViewById(R.id.doc3);
@@ -137,11 +130,15 @@ public class DocumentUploader extends AppCompatActivity {
         r1 = findViewById(R.id.r1);
         r2 = findViewById(R.id.r2);
         r3 = findViewById(R.id.r3);
+        btnOK = findViewById(R.id.btnOK);
         progressBar1 = findViewById(R.id.progressBar1);
         progressBar2 = findViewById(R.id.progressBar2);
         progressBar3 = findViewById(R.id.progressBar3);
         pendinglayout = findViewById(R.id.pendinglayout);
+        ApprovedLayout = findViewById(R.id.ApprovedLayout);
+        mainLayout = findViewById(R.id.mainLayout);
         pendinglayout.setVisibility(View.GONE);
+        ApprovedLayout.setVisibility(View.GONE);
 
         l1.setVisibility(View.VISIBLE);
         l2.setVisibility(View.GONE);
@@ -167,7 +164,7 @@ public class DocumentUploader extends AppCompatActivity {
 
         edtDocumentNumber.clearFocus();
 
-        mstorageReference= FirebaseStorage.getInstance().getReference();
+        mstorageReference = FirebaseStorage.getInstance().getReference();
 
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,312 +182,318 @@ public class DocumentUploader extends AppCompatActivity {
             }
         });
 
+        imgBack2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DocumentUploader.this, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DocumentUploader.this, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
         imageLayout.setVisibility(View.GONE);
-
-
 
         requestOptions = new RequestOptions();
         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
 
-
-                txtHeading.setText("ID Proof");
-                txtHeading1.setText("ID Proof");
-                txtDocName.setText("Id Proof Number");
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                DocumentReference docRef = db.collection("Vendor").document(session.getusername());
-                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()){
-                            try {
-
-
-
-                                if(documentSnapshot.contains("PancardNumber")){
-                                    edtDocumentNumber.setText(documentSnapshot.get("PancardNumber").toString());
-                                    if(btnUpload.getVisibility() != View.VISIBLE) {
-                                        edtDocumentNumber.setEnabled(false);
-                                    }
+        txtHeading.setText("ID Proof");
+        txtHeading1.setText("ID Proof");
+        txtApprovedHeading.setText("ID Proof");
+        txtDocName.setText("Id Proof Number");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("Vendor").document(session.getusername());
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    try {
+                        if (documentSnapshot.contains("PancardNumber")) {
+                            edtDocumentNumber.setText(documentSnapshot.get("PancardNumber").toString());
+                            if (btnUpload.getVisibility() != View.VISIBLE) {
+                                edtDocumentNumber.setEnabled(false);
+                            }
+                        }
+                        if (documentSnapshot.contains("PancardImage1")) {
+                            path1 = documentSnapshot.get("PancardImage1").toString();
+                            if (!TextUtils.isEmpty(path1)) {
+                                if (path1.contains(".pdf")) {
+                                    doc1.setImageResource(R.drawable.pdf);
+                                    doc1.setBackgroundResource(R.drawable.dotted_border);
+                                } else {
+                                    Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
+                                    doc1.setBackgroundResource(R.drawable.dotted_border);
                                 }
-                                if(documentSnapshot.contains("PancardImage1")){
-                                    path1 = documentSnapshot.get("PancardImage1").toString();
-                                    if(!TextUtils.isEmpty(path1)) {
-                                        if (path1.contains(".pdf")) {
-                                            doc1.setImageResource(R.drawable.pdf);
-                                            r1.setBackgroundResource(R.drawable.dotted_border);
-                                        } else {
-                                            Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
-                                            r1.setBackgroundResource(R.drawable.dotted_border);
-                                        }
-                                        l1.setVisibility(View.VISIBLE);
-                                        l2.setVisibility(View.VISIBLE);
-                                        l3.setVisibility(View.VISIBLE);
-                                        doc1.setVisibility(View.VISIBLE);
-                                        doc2.setVisibility(View.VISIBLE);
-                                        close1.setVisibility(View.VISIBLE);
-                                    }
+                                l1.setVisibility(View.VISIBLE);
+                                l2.setVisibility(View.VISIBLE);
+                                l3.setVisibility(View.VISIBLE);
+                                doc1.setVisibility(View.VISIBLE);
+                                doc2.setVisibility(View.VISIBLE);
+                                close1.setVisibility(View.VISIBLE);
+                            }
+                        }
 
+                        if (documentSnapshot.contains("PancardImage2")) {
+                            path2 = documentSnapshot.get("PancardImage2").toString();
+                            if (!TextUtils.isEmpty(path2)) {
+                                if (path2.contains(".pdf")) {
+                                    doc2.setImageResource(R.drawable.pdf);
+                                    doc2.setBackgroundResource(R.drawable.dotted_border);
+                                } else {
+                                    Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
+                                    doc2.setBackgroundResource(R.drawable.dotted_border);
                                 }
+                                l1.setVisibility(View.VISIBLE);
+                                l2.setVisibility(View.VISIBLE);
+                                l3.setVisibility(View.VISIBLE);
+                                doc1.setVisibility(View.VISIBLE);
+                                doc2.setVisibility(View.VISIBLE);
+                                doc3.setVisibility(View.VISIBLE);
+                                close2.setVisibility(View.VISIBLE);
+                            }
+                        }
 
-                                if(documentSnapshot.contains("PancardImage2")){
-                                    path2 = documentSnapshot.get("PancardImage2").toString();
-                                    if(!TextUtils.isEmpty(path2)) {
-                                        if (path2.contains(".pdf")) {
-                                            doc2.setImageResource(R.drawable.pdf);
-                                            r2.setBackgroundResource(R.drawable.dotted_border);
-                                        } else {
-                                            Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
-                                            r2.setBackgroundResource(R.drawable.dotted_border);
-                                        }
-                                        l1.setVisibility(View.VISIBLE);
-                                        l2.setVisibility(View.VISIBLE);
-                                        l3.setVisibility(View.VISIBLE);
-                                        doc1.setVisibility(View.VISIBLE);
-                                        doc2.setVisibility(View.VISIBLE);
-                                        doc3.setVisibility(View.VISIBLE);
-                                        close2.setVisibility(View.VISIBLE);
-                                    }
-
+                        if (documentSnapshot.contains("PancardImage3")) {
+                            path3 = documentSnapshot.get("PancardImage3").toString();
+                            if (!TextUtils.isEmpty(path3)) {
+                                if (path3.contains(".pdf")) {
+                                    doc3.setImageResource(R.drawable.pdf);
+                                    doc3.setBackgroundResource(R.drawable.dotted_border);
+                                } else {
+                                    Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
+                                    doc3.setBackgroundResource(R.drawable.dotted_border);
                                 }
+                                l1.setVisibility(View.VISIBLE);
+                                l2.setVisibility(View.VISIBLE);
+                                l3.setVisibility(View.VISIBLE);
+                                doc1.setVisibility(View.VISIBLE);
+                                doc2.setVisibility(View.VISIBLE);
+                                doc3.setVisibility(View.VISIBLE);
+                                close3.setVisibility(View.VISIBLE);
+                            }
+                        }
 
-                                if(documentSnapshot.contains("PancardImage3")){
-                                    path3 = documentSnapshot.get("PancardImage3").toString();
-                                    if(!TextUtils.isEmpty(path3)) {
-                                        if (path3.contains(".pdf")) {
-                                            doc3.setImageResource(R.drawable.pdf);
-                                            r3.setBackgroundResource(R.drawable.dotted_border);
-                                        } else {
-                                            Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
-                                            r3.setBackgroundResource(R.drawable.dotted_border);
-                                        }
-                                        l1.setVisibility(View.VISIBLE);
-                                        l2.setVisibility(View.VISIBLE);
-                                        l3.setVisibility(View.VISIBLE);
-                                        doc1.setVisibility(View.VISIBLE);
-                                        doc2.setVisibility(View.VISIBLE);
-                                        doc3.setVisibility(View.VISIBLE);
-                                        close3.setVisibility(View.VISIBLE);
-                                    }
-                                }
+                        if (documentSnapshot.contains("PancardImageComments")) {
+                            if (!TextUtils.isEmpty(documentSnapshot.get("PancardImageComments").toString()))
+                                txtComments.setText("" + documentSnapshot.get("PancardImageComments").toString());
+                            else
+                                txtComments.setText("Pending for approval");
+                            txtComments.setVisibility(View.VISIBLE);
+                            txtComments1.setVisibility(View.GONE);
+                        }
 
-                                if(documentSnapshot.contains("PancardImageComments")){
-                                    if(!TextUtils.isEmpty(documentSnapshot.get("PancardImageComments").toString()))
-                                        txtComments.setText(""+documentSnapshot.get("PancardImageComments").toString());
-                                    else
-                                        txtComments.setText("Pending for approval");
+                        if (documentSnapshot.contains("PancardImage1") && documentSnapshot.contains("PancardImageApproval") && documentSnapshot.contains("PancardImageComments")) {
+                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImageApproval")).toString())) {
+                                if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Pending")) {
+                                    btnUpload.setVisibility(View.GONE);
+                                    close1.setVisibility(View.GONE);
+                                    close2.setVisibility(View.GONE);
+                                    close3.setVisibility(View.GONE);
+                                    doc1.setEnabled(false);
+                                    doc2.setEnabled(false);
+                                    doc3.setEnabled(false);
+                                    edtDocumentNumber.setEnabled(false);
+                                    txtComments.setText("");
                                     txtComments.setVisibility(View.VISIBLE);
-                                    txtComments1.setVisibility(View.VISIBLE);
-                                }
+                                    txtComments1.setVisibility(View.GONE);
+                                    doc1.setVisibility(View.INVISIBLE);
+                                    doc2.setVisibility(View.INVISIBLE);
+                                    doc3.setVisibility(View.INVISIBLE);
+                                    if (!TextUtils.isEmpty(path1))
+                                        doc1.setVisibility(View.VISIBLE);
+                                    if (!TextUtils.isEmpty(path2))
+                                        doc2.setVisibility(View.VISIBLE);
+                                    if (!TextUtils.isEmpty(path3))
+                                        doc3.setVisibility(View.VISIBLE);
+                                    pendinglayout.setVisibility(View.VISIBLE);
+                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Approved")) {
+                                    /*btnUpload.setVisibility(View.GONE);
+                                    close1.setVisibility(View.GONE);
+                                    close2.setVisibility(View.GONE);
+                                    close3.setVisibility(View.GONE);
+                                    doc1.setEnabled(false);
+                                    doc2.setEnabled(false);
+                                    doc3.setEnabled(false);
+                                    edtDocumentNumber.setEnabled(false);
+                                    txtComments.setText("Approved");
+                                    txtComments.setTextColor(Color.parseColor("#119326"));
+                                    txtComments.setVisibility(View.GONE);
+                                    txtComments1.setVisibility(View.INVISIBLE);
+                                    doc1.setVisibility(View.INVISIBLE);
+                                    doc2.setVisibility(View.INVISIBLE);
+                                    doc3.setVisibility(View.INVISIBLE);
+                                    if (!TextUtils.isEmpty(path1))
+                                        doc1.setVisibility(View.VISIBLE);
+                                    if (!TextUtils.isEmpty(path2))
+                                        doc2.setVisibility(View.VISIBLE);
+                                    if (!TextUtils.isEmpty(path3))
+                                        doc3.setVisibility(View.VISIBLE);*/
 
-                                if (documentSnapshot.contains("PancardImage1")&&documentSnapshot.contains("PancardImageApproval")&&documentSnapshot.contains("PancardImageComments")) {
-                                    if(!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImageApproval")).toString())) {
-                                        if(documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Pending")){
-                                            btnUpload.setVisibility(View.GONE);
-                                            close1.setVisibility(View.GONE);
-                                            close2.setVisibility(View.GONE);
-                                            close3.setVisibility(View.GONE);
-                                            doc1.setEnabled(false);
-                                            doc2.setEnabled(false);
-                                            doc3.setEnabled(false);
-                                            edtDocumentNumber.setEnabled(false);
-                                            txtComments.setText("");
-                                            txtComments.setVisibility(View.VISIBLE);
-                                            txtComments1.setVisibility(View.VISIBLE);
-                                            doc1.setVisibility(View.INVISIBLE);
-                                            doc2.setVisibility(View.INVISIBLE);
-                                            doc3.setVisibility(View.INVISIBLE);
-                                            if(!TextUtils.isEmpty(path1))
-                                                doc1.setVisibility(View.VISIBLE);
-                                            if(!TextUtils.isEmpty(path2))
-                                                doc2.setVisibility(View.VISIBLE);
-                                            if(!TextUtils.isEmpty(path3))
-                                                doc3.setVisibility(View.VISIBLE);
-                                            pendinglayout.setVisibility(View.VISIBLE);
-                                        }
-                                        else if(documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Approved")){
-                                            btnUpload.setVisibility(View.GONE);
-                                            close1.setVisibility(View.GONE);
-                                            close2.setVisibility(View.GONE);
-                                            close3.setVisibility(View.GONE);
-                                            doc1.setEnabled(false);
-                                            doc2.setEnabled(false);
-                                            doc3.setEnabled(false);
-                                            edtDocumentNumber.setEnabled(false);
-                                            txtComments.setText("Approved");
-                                            txtComments.setTextColor(Color.parseColor("#119326"));
-                                            txtComments.setVisibility(View.GONE);
-                                            txtComments1.setVisibility(View.INVISIBLE);
-                                            doc1.setVisibility(View.INVISIBLE);
-                                            doc2.setVisibility(View.INVISIBLE);
-                                            doc3.setVisibility(View.INVISIBLE);
-                                            if(!TextUtils.isEmpty(path1))
-                                                doc1.setVisibility(View.VISIBLE);
-                                            if(!TextUtils.isEmpty(path2))
-                                                doc2.setVisibility(View.VISIBLE);
-                                            if(!TextUtils.isEmpty(path3))
-                                                doc3.setVisibility(View.VISIBLE);
-                                        }
-                                        else if(documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Rejected")){
-                                            btnUpload.setVisibility(View.VISIBLE);
-                                            txtComments.setVisibility(View.VISIBLE);
-                                            txtComments.setText("Rejected : "+documentSnapshot.get("PancardImageComments"));
-                                            txtComments.setTextColor(Color.parseColor("#FF0000"));
-                                        }
-                                        else{
-                                            txtComments.setVisibility(View.GONE);
-                                            txtComments1.setVisibility(View.GONE);
-                                        }
-                                    }
+                                    mainLayout.setVisibility(View.GONE);
+                                    imageLayout.setVisibility(View.GONE);
+                                    pendinglayout.setVisibility(View.GONE);
+                                    ApprovedLayout.setVisibility(View.VISIBLE);
+                                    approvedComment.setText("This document has been approved. Rest assured while we review the other documents and set up the account for you. We are thrilled to have you onboard");
+                                    // Glide.with(DocumentUploader.this).asGif().load(R.raw.document_approved).into(imgApproved);
+                                    Glide.with(DocumentUploader.this).load(R.drawable.success).into(imgApproved);
 
-//                                    txtComments.setVisibility(View.GONE);
+                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Rejected")) {
+                                    btnUpload.setVisibility(View.VISIBLE);
+                                    txtComments.setVisibility(View.VISIBLE);
+                                    txtComments.setText("Rejected : " + documentSnapshot.get("PancardImageComments"));
+                                    txtComments.setTextColor(Color.parseColor("#FF0000"));
+                                    txtComments1.setVisibility(View.GONE);
+                                } else {
+                                    txtComments.setVisibility(View.GONE);
                                     txtComments1.setVisibility(View.GONE);
                                 }
-
                             }
-                    catch (Exception e){
-                            e.printStackTrace();
+//                                    txtComments.setVisibility(View.GONE);
+                            txtComments1.setVisibility(View.GONE);
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
+                }
 //                        txtComments.setVisibility(View.GONE);
 //                        txtComments1.setVisibility(View.GONE);
-                }
-            });
+            }
+        });
 
+        close1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                close1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if(TextUtils.isEmpty(path3)){
-                            if(TextUtils.isEmpty(path2)){
-                                path1="";
-                                doc1.setImageResource(R.drawable.addimage);
-                                r1.setBackgroundResource(0);
-                                close1.setVisibility(View.GONE);
-                                btnUpload.setVisibility(View.VISIBLE);
-                                l2.setVisibility(View.GONE);
-                                l3.setVisibility(View.GONE);
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("PancardImage1", FieldValue.delete());
-                                data.put("PancardImage2", FieldValue.delete());
-                                data.put("PancardImage3", FieldValue.delete());
-                                db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                            }
-                            else{
-                                path1 = path2;
-                                path2 = "";
-                                Glide.with(getApplicationContext())
-                                        .load(path1)
-                                        .apply(requestOptions)
-                                        .into(doc1);
-                                close2.setVisibility(View.GONE);
-                                doc2.setImageResource(R.drawable.addimage);
-                                r2.setBackgroundResource(0);
-                                doc3.setVisibility(View.GONE);
-                                close2.setVisibility(View.GONE);
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("PancardImage1", path1);
-                                data.put("PancardImage2", FieldValue.delete());
-                                data.put("PancardImage3", FieldValue.delete());
-                                db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                            }
-                        }
-                        else{
-                            path1=path2;
-                            path2=path3;
-                            path3="";
-                            Glide.with(getApplicationContext())
-                                    .load(path1)
-                                    .apply(requestOptions)
-                                    .into(doc1);
-                            Glide.with(getApplicationContext())
-                                    .load(path2)
-                                    .apply(requestOptions)
-                                    .into(doc2);
-                            doc3.setImageResource(R.drawable.addimage);
-                            r3.setBackgroundResource(0);
-                            close3.setVisibility(View.GONE);
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("PancardImage1", path1);
-                            data.put("PancardImage2", path2);
-                            data.put("PancardImage3", FieldValue.delete());
-                            db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                        }
-
-
-                    }
-                });
-
-                close2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(TextUtils.isEmpty(path3)){
-                                path2="";
-                                doc2.setImageResource(R.drawable.addimage);
-                                r2.setBackgroundResource(0);
-                                doc3.setVisibility(View.GONE);
-                                close2.setVisibility(View.GONE);
-                                btnUpload.setVisibility(View.VISIBLE);
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("PancardImage1", path1);
-                            data.put("PancardImage2", FieldValue.delete());
-                            data.put("PancardImage3", FieldValue.delete());
-                            db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                        }
-                        else {
-                            path2=path3;
-                            path3="";
-                            Glide.with(getApplicationContext())
-                                    .load(path2)
-                                    .apply(requestOptions)
-                                    .into(doc2);
-                            doc3.setImageResource(R.drawable.addimage);
-                            r3.setBackgroundResource(0);
-                            close3.setVisibility(View.GONE);
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("PancardImage1", path1);
-                            data.put("PancardImage2", path2);
-                            data.put("PancardImage3", FieldValue.delete());
-                            db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                        }
-                    }
-                });
-
-                close3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        path3="";
-                        doc3.setImageResource(R.drawable.addimage);
-                        r3.setBackgroundResource(0);
-                        close3.setVisibility(View.GONE);
+                if (TextUtils.isEmpty(path3)) {
+                    if (TextUtils.isEmpty(path2)) {
+                        path1 = "";
+                        doc1.setImageResource(R.drawable.add_image);
+                        doc1.setBackgroundResource(0);
+                        close1.setVisibility(View.GONE);
                         btnUpload.setVisibility(View.VISIBLE);
+                        l2.setVisibility(View.GONE);
+                        l3.setVisibility(View.GONE);
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("PancardImage1", FieldValue.delete());
+                        data.put("PancardImage2", FieldValue.delete());
+                        data.put("PancardImage3", FieldValue.delete());
+                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                    } else {
+                        path1 = path2;
+                        path2 = "";
+                        Glide.with(getApplicationContext())
+                                .load(path1)
+                                .apply(requestOptions)
+                                .into(doc1);
+                        close2.setVisibility(View.GONE);
+                        doc2.setImageResource(R.drawable.add_image);
+                        doc2.setBackgroundResource(0);
+                        doc3.setVisibility(View.GONE);
+                        close2.setVisibility(View.GONE);
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         Map<String, Object> data = new HashMap<>();
                         data.put("PancardImage1", path1);
-                        data.put("PancardImage2", path2);
+                        data.put("PancardImage2", FieldValue.delete());
                         data.put("PancardImage3", FieldValue.delete());
-                        db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                     }
-                });
+                } else {
+                    path1 = path2;
+                    path2 = path3;
+                    path3 = "";
+                    Glide.with(getApplicationContext())
+                            .load(path1)
+                            .apply(requestOptions)
+                            .into(doc1);
+                    Glide.with(getApplicationContext())
+                            .load(path2)
+                            .apply(requestOptions)
+                            .into(doc2);
+                    doc3.setImageResource(R.drawable.add_image);
+                    doc3.setBackgroundResource(0);
+                    close3.setVisibility(View.GONE);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("PancardImage1", path1);
+                    data.put("PancardImage2", path2);
+                    data.put("PancardImage3", FieldValue.delete());
+                    db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                }
+            }
+        });
 
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        imageLayout.setVisibility(View.GONE);
-                    }
-                });
+        close2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(path3)) {
+                    path2 = "";
+                    doc2.setImageResource(R.drawable.add_image);
+                    r2.setBackgroundResource(0);
+                    doc3.setVisibility(View.GONE);
+                    close2.setVisibility(View.GONE);
+                    btnUpload.setVisibility(View.VISIBLE);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("PancardImage1", path1);
+                    data.put("PancardImage2", FieldValue.delete());
+                    data.put("PancardImage3", FieldValue.delete());
+                    db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                } else {
+                    path2 = path3;
+                    path3 = "";
+                    Glide.with(getApplicationContext())
+                            .load(path2)
+                            .apply(requestOptions)
+                            .into(doc2);
+                    doc3.setImageResource(R.drawable.add_image);
+                    r3.setBackgroundResource(0);
+                    close3.setVisibility(View.GONE);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("PancardImage1", path1);
+                    data.put("PancardImage2", path2);
+                    data.put("PancardImage3", FieldValue.delete());
+                    db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                }
+            }
+        });
+
+        close3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                path3 = "";
+                doc3.setImageResource(R.drawable.add_image);
+                r3.setBackgroundResource(0);
+                close3.setVisibility(View.GONE);
+                btnUpload.setVisibility(View.VISIBLE);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Map<String, Object> data = new HashMap<>();
+                data.put("PancardImage1", path1);
+                data.put("PancardImage2", path2);
+                data.put("PancardImage3", FieldValue.delete());
+                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageLayout.setVisibility(View.GONE);
+            }
+        });
 
         doc1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selection=1;
-                if(TextUtils.isEmpty(path1)||path1.contains(".pdf")) {
+                selection = 1;
+                if (TextUtils.isEmpty(path1) || path1.contains(".pdf")) {
                     final CharSequence[] items = {"Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader.this, AlertDialog.THEME_HOLO_LIGHT);
@@ -518,9 +521,8 @@ public class DocumentUploader extends AppCompatActivity {
                         }
                     });
                     builder.show();
-                }
-                else{
-                    final CharSequence[] items = {"View Photo","Take Photo", "Choose from Library",
+                } else {
+                    final CharSequence[] items = {"View Photo", "Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader.this, AlertDialog.THEME_HOLO_LIGHT);
                     builder.setTitle("Add Photo!");
@@ -559,8 +561,8 @@ public class DocumentUploader extends AppCompatActivity {
         doc2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selection=2;
-                if(TextUtils.isEmpty(path2)||path2.contains(".pdf")) {
+                selection = 2;
+                if (TextUtils.isEmpty(path2) || path2.contains(".pdf")) {
                     final CharSequence[] items = {"Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader.this, AlertDialog.THEME_HOLO_LIGHT);
@@ -588,9 +590,8 @@ public class DocumentUploader extends AppCompatActivity {
                         }
                     });
                     builder.show();
-                }
-                else{
-                    final CharSequence[] items = {"View Photo","Take Photo", "Choose from Library",
+                } else {
+                    final CharSequence[] items = {"View Photo", "Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader.this, AlertDialog.THEME_HOLO_LIGHT);
                     builder.setTitle("Add Photo!");
@@ -629,8 +630,8 @@ public class DocumentUploader extends AppCompatActivity {
         doc3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selection=3;
-                if(TextUtils.isEmpty(path3)||path3.contains(".pdf")) {
+                selection = 3;
+                if (TextUtils.isEmpty(path3) || path3.contains(".pdf")) {
                     final CharSequence[] items = {"Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader.this, AlertDialog.THEME_HOLO_LIGHT);
@@ -658,9 +659,8 @@ public class DocumentUploader extends AppCompatActivity {
                         }
                     });
                     builder.show();
-                }
-                else{
-                    final CharSequence[] items = {"View Photo","Take Photo", "Choose from Library",
+                } else {
+                    final CharSequence[] items = {"View Photo", "Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader.this, AlertDialog.THEME_HOLO_LIGHT);
                     builder.setTitle("Add Photo!");
@@ -701,18 +701,18 @@ public class DocumentUploader extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                        if (TextUtils.isEmpty(edtDocumentNumber.getText().toString())) {
-                            edtDocumentNumber.setError("Enter the document Number");
-                            edtDocumentNumber.requestFocus();
-                            return;
-                        } else {
-                            edtDocumentNumber.setError(null);
-                        }
+                if (TextUtils.isEmpty(edtDocumentNumber.getText().toString())) {
+                    edtDocumentNumber.setError("Enter the document Number");
+                    edtDocumentNumber.requestFocus();
+                    return;
+                } else {
+                    edtDocumentNumber.setError(null);
+                }
 
-                        if(TextUtils.isEmpty(path1)){
-                            Toast.makeText(getApplicationContext(),"Upload One Image",Toast.LENGTH_LONG).show();
-                            return;
-                        }
+                if (TextUtils.isEmpty(path1)) {
+                    Toast.makeText(getApplicationContext(), "Upload One Image", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Map<String, Object> data = new HashMap<>();
@@ -761,23 +761,21 @@ public class DocumentUploader extends AppCompatActivity {
 
                 new UploadProfileAsyncTask().execute();
 
-                if(selection==1){
+                if (selection == 1) {
                     doc1.setImageResource(0);
                     doc2.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close1.setVisibility(View.VISIBLE);
-                }
-                else if(selection==2){
+                } else if (selection == 2) {
                     doc2.setImageResource(0);
                     doc3.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close2.setVisibility(View.VISIBLE);
-                }
-                else if(selection==3){
+                } else if (selection == 3) {
                     doc3.setImageResource(0);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
@@ -786,14 +784,11 @@ public class DocumentUploader extends AppCompatActivity {
                 }
 
 
-
-            }
-            else {
+            } else {
                 Toast.makeText(DocumentUploader.this, "File Path Null", Toast.LENGTH_SHORT).show();
             }
 
-        }
-        else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
 
 
             imageHoldUri = imageUri;
@@ -807,23 +802,21 @@ public class DocumentUploader extends AppCompatActivity {
 
                 new UploadProfileAsyncTask().execute();
 
-                if(selection==1){
+                if (selection == 1) {
                     doc1.setImageResource(0);
                     doc2.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close1.setVisibility(View.VISIBLE);
-                }
-                else if(selection==2){
+                } else if (selection == 2) {
                     doc2.setImageResource(0);
                     doc3.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close2.setVisibility(View.VISIBLE);
-                }
-                else if(selection==3){
+                } else if (selection == 3) {
                     doc3.setImageResource(0);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
@@ -940,8 +933,7 @@ public class DocumentUploader extends AppCompatActivity {
 //                                }
 //                            }
 //                        });
-            }
-            else {
+            } else {
                 Toast.makeText(DocumentUploader.this, "File Path Null", Toast.LENGTH_SHORT).show();
             }
 
@@ -1015,11 +1007,8 @@ public class DocumentUploader extends AppCompatActivity {
     }
 
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                activity.getCurrentFocus().getWindowToken(), 0);
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 
@@ -1039,143 +1028,125 @@ public class DocumentUploader extends AppCompatActivity {
             // TODO Auto-generated method stub
             // public static final String BUCKET_NAME = "alldercare";
             // using YOUR_S3_ACCESS_KEY, and  YOUR_S3_SECRET
-           int select = selection;
-           String c = "" + System.currentTimeMillis();
-
+            int select = selection;
+            String c = "" + System.currentTimeMillis();
             ContentResolver cR = getApplication().getContentResolver();
             String type = cR.getType(imageHoldUri);
-
             StorageReference riversRef;
-            if(type.equals("application/pdf"))
+            if (type.equals("application/pdf"))
                 riversRef = mstorageReference.child("Documents/" + c + ".pdf");
             else
                 riversRef = mstorageReference.child("Documents/" + c + ".jpg");
 
-                riversRef.putFile(imageHoldUri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Get a URL to the uploaded content
-                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                                final String[] u = new String[1];
-
-                                String path ="";
-                                if(type.equals("application/pdf"))
-                                    path ="Documents/" + c + ".pdf";
+            riversRef.putFile(imageHoldUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Get a URL to the uploaded content
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                    final String[] u = new String[1];
+                    String path = "";
+                    if (type.equals("application/pdf"))
+                        path = "Documents/" + c + ".pdf";
+                    else
+                        path = "Documents/" + c + ".jpg";
+                    storageRef.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            u[0] = uri.toString();
+                            if (select == 1) {
+                                path1 = u[0];
+                                RequestOptions requestOptions = new RequestOptions();
+                                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+                                if (type.equals("application/pdf"))
+                                    doc1.setImageResource(R.drawable.pdf);
                                 else
-                                    path = "Documents/" + c + ".jpg";
-
-                                storageRef.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-
-                                        u[0] = uri.toString();
-
-                                        if(select==1) {
-                                            path1 = u[0];
-                                            RequestOptions requestOptions = new RequestOptions();
-                                            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                            if(type.equals("application/pdf"))
-                                                doc1.setImageResource(R.drawable.pdf);
-                                            else
-                                                Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
-                                            r1.setBackgroundResource(R.drawable.dotted_border);
-                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                            Map<String, Object> data = new HashMap<>();
-                                            data.put("PancardImage1", path1);
-                                            data.put("PancardImageComments", "");
-                                            data.put("PancardNumber", edtDocumentNumber.getText().toString());
-                                            db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                                            doc2.setVisibility(View.VISIBLE);
-                                            l1.setVisibility(View.VISIBLE);
-                                            l2.setVisibility(View.VISIBLE);
-                                            l3.setVisibility(View.VISIBLE);
-                                            progressBar1.setVisibility(View.GONE);
-                                        }
-                                        else  if(select==2) {
-                                            path2 = u[0];
-                                            RequestOptions requestOptions = new RequestOptions();
-                                            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                            if(type.equals("application/pdf"))
-                                                doc2.setImageResource(R.drawable.pdf);
-                                            else
-                                                Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
-                                            r2.setBackgroundResource(R.drawable.dotted_border);
-                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                            Map<String, Object> data = new HashMap<>();
-                                            data.put("PancardImage2", path2);
-                                            data.put("PancardImageComments", "");
-                                            data.put("PancardNumber", edtDocumentNumber.getText().toString());
-                                            db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                                            doc3.setVisibility(View.VISIBLE);
-                                            l1.setVisibility(View.VISIBLE);
-                                            l2.setVisibility(View.VISIBLE);
-                                            l3.setVisibility(View.VISIBLE);
-                                            progressBar2.setVisibility(View.GONE);
-                                        }
-                                        else  if(select==3) {
-                                            path3 = u[0];
-                                            RequestOptions requestOptions = new RequestOptions();
-                                            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                            if(type.equals("application/pdf"))
-                                                doc3.setImageResource(R.drawable.pdf);
-                                            else
-                                                Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
-                                            r3.setBackgroundResource(R.drawable.dotted_border);
-                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                            Map<String, Object> data = new HashMap<>();
-                                            data.put("PancardImage3", path3);
-                                            data.put("PancardImageComments", "");
-                                            data.put("PancardNumber", edtDocumentNumber.getText().toString());
-                                            db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                                            l1.setVisibility(View.VISIBLE);
-                                            l2.setVisibility(View.VISIBLE);
-                                            l3.setVisibility(View.VISIBLE);
-                                            progressBar3.setVisibility(View.GONE);
-                                        }
-
-
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        // Handle any errors
-                                    }
-                                });
-                                if(select==1){
-                                    progressBar1.setVisibility(View.GONE);
-                                }
-                                else if(select == 2){
-                                    progressBar2.setVisibility(View.GONE);
-                                }
-                                else if(select ==3){
-                                    progressBar3.setVisibility(View.GONE);
-                                }
+                                    Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
+                                doc1.setBackgroundResource(R.drawable.dotted_border);
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("PancardImage1", path1);
+                                data.put("PancardImageComments", "");
+                                data.put("PancardNumber", edtDocumentNumber.getText().toString());
+                                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                                doc2.setVisibility(View.VISIBLE);
+                                l1.setVisibility(View.VISIBLE);
+                                l2.setVisibility(View.VISIBLE);
+                                l3.setVisibility(View.VISIBLE);
+                                progressBar1.setVisibility(View.GONE);
+                            } else if (select == 2) {
+                                path2 = u[0];
+                                RequestOptions requestOptions = new RequestOptions();
+                                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+                                if (type.equals("application/pdf"))
+                                    doc2.setImageResource(R.drawable.pdf);
+                                else
+                                    Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
+                                // r2.setBackgroundResource(R.drawable.dotted_border);
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("PancardImage2", path2);
+                                data.put("PancardImageComments", "");
+                                data.put("PancardNumber", edtDocumentNumber.getText().toString());
+                                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                                doc3.setVisibility(View.VISIBLE);
+                                l1.setVisibility(View.VISIBLE);
+                                l2.setVisibility(View.VISIBLE);
+                                l3.setVisibility(View.VISIBLE);
+                                progressBar2.setVisibility(View.GONE);
+                            } else if (select == 3) {
+                                path3 = u[0];
+                                RequestOptions requestOptions = new RequestOptions();
+                                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+                                if (type.equals("application/pdf"))
+                                    doc3.setImageResource(R.drawable.pdf);
+                                else
+                                    Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
+                                r3.setBackgroundResource(R.drawable.dotted_border);
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("PancardImage3", path3);
+                                data.put("PancardImageComments", "");
+                                data.put("PancardNumber", edtDocumentNumber.getText().toString());
+                                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                                l1.setVisibility(View.VISIBLE);
+                                l2.setVisibility(View.VISIBLE);
+                                l3.setVisibility(View.VISIBLE);
+                                progressBar3.setVisibility(View.GONE);
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                Toast.makeText(DocumentUploader.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                                if(select==1){
-                                    progressBar1.setVisibility(View.VISIBLE);
-                                }
-                                else if(select == 2){
-                                    progressBar2.setVisibility(View.VISIBLE);
-                                }
-                                else if(select ==3){
-                                    progressBar3.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        });
-
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                        }
+                    });
+                    if (select == 1) {
+                        progressBar1.setVisibility(View.GONE);
+                    } else if (select == 2) {
+                        progressBar2.setVisibility(View.GONE);
+                    } else if (select == 3) {
+                        progressBar3.setVisibility(View.GONE);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Toast.makeText(DocumentUploader.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    if (select == 1) {
+                        progressBar1.setVisibility(View.VISIBLE);
+                    } else if (select == 2) {
+                        progressBar2.setVisibility(View.VISIBLE);
+                    } else if (select == 3) {
+                        progressBar3.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
         }
     }
 }

@@ -1,4 +1,4 @@
-package yummy.one.yummyonevendor.Signup;
+package yummy.one.yummyonevendor.SignUp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,11 +34,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import yummy.one.yummyonevendor.Login.Login;
 import yummy.one.yummyonevendor.Login.OtpActivity;
 import yummy.one.yummyonevendor.R;
 
-public class Signup extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
 
     Button btnLogin;
     EditText edtName,edtDob,edtEmail;
@@ -52,11 +51,11 @@ public class Signup extends AppCompatActivity {
 
     LinearLayout back;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
         btnLogin = findViewById(R.id.btnLogin);
         edtName = findViewById(R.id.edtName);
         edtDob = findViewById(R.id.edtDob);
@@ -120,7 +119,7 @@ public class Signup extends AppCompatActivity {
                             //deprecated in API 26
                             v.vibrate(500);
                         }
-                        Animation shake = AnimationUtils.loadAnimation(Signup.this, R.anim.shake);
+                        Animation shake = AnimationUtils.loadAnimation(SignUp.this, R.anim.shake);
                         edtName.startAnimation(shake);
                         edtName.setText(charSequence.toString().substring(0, charSequence.length() - 1));
                         edtName.setSelection(charSequence.length() - 1);
@@ -137,7 +136,7 @@ public class Signup extends AppCompatActivity {
                             //deprecated in API 26
                             v.vibrate(500);
                         }
-                        Animation shake = AnimationUtils.loadAnimation(Signup.this, R.anim.shake);
+                        Animation shake = AnimationUtils.loadAnimation(SignUp.this, R.anim.shake);
                         edtName.startAnimation(shake);
                         edtName.setText(charSequence.toString().substring(0, charSequence.length() - 1));
                         edtName.setSelection(charSequence.length() - 1);
@@ -166,8 +165,8 @@ public class Signup extends AppCompatActivity {
                 month = calendar.get(Calendar.MONTH);
                 dayofmonth = calendar.get(Calendar.DAY_OF_MONTH);
                 edtName.setCursorVisible(false);
-                hideSoftKeyboard(Signup.this);
-                datePickerDialog = new DatePickerDialog(Signup.this,
+                hideSoftKeyboard(SignUp.this);
+                datePickerDialog = new DatePickerDialog(SignUp.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -232,7 +231,7 @@ public class Signup extends AppCompatActivity {
                         //deprecated in API 26
                         v.vibrate(500);
                     }
-                    Animation shake = AnimationUtils.loadAnimation(Signup.this, R.anim.shake);
+                    Animation shake = AnimationUtils.loadAnimation(SignUp.this, R.anim.shake);
                     edtName.startAnimation(shake);
                     edtName.setError("Enter Full Name");
                     edtName.requestFocus();
@@ -250,7 +249,7 @@ public class Signup extends AppCompatActivity {
                         //deprecated in API 26
                         v.vibrate(500);
                     }
-                    Animation shake = AnimationUtils.loadAnimation(Signup.this, R.anim.shake);
+                    Animation shake = AnimationUtils.loadAnimation(SignUp.this, R.anim.shake);
                     edtName.startAnimation(shake);
                     edtName.setError("Enter Proper Name");
                     edtName.requestFocus();
@@ -268,7 +267,7 @@ public class Signup extends AppCompatActivity {
                         //deprecated in API 26
                         v.vibrate(500);
                     }
-                    Animation shake = AnimationUtils.loadAnimation(Signup.this, R.anim.shake);
+                    Animation shake = AnimationUtils.loadAnimation(SignUp.this, R.anim.shake);
                     edtDob.startAnimation(shake);
                     edtDob.setError("Select Date of Birth");
                     edtDob.requestFocus();
@@ -287,13 +286,13 @@ public class Signup extends AppCompatActivity {
                         //deprecated in API 26
                         v.vibrate(500);
                     }
-                    Animation shake = AnimationUtils.loadAnimation(Signup.this, R.anim.shake);
+                    Animation shake = AnimationUtils.loadAnimation(SignUp.this, R.anim.shake);
                     edtDob.startAnimation(shake);
                     Toast.makeText(getApplicationContext(),"Must be greater than 18 Yrs",Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                Intent intent = new Intent(Signup.this, OtpActivity.class);
+                Intent intent = new Intent(SignUp.this, OtpActivity.class);
                 intent.putExtra("status",status);
                 intent.putExtra("id",id);
                 intent.putExtra("mobilenumber",number);
@@ -342,7 +341,7 @@ public class Signup extends AppCompatActivity {
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(Signup.this);
+                    hideSoftKeyboard(SignUp.this);
                     return false;
                 }
             });

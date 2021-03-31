@@ -8,7 +8,6 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,11 +34,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.L;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -59,7 +56,6 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.zcw.togglebutton.ToggleButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -70,15 +66,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import yummy.one.yummyonevendor.FoodCategory.Sub;
-import yummy.one.yummyonevendor.FoodCategory.SubCategory;
 import yummy.one.yummyonevendor.Functionality.Session;
 import yummy.one.yummyonevendor.Login.Login;
-import yummy.one.yummyonevendor.MainActivity;
 import yummy.one.yummyonevendor.R;
-import yummy.one.yummyonevendor.Signup.CategorySelection;
-import yummy.one.yummyonevendor.Signup.RegisterDetails;
-import yummy.one.yummyonevendor.Signup.Signup;
 import yummy.one.yummyonevendor.Videos.Video;
 import yummy.one.yummyonevendor.Videos.VideosAdapter;
 
@@ -87,9 +77,9 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     private TextView txtVendorname, txtName;
-    private ImageView imgProfilepic;
+    private ImageView imgProfilepic,img;
     private Session session;
-    private LinearLayout linearRow1, linearRow2, linearRow3, linearRow4, linearRow5, linearRow7, linearBlock1, linearBlock2, linearBlock3, linearBlock4, linearLive, linearUpload, linearadd;
+    private LinearLayout linearRow1, linearRow2, linearRow3, linearRow4, linearRow5, linearRow7, linearBlock1, linearBlock2, linearBlock3, linearBlock4, linearLive, linearUpload, linearadd,topBar,linearRow50;
     private TextView txtVlogs, txtAccountdetails;
     private View viewLine1, viewLine2;
     private Button btnAdd;
@@ -127,12 +117,14 @@ public class ProfileFragment extends Fragment {
         txtVendorname = v.findViewById(R.id.txtVendorname);
         txtName = v.findViewById(R.id.txtName);
         imgProfilepic = v.findViewById(R.id.imgProfilepic);
+        img = v.findViewById(R.id.img);
         linearRow1 = v.findViewById(R.id.linearRow1);
         linearRow2 = v.findViewById(R.id.linearRow2);
         linearRow3 = v.findViewById(R.id.linearRow3);
         linearRow4 = v.findViewById(R.id.linearRow4);
         linearRow5 = v.findViewById(R.id.linearRow5);
         linearRow7 = v.findViewById(R.id.linearRow7);
+        linearRow50 = v.findViewById(R.id.linearRow50);
         linearBlock1 = v.findViewById(R.id.linearBlock1);
         linearBlock2 = v.findViewById(R.id.linearBlock2);
         linearBlock3 = v.findViewById(R.id.linearBlock3);
@@ -145,6 +137,7 @@ public class ProfileFragment extends Fragment {
         linearLive = v.findViewById(R.id.linearLive);
         linearUpload = v.findViewById(R.id.linearUpload);
         linearadd = v.findViewById(R.id.linearadd);
+        topBar = v.findViewById(R.id.topBar);
 
         //Video Recylcer View
         recyclerView = v.findViewById(R.id.recyclerView);
@@ -158,11 +151,20 @@ public class ProfileFragment extends Fragment {
             bottomnavigation.setVisibility(View.VISIBLE);
         }
 
-        if (session.getcategory().equals("Homemade")) {
-            linearadd.setVisibility(View.VISIBLE);
-        } else {
+//        if (session.getcategory().equals("Homemade")) {
+//            linearadd.setVisibility(View.VISIBLE);
+//        } else {
+//            linearadd.setVisibility(View.GONE);
+//        }
+
+
+        if(session.getcategory().equals("Grocery")){
+            topBar.setVisibility(View.GONE);
             linearadd.setVisibility(View.GONE);
         }
+
+        linearadd.setVisibility(View.GONE);
+
 
         txtAccountdetails.setTextColor(getResources().getColor(R.color.colorPrimary));
         txtVlogs.setTextColor(getResources().getColor(R.color.colorDarkgrey));
@@ -231,6 +233,7 @@ public class ProfileFragment extends Fragment {
                             if (!TextUtils.isEmpty(documentSnapshot.get("PP").toString())) {
                                 session.setpp(documentSnapshot.get("PP").toString());
                                 Glide.with(getActivity()).load(session.getpp()).into(imgProfilepic);
+                                Glide.with(getActivity()).load(session.getpp()).into(img);
                             }
                         }
                     }
@@ -238,6 +241,7 @@ public class ProfileFragment extends Fragment {
             });
         } else {
             Glide.with(getActivity()).load(session.getpp()).into(imgProfilepic);
+            Glide.with(getActivity()).load(session.getpp()).into(img);
         }
 
 
@@ -304,6 +308,19 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 if (getActivity() != null) {
                     Fragment fragment = new PastOrders();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.frame_container, fragment).commit();
+                }
+            }
+        });
+
+        linearRow50.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getActivity() != null) {
+                    Fragment fragment = new NotificationFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .addToBackStack(null)
@@ -449,6 +466,7 @@ public class ProfileFragment extends Fragment {
                                         u[0] = uri.toString();
                                         if (getActivity() != null)
                                             Glide.with(getActivity()).load(u[0]).into(imgProfilepic);
+                                            Glide.with(getActivity()).load(u[0]).into(img);
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                                         Map<String, Object> data = new HashMap<>();
                                         data.put("PP", u[0]);
@@ -508,6 +526,7 @@ public class ProfileFragment extends Fragment {
                                         u[0] = uri.toString();
                                         if (getActivity() != null)
                                             Glide.with(getActivity()).load(u[0]).into(imgProfilepic);
+                                            Glide.with(getActivity()).load(u[0]).into(img);
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                                         Map<String, Object> data = new HashMap<>();
                                         data.put("PP", u[0]);

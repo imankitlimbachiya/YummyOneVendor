@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import yummy.one.yummyonevendor.Fragments.AddGroceryItems;
+import yummy.one.yummyonevendor.Fragments.AddGroceryItemsEdit;
 import yummy.one.yummyonevendor.Fragments.FoodItemsEdit;
 import yummy.one.yummyonevendor.Functionality.Session;
 import yummy.one.yummyonevendor.MainActivity;
@@ -144,16 +146,31 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.View
         holder.indicator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(session.getcategory().equals("Grocery")){
+                    Fragment fragment = new AddGroceryItemsEdit();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("pushid",holder.pushid.getText().toString());
+                    bundle.putString("category",inventory.Category);
+                    fragment.setArguments(bundle);
+                    MainActivity mainActivity=(MainActivity) holder.view.getContext();
+                    FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.frame_container, fragment).commitAllowingStateLoss();
+                }
+                else{
                     Fragment fragment = new FoodItemsEdit();
                     Bundle bundle=new Bundle();
                     bundle.putString("pushid",holder.pushid.getText().toString());
                     bundle.putString("category",inventory.Category);
                     fragment.setArguments(bundle);
                     MainActivity mainActivity=(MainActivity) holder.view.getContext();
-                        FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
-                        fragmentManager.beginTransaction()
-                                .addToBackStack(null)
-                                .replace(R.id.frame_container, fragment).commitAllowingStateLoss();
+                    FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.frame_container, fragment).commitAllowingStateLoss();
+                }
             }
         });
 

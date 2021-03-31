@@ -30,12 +30,14 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -118,6 +120,7 @@ public class AddVlog extends Fragment {
     private LinearLayout linearSelect, linearUpload;
     private RecyclerView recyclerView;
     private ImageView image1, image2;
+    private EditText edtTitle,edtDescription;
 
     private static final int PICK_VIDEO_REQUEST = 1;
 
@@ -149,6 +152,8 @@ public class AddVlog extends Fragment {
         back = v.findViewById(R.id.back);
         background = v.findViewById(R.id.background);
         videoView = v.findViewById(R.id.Video_view);
+        edtDescription = v.findViewById(R.id.edtDescription);
+        edtTitle = v.findViewById(R.id.edtTitle);
 
         session = new Session(getActivity());
 
@@ -245,6 +250,20 @@ public class AddVlog extends Fragment {
 
     private void UploadVideo() {
 
+        if(TextUtils.isEmpty(edtTitle.getText().toString())){
+            edtTitle.setError("Enter Title");
+            edtTitle.requestFocus();
+            return;
+        }
+
+        if(TextUtils.isEmpty(edtDescription.getText().toString())){
+            edtDescription.setError("Enter Description");
+            edtDescription.requestFocus();
+            return;
+        }
+
+
+
         if (videoUri != null) {
             StorageReference reference = mStorageRef.child(session.getusername());
 
@@ -285,6 +304,8 @@ public class AddVlog extends Fragment {
                                     data.put("UserNumber", session.getnumber());
                                     data.put("Type", "Vendor");
                                     data.put("Views", 0);
+                                    data.put("Title", edtTitle.getText().toString());
+                                    data.put("Description", edtDescription.getText().toString());
                                     data.put("Created", ServerTimestamp);
                                     db1.set(data);
 

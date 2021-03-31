@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:backgroundTint="@color/white">
+
+    <TextView
+        android:id="@+id/txtYummyOneVendor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:text="YummyOne Vendor"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/ViewOne"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_below="@id/txtYummyOneVendor"/>
+
+    <TextView
+        android:id="@+id/txtContactSupport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/ViewOne"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:text="Contact Support"
+        android:textColor="@color/blue"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/ViewTwo"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_below="@id/txtContactSupport"/>
+
+    <TextView
+        android:id="@+id/txtCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/ViewTwo"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:text="Cancel"
+        android:textColor="@color/blue"
+        android:textSize="16sp" />
+
+</RelativeLayout>
+
+
+

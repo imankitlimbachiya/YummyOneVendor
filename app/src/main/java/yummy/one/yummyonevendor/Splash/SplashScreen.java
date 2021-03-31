@@ -2,37 +2,28 @@ package yummy.one.yummyonevendor.Splash;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.animation.Animation;
-import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
-
-import java.security.Permissions;
 
 import yummy.one.yummyonevendor.Functionality.Session;
 import yummy.one.yummyonevendor.Login.Login;
 import yummy.one.yummyonevendor.MainActivity;
-import yummy.one.yummyonevendor.PermissionActivity;
 import yummy.one.yummyonevendor.R;
-import yummy.one.yummyonevendor.Signup.CategorySelection;
 
 public class SplashScreen extends AppCompatActivity {
 
-    private static final String TAG ="LOGIN DATA" ;
+    Context mContext;
     protected boolean _active = true;
     protected int _splashTime = 3000;
     private Session session;
-
-    DatabaseReference database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +31,10 @@ public class SplashScreen extends AppCompatActivity {
         FirebaseApp.initializeApp(getApplicationContext());
         setContentView(R.layout.activity_splash_screen);
 
-        session = new Session(SplashScreen.this);
+        mContext = this;
+
+        session = new Session(mContext);
+
         final Thread splashTread = new Thread() {
             @Override
             public void run() {
@@ -52,10 +46,9 @@ public class SplashScreen extends AppCompatActivity {
                             waited += 100;
                         }
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 } finally {
-
                     if (TextUtils.isEmpty(session.getisfirsttime())) {
                         FirebaseDynamicLinks.getInstance()
                                 .getDynamicLink(getIntent())
@@ -67,45 +60,31 @@ public class SplashScreen extends AppCompatActivity {
                                         if (pendingDynamicLinkData != null) {
                                             deepLink = pendingDynamicLinkData.getLink();
                                         }
-
-                                        if (deepLink != null
-                                                && deepLink.getBooleanQueryParameter("invitedby", false)) {
+                                        if (deepLink != null && deepLink.getBooleanQueryParameter("invitedby", false)) {
                                             String referrerUid = deepLink.getQueryParameter("invitedby");
                                             session.setreferral(referrerUid);
-
-                                            startActivity(new Intent(SplashScreen.this,
-                                                    Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                            finish();
-                                        } else {
-                                            startActivity(new Intent(SplashScreen.this,
-                                                    Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                            finish();
                                         }
-
-
+                                        startActivity(new Intent(mContext, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                        finish();
                                     }
                                 });
                     } else {
-                        if (session.getusername() != "") {
+                        if (!session.getusername().equals("")) {
                             session.settemp("");
                             session.setaddress("");
                             session.setpincode("");
                             session.setcity("");
                             session.setstate("");
                             session.setdocument("");
-                            startActivity(new Intent(SplashScreen.this,
-                                    MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                            finish();
+                            startActivity(new Intent(mContext, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         } else {
-                            startActivity(new Intent(SplashScreen.this,
-                                    Login.class));
-                            finish();
+                            startActivity(new Intent(mContext, Login.class));
                         }
+                        finish();
                     }
                 }
-
-                }
-            };
+            }
+        };
         splashTread.start();
     }
 }

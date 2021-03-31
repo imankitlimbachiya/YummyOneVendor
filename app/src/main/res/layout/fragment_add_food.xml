@@ -38,7 +38,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/back_button"
+                    android:src="@drawable/back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,7 +85,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:paddingLeft="5dp"
                     android:text="Item Name"
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -113,7 +113,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:paddingLeft="5dp"
                     android:text="Price"
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -159,7 +159,7 @@
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Description "
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <EditText
@@ -169,7 +169,7 @@
             android:layout_marginStart="19dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="19dp"
-            android:background="@drawable/border_transparent"
+            android:background="@drawable/edt_bg"
             android:fontFamily="@font/roboto_regular"
             android:gravity="top|start"
             android:inputType="textMultiLine"
@@ -264,7 +264,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:paddingLeft="5dp"
                     android:text="Start Time "
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -304,7 +304,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:paddingLeft="5dp"
                     android:text="End Time "
-                    android:textColor="@color/colorLabel"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -339,7 +339,7 @@
             android:background="#ffffff"
             android:fontFamily="@font/roboto_regular"
             android:text="Type of Food"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <LinearLayout
@@ -429,7 +429,7 @@
             android:fontFamily="@font/roboto_regular"
             android:paddingLeft="5dp"
             android:text="Cuisines"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <EditText
@@ -460,7 +460,7 @@
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Portion's"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -479,7 +479,7 @@
             android:layout_marginEnd="19dp"
             android:fontFamily="@font/roboto_regular"
             android:text="Add On(s)"
-            android:textColor="@color/colorLabel"
+            android:textColor="@color/colorPrimary"
             android:textSize="13sp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -497,7 +497,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/border_transparent"
+            android:background="@drawable/edt_bg"
             android:gravity="center"
             android:paddingStart="16dp"
             android:paddingTop="4dp"

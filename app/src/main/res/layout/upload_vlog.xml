@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:src="@drawable/back_button" />
+                android:src="@drawable/back" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,8 +67,7 @@
                     android:id="@+id/imgVlog"
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/edt_bg"
-                    android:src="" />
+                    android:background="@drawable/edt_bg" />
 
                 <TextView
                     android:id="@+id/txtTitle"

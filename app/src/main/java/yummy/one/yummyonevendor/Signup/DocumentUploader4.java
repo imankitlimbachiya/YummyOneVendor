@@ -1,4 +1,4 @@
-package yummy.one.yummyonevendor.Signup;
+package yummy.one.yummyonevendor.SignUp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,13 +70,13 @@ import yummy.one.yummyonevendor.R;
 
 public class DocumentUploader4 extends AppCompatActivity {
 
-    ImageView doc1,doc2,doc3,close1,close2,close3;
-    ProgressBar progressBar1,progressBar2,progressBar3;
-    TextView txtHeading,txtHeading1,txtDocName,txtComments,txtComments1;
+    ImageView doc1, doc2, doc3, close1, close2, close3;
+    ProgressBar progressBar1, progressBar2, progressBar3;
+    TextView txtHeading, txtHeading1, txtApprovedHeading, txtDocName, txtComments, txtComments1, approvedComment;
     EditText edtDocumentNumber;
-    Button btnUpload;
-    RelativeLayout r1,r2,r3;
-    LinearLayout l1,l2,l3,imgBack,imgBack1;
+    Button btnUpload, btnOK;
+    RelativeLayout r1, r2, r3;
+    LinearLayout l1, l2, l3, imgBack, imgBack1;
     Session session;
     ScrollView pendinglayout;
     private Uri imageUri;
@@ -89,27 +89,39 @@ public class DocumentUploader4 extends AppCompatActivity {
     private static final int SELECT_FILE = 2;
     private final int RESULT_CROP = 400;
     private StorageReference mstorageReference;
-    int selection=0;
-    private String path1="",path2="",path3="";
+    int selection = 0;
+    private String path1 = "", path2 = "", path3 = "";
     RequestOptions requestOptions;
 
     RelativeLayout imageLayout;
-    ImageView image,close;
+    ImageView image, close;
+
+    LinearLayout imgBack2;
+    ScrollView mainLayout, ApprovedLayout;
+    ImageView imgApproved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_uploader4);
 
+        imgBack2 = findViewById(R.id.imgBack2);
+        mainLayout = findViewById(R.id.mainLayout);
+        ApprovedLayout = findViewById(R.id.ApprovedLayout);
+        imgApproved = findViewById(R.id.imgApproved);
+
         imgBack = findViewById(R.id.imgBack);
         imgBack1 = findViewById(R.id.imgBack1);
         txtHeading = findViewById(R.id.txtHeading);
         txtHeading1 = findViewById(R.id.txtHeading1);
+        txtApprovedHeading = findViewById(R.id.txtApprovedHeading);
         txtDocName = findViewById(R.id.txtDocName);
         txtComments = findViewById(R.id.comments);
         txtComments1 = findViewById(R.id.comments1);
+        approvedComment = findViewById(R.id.approvedComment);
         edtDocumentNumber = findViewById(R.id.edtDocumentNumber);
         btnUpload = findViewById(R.id.btnUpload);
+        btnOK = findViewById(R.id.btnOK);
         doc1 = findViewById(R.id.doc1);
         doc2 = findViewById(R.id.doc2);
         doc3 = findViewById(R.id.doc3);
@@ -168,36 +180,53 @@ public class DocumentUploader4 extends AppCompatActivity {
             }
         });
 
+        imgBack2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DocumentUploader4.this, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DocumentUploader4.this, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
         requestOptions = new RequestOptions();
         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
 
-        mstorageReference= FirebaseStorage.getInstance().getReference();
+        mstorageReference = FirebaseStorage.getInstance().getReference();
         txtHeading.setText("Registeration Certificate");
         txtHeading1.setText("Registeration Certificate");
+        txtApprovedHeading.setText("Registeration Certificate");
         txtDocName.setText("Id Proof Number");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Vendor").document(session.getusername());
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
+                if (documentSnapshot.exists()) {
                     try {
 
-                        if(documentSnapshot.contains("LICNumber")){
+                        if (documentSnapshot.contains("LICNumber")) {
                             edtDocumentNumber.setText(documentSnapshot.get("LICNumber").toString());
-                            if(btnUpload.getVisibility() != View.VISIBLE) {
+                            if (btnUpload.getVisibility() != View.VISIBLE) {
                                 edtDocumentNumber.setEnabled(false);
                             }
                         }
-                        if(documentSnapshot.contains("LICImage1")){
+                        if (documentSnapshot.contains("LICImage1")) {
                             path1 = documentSnapshot.get("LICImage1").toString();
-                            if(!TextUtils.isEmpty(path1)) {
+                            if (!TextUtils.isEmpty(path1)) {
                                 if (path1.contains(".pdf")) {
                                     doc1.setImageResource(R.drawable.pdf);
-                                    r1.setBackgroundResource(R.drawable.dotted_border);
+                                    doc1.setBackgroundResource(R.drawable.dotted_border);
                                 } else {
                                     Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
-                                    r1.setBackgroundResource(R.drawable.dotted_border);
+                                    doc1.setBackgroundResource(R.drawable.dotted_border);
                                 }
                                 l1.setVisibility(View.VISIBLE);
                                 l2.setVisibility(View.VISIBLE);
@@ -208,15 +237,15 @@ public class DocumentUploader4 extends AppCompatActivity {
                             }
                         }
 
-                        if(documentSnapshot.contains("LICImage2")){
+                        if (documentSnapshot.contains("LICImage2")) {
                             path2 = documentSnapshot.get("LICImage2").toString();
-                            if(!TextUtils.isEmpty(path2)) {
+                            if (!TextUtils.isEmpty(path2)) {
                                 if (path2.contains(".pdf")) {
                                     doc2.setImageResource(R.drawable.pdf);
-                                    r2.setBackgroundResource(R.drawable.dotted_border);
+                                    doc2.setBackgroundResource(R.drawable.dotted_border);
                                 } else {
                                     Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
-                                    r2.setBackgroundResource(R.drawable.dotted_border);
+                                    doc2.setBackgroundResource(R.drawable.dotted_border);
                                 }
                                 l1.setVisibility(View.VISIBLE);
                                 l2.setVisibility(View.VISIBLE);
@@ -228,15 +257,15 @@ public class DocumentUploader4 extends AppCompatActivity {
                             }
                         }
 
-                        if(documentSnapshot.contains("LICImage3")){
+                        if (documentSnapshot.contains("LICImage3")) {
                             path3 = documentSnapshot.get("LICImage3").toString();
-                            if(!TextUtils.isEmpty(path3)) {
+                            if (!TextUtils.isEmpty(path3)) {
                                 if (path3.contains(".pdf")) {
                                     doc3.setImageResource(R.drawable.pdf);
-                                    r3.setBackgroundResource(R.drawable.dotted_border);
+                                    doc3.setBackgroundResource(R.drawable.dotted_border);
                                 } else {
                                     Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
-                                    r3.setBackgroundResource(R.drawable.dotted_border);
+                                    doc3.setBackgroundResource(R.drawable.dotted_border);
                                 }
                                 l1.setVisibility(View.VISIBLE);
                                 l2.setVisibility(View.VISIBLE);
@@ -248,18 +277,18 @@ public class DocumentUploader4 extends AppCompatActivity {
                             }
                         }
 
-                        if(documentSnapshot.contains("LICImageComments")){
-                            if(!TextUtils.isEmpty(documentSnapshot.get("LICImageComments").toString()))
-                                txtComments.setText(""+documentSnapshot.get("LICImageComments").toString());
+                        if (documentSnapshot.contains("LICImageComments")) {
+                            if (!TextUtils.isEmpty(documentSnapshot.get("LICImageComments").toString()))
+                                txtComments.setText("" + documentSnapshot.get("LICImageComments").toString());
                             else
                                 txtComments.setText("Pending for approval");
                             txtComments.setVisibility(View.VISIBLE);
-                            txtComments1.setVisibility(View.VISIBLE);
+                            txtComments1.setVisibility(View.GONE);
                         }
 
-                        if (documentSnapshot.contains("LICImage1")&&documentSnapshot.contains("LICImageApproval")&&documentSnapshot.contains("LICImageComments")) {
-                            if(!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("LICImageApproval")).toString())) {
-                                if(documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Pending")){
+                        if (documentSnapshot.contains("LICImage1") && documentSnapshot.contains("LICImageApproval") && documentSnapshot.contains("LICImageComments")) {
+                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("LICImageApproval")).toString())) {
+                                if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Pending")) {
                                     btnUpload.setVisibility(View.GONE);
                                     close1.setVisibility(View.GONE);
                                     close2.setVisibility(View.GONE);
@@ -270,20 +299,19 @@ public class DocumentUploader4 extends AppCompatActivity {
                                     edtDocumentNumber.setEnabled(false);
                                     txtComments.setText("Pending for Approval");
                                     txtComments.setVisibility(View.VISIBLE);
-                                    txtComments1.setVisibility(View.VISIBLE);
+                                    txtComments1.setVisibility(View.GONE);
                                     doc1.setVisibility(View.INVISIBLE);
                                     doc2.setVisibility(View.INVISIBLE);
                                     doc3.setVisibility(View.INVISIBLE);
-                                    if(!TextUtils.isEmpty(path1))
+                                    if (!TextUtils.isEmpty(path1))
                                         doc1.setVisibility(View.VISIBLE);
-                                    if(!TextUtils.isEmpty(path2))
+                                    if (!TextUtils.isEmpty(path2))
                                         doc2.setVisibility(View.VISIBLE);
-                                    if(!TextUtils.isEmpty(path3))
+                                    if (!TextUtils.isEmpty(path3))
                                         doc3.setVisibility(View.VISIBLE);
                                     pendinglayout.setVisibility(View.VISIBLE);
-                                }
-                                else if(documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Approved")){
-                                    btnUpload.setVisibility(View.GONE);
+                                } else if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Approved")) {
+                                    /*btnUpload.setVisibility(View.GONE);
                                     close1.setVisibility(View.GONE);
                                     close2.setVisibility(View.GONE);
                                     close3.setVisibility(View.GONE);
@@ -297,21 +325,29 @@ public class DocumentUploader4 extends AppCompatActivity {
                                     doc1.setVisibility(View.INVISIBLE);
                                     doc2.setVisibility(View.INVISIBLE);
                                     doc3.setVisibility(View.INVISIBLE);
-                                    if(!TextUtils.isEmpty(path1))
+                                    if (!TextUtils.isEmpty(path1))
                                         doc1.setVisibility(View.VISIBLE);
-                                    if(!TextUtils.isEmpty(path2))
+                                    if (!TextUtils.isEmpty(path2))
                                         doc2.setVisibility(View.VISIBLE);
-                                    if(!TextUtils.isEmpty(path3))
-                                        doc3.setVisibility(View.VISIBLE);
-                                }
-                                else if(documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Rejected")){
+                                    if (!TextUtils.isEmpty(path3))
+                                        doc3.setVisibility(View.VISIBLE);*/
+
+                                    mainLayout.setVisibility(View.GONE);
+                                    imageLayout.setVisibility(View.GONE);
+                                    pendinglayout.setVisibility(View.GONE);
+                                    ApprovedLayout.setVisibility(View.VISIBLE);
+                                    approvedComment.setText("This document has been approved. Rest assured while we review the other documents and set up the account for you. We are thrilled to have you onboard");
+                                    // Glide.with(DocumentUploader4.this).asGif().load(R.raw.document_approved).into(imgApproved);
+                                    Glide.with(DocumentUploader4.this).load(R.drawable.success).into(imgApproved);
+
+                                } else if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Rejected")) {
                                     btnUpload.setVisibility(View.VISIBLE);
                                     txtComments.setVisibility(View.VISIBLE);
                                     txtComments.setVisibility(View.VISIBLE);
-                                    txtComments.setText("Rejected : "+documentSnapshot.get("LICImageComments"));
+                                    txtComments.setText("Rejected : " + documentSnapshot.get("LICImageComments"));
                                     txtComments.setTextColor(Color.parseColor("#FF0000"));
-                                }
-                                else{
+                                    txtComments1.setVisibility(View.GONE);
+                                } else {
                                     txtComments.setVisibility(View.GONE);
                                     txtComments1.setVisibility(View.GONE);
                                 }
@@ -320,8 +356,7 @@ public class DocumentUploader4 extends AppCompatActivity {
 
                         }
 
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -334,11 +369,11 @@ public class DocumentUploader4 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(TextUtils.isEmpty(path3)){
-                    if(TextUtils.isEmpty(path2)){
-                        path1="";
-                        doc1.setImageResource(R.drawable.addimage);
-                        r1.setBackgroundResource(0);
+                if (TextUtils.isEmpty(path3)) {
+                    if (TextUtils.isEmpty(path2)) {
+                        path1 = "";
+                        doc1.setImageResource(R.drawable.add_image);
+                        doc1.setBackgroundResource(0);
                         close1.setVisibility(View.GONE);
                         btnUpload.setVisibility(View.VISIBLE);
                         l2.setVisibility(View.GONE);
@@ -348,9 +383,8 @@ public class DocumentUploader4 extends AppCompatActivity {
                         data.put("LICImage1", FieldValue.delete());
                         data.put("LICImage2", FieldValue.delete());
                         data.put("LICImage3", FieldValue.delete());
-                        db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                    }
-                    else{
+                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                    } else {
                         path1 = path2;
                         path2 = "";
                         Glide.with(getApplicationContext())
@@ -358,8 +392,8 @@ public class DocumentUploader4 extends AppCompatActivity {
                                 .apply(requestOptions)
                                 .into(doc1);
                         close2.setVisibility(View.GONE);
-                        doc2.setImageResource(R.drawable.addimage);
-                        r2.setBackgroundResource(0);
+                        doc2.setImageResource(R.drawable.add_image);
+                        doc2.setBackgroundResource(0);
                         doc3.setVisibility(View.GONE);
                         close2.setVisibility(View.GONE);
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -367,13 +401,12 @@ public class DocumentUploader4 extends AppCompatActivity {
                         data.put("LICImage1", path1);
                         data.put("LICImage2", FieldValue.delete());
                         data.put("LICImage3", FieldValue.delete());
-                        db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                     }
-                }
-                else{
-                    path1=path2;
-                    path2=path3;
-                    path3="";
+                } else {
+                    path1 = path2;
+                    path2 = path3;
+                    path3 = "";
                     Glide.with(getApplicationContext())
                             .load(path1)
                             .apply(requestOptions)
@@ -382,15 +415,15 @@ public class DocumentUploader4 extends AppCompatActivity {
                             .load(path2)
                             .apply(requestOptions)
                             .into(doc2);
-                    doc3.setImageResource(R.drawable.addimage);
-                    r3.setBackgroundResource(0);
+                    doc3.setImageResource(R.drawable.add_image);
+                    doc3.setBackgroundResource(0);
                     close3.setVisibility(View.GONE);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> data = new HashMap<>();
                     data.put("LICImage1", path1);
                     data.put("LICImage2", path2);
                     data.put("LICImage3", FieldValue.delete());
-                    db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                    db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                 }
 
 
@@ -400,10 +433,10 @@ public class DocumentUploader4 extends AppCompatActivity {
         close2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(TextUtils.isEmpty(path3)){
-                    path2="";
-                    doc2.setImageResource(R.drawable.addimage);
-                    r2.setBackgroundResource(0);
+                if (TextUtils.isEmpty(path3)) {
+                    path2 = "";
+                    doc2.setImageResource(R.drawable.add_image);
+                    doc2.setBackgroundResource(0);
                     doc3.setVisibility(View.GONE);
                     close2.setVisibility(View.GONE);
                     btnUpload.setVisibility(View.VISIBLE);
@@ -412,24 +445,23 @@ public class DocumentUploader4 extends AppCompatActivity {
                     data.put("LICImage1", path1);
                     data.put("LICImage2", FieldValue.delete());
                     data.put("LICImage3", FieldValue.delete());
-                    db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
-                }
-                else {
-                    path2=path3;
-                    path3="";
+                    db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+                } else {
+                    path2 = path3;
+                    path3 = "";
                     Glide.with(getApplicationContext())
                             .load(path2)
                             .apply(requestOptions)
                             .into(doc2);
-                    doc3.setImageResource(R.drawable.addimage);
-                    r3.setBackgroundResource(0);
+                    doc3.setImageResource(R.drawable.add_image);
+                    doc3.setBackgroundResource(0);
                     close3.setVisibility(View.GONE);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> data = new HashMap<>();
                     data.put("LICImage1", path1);
                     data.put("LICImage2", path2);
                     data.put("LICImage3", FieldValue.delete());
-                    db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                    db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                 }
             }
         });
@@ -437,9 +469,9 @@ public class DocumentUploader4 extends AppCompatActivity {
         close3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                path3="";
-                doc3.setImageResource(R.drawable.addimage);
-                r3.setBackgroundResource(0);
+                path3 = "";
+                doc3.setImageResource(R.drawable.add_image);
+                doc3.setBackgroundResource(0);
                 close3.setVisibility(View.GONE);
                 btnUpload.setVisibility(View.VISIBLE);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -447,7 +479,7 @@ public class DocumentUploader4 extends AppCompatActivity {
                 data.put("LICImage1", path1);
                 data.put("LICImage2", path2);
                 data.put("LICImage3", FieldValue.delete());
-                db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
             }
         });
 
@@ -455,8 +487,8 @@ public class DocumentUploader4 extends AppCompatActivity {
         doc1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selection=1;
-                if(TextUtils.isEmpty(path1)||path1.contains(".pdf")) {
+                selection = 1;
+                if (TextUtils.isEmpty(path1) || path1.contains(".pdf")) {
                     final CharSequence[] items = {"Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader4.this, AlertDialog.THEME_HOLO_LIGHT);
@@ -484,9 +516,8 @@ public class DocumentUploader4 extends AppCompatActivity {
                         }
                     });
                     builder.show();
-                }
-                else{
-                    final CharSequence[] items = {"View Photo","Take Photo", "Choose from Library",
+                } else {
+                    final CharSequence[] items = {"View Photo", "Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader4.this, AlertDialog.THEME_HOLO_LIGHT);
                     builder.setTitle("Add Photo!");
@@ -525,8 +556,8 @@ public class DocumentUploader4 extends AppCompatActivity {
         doc2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selection=2;
-                if(TextUtils.isEmpty(path2)||path2.contains(".pdf")) {
+                selection = 2;
+                if (TextUtils.isEmpty(path2) || path2.contains(".pdf")) {
                     final CharSequence[] items = {"Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader4.this, AlertDialog.THEME_HOLO_LIGHT);
@@ -554,9 +585,8 @@ public class DocumentUploader4 extends AppCompatActivity {
                         }
                     });
                     builder.show();
-                }
-                else{
-                    final CharSequence[] items = {"View Photo","Take Photo", "Choose from Library",
+                } else {
+                    final CharSequence[] items = {"View Photo", "Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader4.this, AlertDialog.THEME_HOLO_LIGHT);
                     builder.setTitle("Add Photo!");
@@ -595,8 +625,8 @@ public class DocumentUploader4 extends AppCompatActivity {
         doc3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selection=3;
-                if(TextUtils.isEmpty(path3)||path3.contains(".pdf")) {
+                selection = 3;
+                if (TextUtils.isEmpty(path3) || path3.contains(".pdf")) {
                     final CharSequence[] items = {"Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader4.this, AlertDialog.THEME_HOLO_LIGHT);
@@ -624,9 +654,8 @@ public class DocumentUploader4 extends AppCompatActivity {
                         }
                     });
                     builder.show();
-                }
-                else{
-                    final CharSequence[] items = {"View Photo","Take Photo", "Choose from Library",
+                } else {
+                    final CharSequence[] items = {"View Photo", "Take Photo", "Choose from Library",
                             "Cancel"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(DocumentUploader4.this, AlertDialog.THEME_HOLO_LIGHT);
                     builder.setTitle("Add Photo!");
@@ -675,8 +704,8 @@ public class DocumentUploader4 extends AppCompatActivity {
                     edtDocumentNumber.setError(null);
                 }
 
-                if(TextUtils.isEmpty(path1)){
-                    Toast.makeText(getApplicationContext(),"Upload One Image",Toast.LENGTH_LONG).show();
+                if (TextUtils.isEmpty(path1)) {
+                    Toast.makeText(getApplicationContext(), "Upload One Image", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -721,7 +750,6 @@ public class DocumentUploader4 extends AppCompatActivity {
             imageHoldUri = data.getData();
 
 
-
             if (imageHoldUri != null) {
                 final Date c = Calendar.getInstance().getTime();
                 System.out.println("Current time => " + c);
@@ -734,23 +762,21 @@ public class DocumentUploader4 extends AppCompatActivity {
 
                 new UploadProfileAsyncTask().execute();
 
-                if(selection==1){
+                if (selection == 1) {
                     doc1.setImageResource(0);
                     doc2.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close1.setVisibility(View.VISIBLE);
-                }
-                else if(selection==2){
+                } else if (selection == 2) {
                     doc2.setImageResource(0);
                     doc3.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close2.setVisibility(View.VISIBLE);
-                }
-                else if(selection==3){
+                } else if (selection == 3) {
                     doc3.setImageResource(0);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
@@ -883,13 +909,11 @@ public class DocumentUploader4 extends AppCompatActivity {
 //                                }
 //                            }
 //                        });
-            }
-            else {
+            } else {
                 Toast.makeText(DocumentUploader4.this, "File Path Null", Toast.LENGTH_SHORT).show();
             }
 
-        }
-        else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
 
 
             imageHoldUri = imageUri;
@@ -903,23 +927,21 @@ public class DocumentUploader4 extends AppCompatActivity {
 
                 new UploadProfileAsyncTask().execute();
 
-                if(selection==1){
+                if (selection == 1) {
                     doc1.setImageResource(0);
                     doc2.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close1.setVisibility(View.VISIBLE);
-                }
-                else if(selection==2){
+                } else if (selection == 2) {
                     doc2.setImageResource(0);
                     doc3.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
                     l3.setVisibility(View.VISIBLE);
                     close2.setVisibility(View.VISIBLE);
-                }
-                else if(selection==3){
+                } else if (selection == 3) {
                     doc3.setImageResource(0);
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.VISIBLE);
@@ -1036,8 +1058,7 @@ public class DocumentUploader4 extends AppCompatActivity {
 //                            }
 //                        });
 
-            }
-            else {
+            } else {
                 Toast.makeText(DocumentUploader4.this, "File Path Null", Toast.LENGTH_SHORT).show();
             }
 
@@ -1142,7 +1163,7 @@ public class DocumentUploader4 extends AppCompatActivity {
             String type = cR.getType(imageHoldUri);
 
             StorageReference riversRef;
-            if(type.equals("application/pdf"))
+            if (type.equals("application/pdf"))
                 riversRef = mstorageReference.child("Documents/" + c + ".pdf");
             else
                 riversRef = mstorageReference.child("Documents/" + c + ".jpg");
@@ -1154,9 +1175,9 @@ public class DocumentUploader4 extends AppCompatActivity {
                             // Get a URL to the uploaded content
                             StorageReference storageRef = FirebaseStorage.getInstance().getReference();
                             final String[] u = new String[1];
-                            String path ="";
-                            if(type.equals("application/pdf"))
-                                path ="Documents/" + c + ".pdf";
+                            String path = "";
+                            if (type.equals("application/pdf"))
+                                path = "Documents/" + c + ".pdf";
                             else
                                 path = "Documents/" + c + ".jpg";
                             storageRef.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -1165,63 +1186,61 @@ public class DocumentUploader4 extends AppCompatActivity {
 
                                     u[0] = uri.toString();
 
-                                    if(select==1) {
+                                    if (select == 1) {
                                         path1 = u[0];
                                         RequestOptions requestOptions = new RequestOptions();
                                         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if(type.equals("application/pdf"))
+                                        if (type.equals("application/pdf"))
                                             doc1.setImageResource(R.drawable.pdf);
                                         else
                                             Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
-                                        r1.setBackgroundResource(R.drawable.dotted_border);
+                                        doc1.setBackgroundResource(R.drawable.dotted_border);
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                                         Map<String, Object> data = new HashMap<>();
                                         data.put("LICImage1", path1);
                                         data.put("LICImageComments", "");
                                         data.put("LICNumber", edtDocumentNumber.getText().toString());
-                                        db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                                         doc2.setVisibility(View.VISIBLE);
                                         l1.setVisibility(View.VISIBLE);
                                         l2.setVisibility(View.VISIBLE);
                                         l3.setVisibility(View.VISIBLE);
                                         progressBar1.setVisibility(View.GONE);
-                                    }
-                                    else  if(select==2) {
+                                    } else if (select == 2) {
                                         path2 = u[0];
                                         RequestOptions requestOptions = new RequestOptions();
                                         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if(type.equals("application/pdf"))
+                                        if (type.equals("application/pdf"))
                                             doc2.setImageResource(R.drawable.pdf);
                                         else
                                             Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
-                                        r2.setBackgroundResource(R.drawable.dotted_border);
+                                        doc2.setBackgroundResource(R.drawable.dotted_border);
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                                         Map<String, Object> data = new HashMap<>();
                                         data.put("LICImage2", path2);
                                         data.put("LICImageComments", "");
                                         data.put("LICNumber", edtDocumentNumber.getText().toString());
-                                        db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                                         doc3.setVisibility(View.VISIBLE);
                                         l1.setVisibility(View.VISIBLE);
                                         l2.setVisibility(View.VISIBLE);
                                         l3.setVisibility(View.VISIBLE);
                                         progressBar2.setVisibility(View.GONE);
-                                    }
-                                    else  if(select==3) {
+                                    } else if (select == 3) {
                                         path3 = u[0];
                                         RequestOptions requestOptions = new RequestOptions();
                                         requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if(type.equals("application/pdf"))
+                                        if (type.equals("application/pdf"))
                                             doc3.setImageResource(R.drawable.pdf);
                                         else
                                             Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
-                                        r3.setBackgroundResource(R.drawable.dotted_border);
+                                        doc3.setBackgroundResource(R.drawable.dotted_border);
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                                         Map<String, Object> data = new HashMap<>();
                                         data.put("LICImage3", path3);
                                         data.put("LICImageComments", "");
                                         data.put("LICNumber", edtDocumentNumber.getText().toString());
-                                        db.collection("Vendor").document(session.getusername()).set(data,SetOptions.merge());
+                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
                                         l1.setVisibility(View.VISIBLE);
                                         l2.setVisibility(View.VISIBLE);
                                         l3.setVisibility(View.VISIBLE);
@@ -1236,13 +1255,11 @@ public class DocumentUploader4 extends AppCompatActivity {
                                     // Handle any errors
                                 }
                             });
-                            if(select==1){
+                            if (select == 1) {
                                 progressBar1.setVisibility(View.GONE);
-                            }
-                            else if(select == 2){
+                            } else if (select == 2) {
                                 progressBar2.setVisibility(View.GONE);
-                            }
-                            else if(select ==3){
+                            } else if (select == 3) {
                                 progressBar3.setVisibility(View.GONE);
                             }
                         }
@@ -1258,13 +1275,11 @@ public class DocumentUploader4 extends AppCompatActivity {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                            if(select==1){
+                            if (select == 1) {
                                 progressBar1.setVisibility(View.VISIBLE);
-                            }
-                            else if(select == 2){
+                            } else if (select == 2) {
                                 progressBar2.setVisibility(View.VISIBLE);
-                            }
-                            else if(select ==3){
+                            } else if (select == 3) {
                                 progressBar3.setVisibility(View.VISIBLE);
                             }
                         }

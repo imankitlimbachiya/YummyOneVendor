@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Login.AccountSuspendedActivity">
+
+    <RelativeLayout
+        android:id="@+id/TitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/imgBack"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Back"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/TitleLayout">
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            android:text="Account on hold"
+            android:textColor="@color/black"
+            android:textSize="34sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:layout_below="@id/txtTitle"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:text="The account is on hold\nPlease contact our support team."
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            android:background="@color/white"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/account_on_hold" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnContactSupportTeam"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/border_round"
+        android:backgroundTint="@color/colorPrimary"
+        android:paddingStart="24dp"
+        android:layout_alignParentBottom="true"
+        android:paddingEnd="24dp"
+        android:text="Contact Support"
+        android:textSize="17sp"
+        android:fontFamily="@font/roboto_medium"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</RelativeLayout>
