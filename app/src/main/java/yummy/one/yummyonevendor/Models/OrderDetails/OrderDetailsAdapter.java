@@ -1,7 +1,5 @@
 package yummy.one.yummyonevendor.Models.OrderDetails;
 
-import android.content.res.ColorStateList;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,11 +16,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import yummy.one.yummyonevendor.Functionality.Session;
-import yummy.one.yummyonevendor.MainActivity;
 import yummy.one.yummyonevendor.R;
 
 public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapter.ViewHolder> implements Filterable {

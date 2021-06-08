@@ -17,7 +17,7 @@
         android:overScrollMode="never"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".Activities.Welcome">
+        tools:context=".Controller.Activities.Welcome">
 
         <LinearLayout
             android:layout_width="match_parent"

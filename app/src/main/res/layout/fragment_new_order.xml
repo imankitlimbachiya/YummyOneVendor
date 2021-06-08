@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.NewOrder">
+    tools:context=".Controller.Fragments.NewOrder">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/c1"
@@ -56,7 +56,7 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/roboto_bold"
             android:text="New Orders"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black"
             android:textSize="21dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

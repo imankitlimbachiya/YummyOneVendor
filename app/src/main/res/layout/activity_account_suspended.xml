@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login.AccountSuspendedActivity">
+    tools:context=".Controller.Activities.Login.AccountSuspendedActivity">
 
     <RelativeLayout
         android:id="@+id/TitleLayout"
@@ -29,7 +29,7 @@
             android:layout_toRightOf="@id/imgBack"
             android:fontFamily="@font/roboto_regular"
             android:text="Back"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -52,6 +52,7 @@
             android:textSize="34sp" />
 
         <TextView
+            android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -59,15 +60,16 @@
             android:layout_below="@id/txtTitle"
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
-            android:text="The account is on hold\nPlease contact our support team."
+            android:text="This account is on hold\nPlease contact our support team."
             android:textColor="@color/black"
             android:textSize="17sp" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_centerInParent="true"
+            android:layout_below="@+id/text"
             android:background="@color/white"
+            android:layout_centerHorizontal="true"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/account_on_hold" />

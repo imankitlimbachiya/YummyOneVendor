@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:onClick="setupUI"
-    tools:context=".Login.Login">
+    tools:context=".Controller.Activities.Login.Login">
 
     <ImageView
         android:id="@+id/imageView2"

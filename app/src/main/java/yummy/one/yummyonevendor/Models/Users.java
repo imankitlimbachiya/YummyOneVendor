@@ -9,6 +9,7 @@ public class Users {
     GeoPoint Location;
     public String PackingCharges,PancardImage,PassbookImage,Password,PreperationTime,Status,UserId,UserName,VendorImage,Zone,ZonePushId,RestaurantName;
 
+
     public Users(String AccountNumber, String Address, String BranchAddress, String BranchName, String Category, String City, String CityPushId, String CloseTime, String Commission, String Cuisines, String DiscountType, String Email, String FSSAIAddress, String FSSAIExpiryDate, String FSSAIImage, String FSSAINumber, String GSTImage, String GSTNumber, String IFSCCode, String ItemCategory, String LICImage, String MobileNumber, String Name, String OfferAmount, String POC, GeoPoint Location, String PackingCharges, String PancardImage, String PassbookImage, String Password, String PreperationTime, String Status, String UserId, String UserName, String VendorImage, String Zone, String ZonePushId,String RestaurantName) {
         this.AccountNumber = AccountNumber;
         this.Address = Address;
@@ -49,7 +50,5 @@ public class Users {
         this.ZonePushId = ZonePushId;
         this.RestaurantName = RestaurantName;
     }
-
-    public Users(){}
 
 }

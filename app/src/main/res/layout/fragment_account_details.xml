@@ -3,14 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".Fragments.AccountDetails">
+    tools:context=".Controller.Fragments.AccountDetails">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".Fragments.AccountDetails">
+        tools:context=".Controller.Fragments.AccountDetails">
 
         <LinearLayout
             android:id="@+id/back"
@@ -47,7 +52,7 @@
             android:layout_marginBottom="4dp"
             android:fontFamily="@font/roboto_bold"
             android:text="Account Details"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black"
             android:textSize="21sp" />
 
         <TextView
@@ -282,4 +287,11 @@
 
     </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 </ScrollView>

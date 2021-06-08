@@ -41,9 +41,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/TitleLayout"
         android:layout_marginStart="25dp"
-        android:fontFamily="@font/roboto_regular"
+        android:fontFamily="@font/roboto_bold"
         android:text="Notification"
-        android:textColor="#444444"
+        android:textColor="@color/black"
         android:textSize="22sp" />
 
     <androidx.recyclerview.widget.RecyclerView

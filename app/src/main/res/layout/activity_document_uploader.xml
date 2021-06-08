@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:onClick="setupUI"
     android:orientation="vertical"
-    tools:context=".SignUp.DocumentUploader">
+    tools:context=".Controller.Activities.Register.DocumentUploader">
 
     <ScrollView
         android:id="@+id/mainLayout"
@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:onClick="setupUI"
         android:orientation="vertical"
-        tools:context=".SignUp.DocumentUploader">
+        tools:context=".Controller.Activities.Register.DocumentUploader">
 
         <LinearLayout
             android:id="@+id/linearLayout5"
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Back"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -179,7 +179,6 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="16dp"
-                android:cursorVisible="false"
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678910"
                 android:hint="Document Number"
                 android:inputType="textCapCharacters"
@@ -427,7 +426,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:onClick="setupUI"
                 android:text="ID Proof"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black"
                 android:textSize="24sp" />
 
             <TextView
@@ -538,7 +537,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:onClick="setupUI"
                 android:text="ID Proof"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black"
                 android:textSize="24sp" />
 
             <TextView
@@ -553,15 +552,27 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/roboto_bold"
+                android:onClick="setupUI"
+                android:text="Comments:"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+
+            <TextView
                 android:id="@+id/approvedComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/roboto_regular"
-                android:gravity="center"
                 android:onClick="setupUI"
                 android:text="Pending for approval"
                 android:textColor="@color/black"

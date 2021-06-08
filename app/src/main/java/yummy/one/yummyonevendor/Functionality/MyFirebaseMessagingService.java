@@ -18,7 +18,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-import yummy.one.yummyonevendor.MainActivity;
+import yummy.one.yummyonevendor.Controller.Activities.MainActivity;
 import yummy.one.yummyonevendor.R;
 
 

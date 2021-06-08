@@ -8,7 +8,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Fragments.ApprovalPages">
+    tools:context=".Controller.Fragments.ApprovalPages">
 
     <ImageView
         android:id="@+id/imageView3"

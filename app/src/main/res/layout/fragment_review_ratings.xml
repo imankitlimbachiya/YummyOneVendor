@@ -34,7 +34,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="10dp"
             android:text="Review and Ratings"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/black"
             android:textSize="20dp" />
 
     </LinearLayout>

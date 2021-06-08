@@ -28,6 +28,9 @@
     <color name="editext">#BABABA</color>
     <color name="placeholder_bg">#dddddd</color>
     <color name="blue">#0A59AE</color>
+    <color name="main_green_color">#a4c639</color>
+    <color name="main_blue_color">#0A59AE</color>
+    <color name="main_orange_color">#ff8900</color>
 
     <color name="theme">#08154A</color>
 
