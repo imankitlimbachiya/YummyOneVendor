@@ -230,163 +230,163 @@ public class DocumentUploader extends AppCompatActivity {
         txtHeading1.setText("ID Proof");
         txtApprovedHeading.setText("ID Proof");
         txtDocName.setText("Id Proof Number");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("Vendor").document(session.getusername());
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    try {
-                        if (documentSnapshot.contains("PancardNumber")) {
-                            edtDocumentNumber.setText(documentSnapshot.get("PancardNumber").toString());
-                            if (btnUpload.getVisibility() != View.VISIBLE) {
-                                edtDocumentNumber.setEnabled(false);
-                            }
-                        }
-                        if (documentSnapshot.contains("PancardImage1")) {
-                            path1 = documentSnapshot.get("PancardImage1").toString();
-                            if (!TextUtils.isEmpty(path1)) {
-                                if (path1.contains(".pdf")) {
-                                    doc1.setImageResource(R.drawable.pdf);
-                                    doc1.setBackgroundResource(R.drawable.dotted_border);
-                                } else {
-                                    Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
-                                    doc1.setBackgroundResource(R.drawable.dotted_border);
-                                }
-                                l1.setVisibility(View.VISIBLE);
-                                l2.setVisibility(View.VISIBLE);
-                                l3.setVisibility(View.VISIBLE);
-                                doc1.setVisibility(View.VISIBLE);
-                                doc2.setVisibility(View.VISIBLE);
-                                close1.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        if (documentSnapshot.contains("PancardImage2")) {
-                            path2 = documentSnapshot.get("PancardImage2").toString();
-                            if (!TextUtils.isEmpty(path2)) {
-                                if (path2.contains(".pdf")) {
-                                    doc2.setImageResource(R.drawable.pdf);
-                                    doc2.setBackgroundResource(R.drawable.dotted_border);
-                                } else {
-                                    Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
-                                    doc2.setBackgroundResource(R.drawable.dotted_border);
-                                }
-                                l1.setVisibility(View.VISIBLE);
-                                l2.setVisibility(View.VISIBLE);
-                                l3.setVisibility(View.VISIBLE);
-                                doc1.setVisibility(View.VISIBLE);
-                                doc2.setVisibility(View.VISIBLE);
-                                doc3.setVisibility(View.VISIBLE);
-                                close2.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        if (documentSnapshot.contains("PancardImage3")) {
-                            path3 = documentSnapshot.get("PancardImage3").toString();
-                            if (!TextUtils.isEmpty(path3)) {
-                                if (path3.contains(".pdf")) {
-                                    doc3.setImageResource(R.drawable.pdf);
-                                    doc3.setBackgroundResource(R.drawable.dotted_border);
-                                } else {
-                                    Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
-                                    doc3.setBackgroundResource(R.drawable.dotted_border);
-                                }
-                                l1.setVisibility(View.VISIBLE);
-                                l2.setVisibility(View.VISIBLE);
-                                l3.setVisibility(View.VISIBLE);
-                                doc1.setVisibility(View.VISIBLE);
-                                doc2.setVisibility(View.VISIBLE);
-                                doc3.setVisibility(View.VISIBLE);
-                                close3.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        if (documentSnapshot.contains("PancardImageComments")) {
-                            if (!TextUtils.isEmpty(documentSnapshot.get("PancardImageComments").toString())) {
-                                txtComments.setText("" + documentSnapshot.get("PancardImageComments").toString());
-                            }
-                            else
-                                txtComments.setText("Pending for approval");
-                            txtComments.setVisibility(View.GONE);
-                            txtComments1.setVisibility(View.GONE);
-                        }
-
-                        if (documentSnapshot.contains("PancardImage1") && documentSnapshot.contains("PancardImageApproval") && documentSnapshot.contains("PancardImageComments")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImageApproval")).toString())) {
-                                if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Pending")) {
-                                    btnUpload.setVisibility(View.GONE);
-                                    close1.setVisibility(View.GONE);
-                                    close2.setVisibility(View.GONE);
-                                    close3.setVisibility(View.GONE);
-                                    doc1.setEnabled(false);
-                                    doc2.setEnabled(false);
-                                    doc3.setEnabled(false);
-                                    edtDocumentNumber.setEnabled(false);
-                                    txtComments.setText("");
-                                    txtComments.setVisibility(View.VISIBLE);
-                                    txtComments1.setVisibility(View.GONE);
-                                    doc1.setVisibility(View.INVISIBLE);
-                                    doc2.setVisibility(View.INVISIBLE);
-                                    doc3.setVisibility(View.INVISIBLE);
-                                    if (!TextUtils.isEmpty(path1))
-                                        doc1.setVisibility(View.VISIBLE);
-                                    if (!TextUtils.isEmpty(path2))
-                                        doc2.setVisibility(View.VISIBLE);
-                                    if (!TextUtils.isEmpty(path3))
-                                        doc3.setVisibility(View.VISIBLE);
-                                    pendinglayout.setVisibility(View.VISIBLE);
-                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Approved")) {
-                                    /*btnUpload.setVisibility(View.GONE);
-                                    close1.setVisibility(View.GONE);
-                                    close2.setVisibility(View.GONE);
-                                    close3.setVisibility(View.GONE);
-                                    doc1.setEnabled(false);
-                                    doc2.setEnabled(false);
-                                    doc3.setEnabled(false);
-                                    edtDocumentNumber.setEnabled(false);
-                                    txtComments.setText("Approved");
-                                    txtComments.setTextColor(Color.parseColor("#119326"));
-                                    txtComments.setVisibility(View.GONE);
-                                    txtComments1.setVisibility(View.INVISIBLE);
-                                    doc1.setVisibility(View.INVISIBLE);
-                                    doc2.setVisibility(View.INVISIBLE);
-                                    doc3.setVisibility(View.INVISIBLE);
-                                    if (!TextUtils.isEmpty(path1))
-                                        doc1.setVisibility(View.VISIBLE);
-                                    if (!TextUtils.isEmpty(path2))
-                                        doc2.setVisibility(View.VISIBLE);
-                                    if (!TextUtils.isEmpty(path3))
-                                        doc3.setVisibility(View.VISIBLE);*/
-
-                                    mainLayout.setVisibility(View.GONE);
-                                    imageLayout.setVisibility(View.GONE);
-                                    pendinglayout.setVisibility(View.GONE);
-                                    ApprovedLayout.setVisibility(View.VISIBLE);
-                                    approvedComment.setText("This document has been approved. Rest assured while we review the other documents and set up the account for you. We are thrilled to have you onboard");
-                                    // Glide.with(DocumentUploader.this).asGif().load(R.raw.document_approved).into(imgApproved);
-                                    Glide.with(DocumentUploader.this).load(R.drawable.success).into(imgApproved);
-
-                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Rejected")) {
-                                    btnUpload.setVisibility(View.VISIBLE);
-                                    txtComments.setVisibility(View.VISIBLE);
-                                    txtComments.setText("Rejected : " + documentSnapshot.get("PancardImageComments"));
-                                    txtComments.setTextColor(Color.parseColor("#FF0000"));
-                                    txtComments1.setVisibility(View.GONE);
-                                } else {
-                                    txtComments.setVisibility(View.GONE);
-                                    txtComments1.setVisibility(View.GONE);
-                                }
-                            }
-//                          txtComments.setVisibility(View.GONE);
-                            txtComments1.setVisibility(View.GONE);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+      //  FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //DocumentReference docRef = db.collection("Vendor").document(session.getusername());
+//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                if (documentSnapshot.exists()) {
+//                    try {
+//                        if (documentSnapshot.contains("PancardNumber")) {
+//                            edtDocumentNumber.setText(documentSnapshot.get("PancardNumber").toString());
+//                            if (btnUpload.getVisibility() != View.VISIBLE) {
+//                                edtDocumentNumber.setEnabled(false);
+//                            }
+//                        }
+//                        if (documentSnapshot.contains("PancardImage1")) {
+//                            path1 = documentSnapshot.get("PancardImage1").toString();
+//                            if (!TextUtils.isEmpty(path1)) {
+//                                if (path1.contains(".pdf")) {
+//                                    doc1.setImageResource(R.drawable.pdf);
+//                                    doc1.setBackgroundResource(R.drawable.dotted_border);
+//                                } else {
+//                                    Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
+//                                    doc1.setBackgroundResource(R.drawable.dotted_border);
+//                                }
+//                                l1.setVisibility(View.VISIBLE);
+//                                l2.setVisibility(View.VISIBLE);
+//                                l3.setVisibility(View.VISIBLE);
+//                                doc1.setVisibility(View.VISIBLE);
+//                                doc2.setVisibility(View.VISIBLE);
+//                                close1.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("PancardImage2")) {
+//                            path2 = documentSnapshot.get("PancardImage2").toString();
+//                            if (!TextUtils.isEmpty(path2)) {
+//                                if (path2.contains(".pdf")) {
+//                                    doc2.setImageResource(R.drawable.pdf);
+//                                    doc2.setBackgroundResource(R.drawable.dotted_border);
+//                                } else {
+//                                    Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
+//                                    doc2.setBackgroundResource(R.drawable.dotted_border);
+//                                }
+//                                l1.setVisibility(View.VISIBLE);
+//                                l2.setVisibility(View.VISIBLE);
+//                                l3.setVisibility(View.VISIBLE);
+//                                doc1.setVisibility(View.VISIBLE);
+//                                doc2.setVisibility(View.VISIBLE);
+//                                doc3.setVisibility(View.VISIBLE);
+//                                close2.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("PancardImage3")) {
+//                            path3 = documentSnapshot.get("PancardImage3").toString();
+//                            if (!TextUtils.isEmpty(path3)) {
+//                                if (path3.contains(".pdf")) {
+//                                    doc3.setImageResource(R.drawable.pdf);
+//                                    doc3.setBackgroundResource(R.drawable.dotted_border);
+//                                } else {
+//                                    Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
+//                                    doc3.setBackgroundResource(R.drawable.dotted_border);
+//                                }
+//                                l1.setVisibility(View.VISIBLE);
+//                                l2.setVisibility(View.VISIBLE);
+//                                l3.setVisibility(View.VISIBLE);
+//                                doc1.setVisibility(View.VISIBLE);
+//                                doc2.setVisibility(View.VISIBLE);
+//                                doc3.setVisibility(View.VISIBLE);
+//                                close3.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("PancardImageComments")) {
+//                            if (!TextUtils.isEmpty(documentSnapshot.get("PancardImageComments").toString())) {
+//                                txtComments.setText("" + documentSnapshot.get("PancardImageComments").toString());
+//                            }
+//                            else
+//                                txtComments.setText("Pending for approval");
+//                            txtComments.setVisibility(View.GONE);
+//                            txtComments1.setVisibility(View.GONE);
+//                        }
+//
+//                        if (documentSnapshot.contains("PancardImage1") && documentSnapshot.contains("PancardImageApproval") && documentSnapshot.contains("PancardImageComments")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImageApproval")).toString())) {
+//                                if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Pending")) {
+//                                    btnUpload.setVisibility(View.GONE);
+//                                    close1.setVisibility(View.GONE);
+//                                    close2.setVisibility(View.GONE);
+//                                    close3.setVisibility(View.GONE);
+//                                    doc1.setEnabled(false);
+//                                    doc2.setEnabled(false);
+//                                    doc3.setEnabled(false);
+//                                    edtDocumentNumber.setEnabled(false);
+//                                    txtComments.setText("");
+//                                    txtComments.setVisibility(View.VISIBLE);
+//                                    txtComments1.setVisibility(View.GONE);
+//                                    doc1.setVisibility(View.INVISIBLE);
+//                                    doc2.setVisibility(View.INVISIBLE);
+//                                    doc3.setVisibility(View.INVISIBLE);
+//                                    if (!TextUtils.isEmpty(path1))
+//                                        doc1.setVisibility(View.VISIBLE);
+//                                    if (!TextUtils.isEmpty(path2))
+//                                        doc2.setVisibility(View.VISIBLE);
+//                                    if (!TextUtils.isEmpty(path3))
+//                                        doc3.setVisibility(View.VISIBLE);
+//                                    pendinglayout.setVisibility(View.VISIBLE);
+//                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Approved")) {
+//                                    /*btnUpload.setVisibility(View.GONE);
+//                                    close1.setVisibility(View.GONE);
+//                                    close2.setVisibility(View.GONE);
+//                                    close3.setVisibility(View.GONE);
+//                                    doc1.setEnabled(false);
+//                                    doc2.setEnabled(false);
+//                                    doc3.setEnabled(false);
+//                                    edtDocumentNumber.setEnabled(false);
+//                                    txtComments.setText("Approved");
+//                                    txtComments.setTextColor(Color.parseColor("#119326"));
+//                                    txtComments.setVisibility(View.GONE);
+//                                    txtComments1.setVisibility(View.INVISIBLE);
+//                                    doc1.setVisibility(View.INVISIBLE);
+//                                    doc2.setVisibility(View.INVISIBLE);
+//                                    doc3.setVisibility(View.INVISIBLE);
+//                                    if (!TextUtils.isEmpty(path1))
+//                                        doc1.setVisibility(View.VISIBLE);
+//                                    if (!TextUtils.isEmpty(path2))
+//                                        doc2.setVisibility(View.VISIBLE);
+//                                    if (!TextUtils.isEmpty(path3))
+//                                        doc3.setVisibility(View.VISIBLE);*/
+//
+//                                    mainLayout.setVisibility(View.GONE);
+//                                    imageLayout.setVisibility(View.GONE);
+//                                    pendinglayout.setVisibility(View.GONE);
+//                                    ApprovedLayout.setVisibility(View.VISIBLE);
+//                                    approvedComment.setText("This document has been approved. Rest assured while we review the other documents and set up the account for you. We are thrilled to have you onboard");
+//                                    // Glide.with(DocumentUploader.this).asGif().load(R.raw.document_approved).into(imgApproved);
+//                                    Glide.with(DocumentUploader.this).load(R.drawable.success).into(imgApproved);
+//
+//                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Rejected")) {
+//                                    btnUpload.setVisibility(View.VISIBLE);
+//                                    txtComments.setVisibility(View.VISIBLE);
+//                                    txtComments.setText("Rejected : " + documentSnapshot.get("PancardImageComments"));
+//                                    txtComments.setTextColor(Color.parseColor("#FF0000"));
+//                                    txtComments1.setVisibility(View.GONE);
+//                                } else {
+//                                    txtComments.setVisibility(View.GONE);
+//                                    txtComments1.setVisibility(View.GONE);
+//                                }
+//                            }
+////                          txtComments.setVisibility(View.GONE);
+//                            txtComments1.setVisibility(View.GONE);
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
 
         close1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -736,11 +736,11 @@ public class DocumentUploader extends AppCompatActivity {
                     return;
                 }
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                Map<String, Object> data = new HashMap<>();
-                data.put("PancardImageApproval", "Pending");
-                data.put("PancardNumber", edtDocumentNumber.getText().toString());
-                db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+               // FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                Map<String, Object> data = new HashMap<>();
+//                data.put("PancardImageApproval", "Pending");
+//                data.put("PancardNumber", edtDocumentNumber.getText().toString());
+                //db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
 
                 Intent intent = new Intent(DocumentUploader.this, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

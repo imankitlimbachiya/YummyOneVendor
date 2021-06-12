@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,7 +17,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -28,14 +39,28 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import yummy.one.yummyonevendor.Controller.Activities.Login.Login;
+import yummy.one.yummyonevendor.Controller.Activities.Login.OtpActivity;
+import yummy.one.yummyonevendor.Controller.Activities.SignUp.SignUp;
 import yummy.one.yummyonevendor.Controller.Fragments.InventoryFragment;
 import yummy.one.yummyonevendor.Controller.Fragments.OrdersFragment;
 import yummy.one.yummyonevendor.Controller.Fragments.ProfileFragment;
+import yummy.one.yummyonevendor.Functionality.Retrofit.APIClient;
+import yummy.one.yummyonevendor.Functionality.Retrofit.APIInterface;
 import yummy.one.yummyonevendor.Functionality.Session;
 import yummy.one.yummyonevendor.Controller.Activities.Login.AccountSuspendedActivity;
 import yummy.one.yummyonevendor.Controller.Activities.Register.CategorySelection;
 import yummy.one.yummyonevendor.Controller.Activities.Register.RegisterDetails;
+import yummy.one.yummyonevendor.Functionality.VolleySupport.APIConstant;
 import yummy.one.yummyonevendor.R;
+
+import static yummy.one.yummyonevendor.Functionality.VolleySupport.APIConstant.getInstance;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,12 +68,21 @@ public class MainActivity extends AppCompatActivity {
     private ImageView i1, i2, i3;
     Session session;
     ProgressBar progressBar;
+    Context mContext;
     private static final String TAG = "MyFirebaseMsgService";
+
+    SharedPreferences sharedPreferences;
+    APIInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext = this;
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+        sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+        APIConstant.getInstance().renewAccessTokenApi(mContext);
 
         b1 = findViewById(R.id.b1);
         b2 = findViewById(R.id.b2);
@@ -340,4 +374,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 }

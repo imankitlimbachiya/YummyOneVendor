@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -39,8 +40,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -63,6 +64,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.protobuf.Api;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -70,11 +72,13 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -123,22 +127,13 @@ public class DocumentUploader1 extends AppCompatActivity {
     //S3 Bucket
     private AmazonS3Client s3Client;
     private BasicAWSCredentials credentials;
+    String image_url="";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_uploader1);
-
-//        try {
-//            //S3 Bucket init
-//            AWSMobileClient.getInstance().initialize(this).execute();
-//            credentials = new BasicAWSCredentials(getInstance().KEY, getInstance().SECRET);
-//            s3Client = new AmazonS3Client(credentials);
-//        }catch (Exception e){
-//            Log.e("EXCEPTION","ERROE=="+e);
-//        }
-
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
@@ -815,7 +810,7 @@ public class DocumentUploader1 extends AppCompatActivity {
                 File f = new File(String.valueOf(imageHoldUri));
                 String imageName = f.getName();
 
-                new UploadProfileAsyncTask().execute();
+                new UploadProfileAsyncTask(f.getPath()).execute();
 
                 if (selection == 1) {
                     doc1.setImageResource(0);
@@ -963,7 +958,7 @@ public class DocumentUploader1 extends AppCompatActivity {
                 File f = new File(String.valueOf(imageHoldUri));
                 String imageName = f.getName();
 
-                new UploadProfileAsyncTask().execute();
+                new UploadProfileAsyncTask(f.getPath()).execute();
 
 
                 if (selection == 1) {
@@ -1165,155 +1160,207 @@ public class DocumentUploader1 extends AppCompatActivity {
     }
 
     private class UploadProfileAsyncTask extends AsyncTask<String, Void, String> {
+        String path;
+        public UploadProfileAsyncTask(String path) {
+            this.path=path;
+        }
+
         @Override
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
-            new UploadProThread().start();
+            new UploadProThread(path).start();
             return null;
         }
     }
 
+//    private class UploadProThread extends Thread {
+//        @SuppressWarnings("deprecation")
+//        @Override
+//        public void run() {
+//            // TODO Auto-generated method stub
+//            // public static final String BUCKET_NAME = "alldercare";
+//            // using YOUR_S3_ACCESS_KEY, and  YOUR_S3_SECRET
+//            int select = selection;
+//            String c = "" + System.currentTimeMillis();
+//
+//            ContentResolver cR = getApplication().getContentResolver();
+//            String type = cR.getType(imageHoldUri);
+//
+//            StorageReference riversRef;
+//            if (type.equals("application/pdf"))
+//                riversRef = mstorageReference.child("Documents/" + c + ".pdf");
+//            else
+//                riversRef = mstorageReference.child("Documents/" + c + ".jpg");
+//
+//            riversRef.putFile(imageHoldUri)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            // Get a URL to the uploaded content
+//                            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+//                            final String[] u = new String[1];
+//                            String path = "";
+//                            if (type.equals("application/pdf"))
+//                                path = "Documents/" + c + ".pdf";
+//                            else
+//                                path = "Documents/" + c + ".jpg";
+//                            storageRef.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                @Override
+//                                public void onSuccess(Uri uri) {
+//
+//                                    u[0] = uri.toString();
+//
+//                                    if (select == 1) {
+//                                        path1 = u[0];
+//                                        RequestOptions requestOptions = new RequestOptions();
+//                                        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+//                                        if (type.equals("application/pdf"))
+//                                            doc1.setImageResource(R.drawable.pdf);
+//                                        else
+//                                            Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
+//                                        doc1.setBackgroundResource(R.drawable.dotted_border);
+//                                        AddFSSAIDocumentApi("123456","s3 url","s3 url","s3 url");
+////                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+////                                        Map<String, Object> data = new HashMap<>();
+////                                        data.put("FSSAIImage1", path1);
+////                                        data.put("FSSAIImageComments", "");
+////                                        data.put("FSSAINumber", edtDocumentNumber.getText().toString());
+////                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+//                                        doc2.setVisibility(View.VISIBLE);
+//                                        l1.setVisibility(View.VISIBLE);
+//                                        l2.setVisibility(View.VISIBLE);
+//                                        l3.setVisibility(View.VISIBLE);
+//                                        progressBar1.setVisibility(View.GONE);
+//                                    } else if (select == 2) {
+//                                        path2 = u[0];
+//                                        RequestOptions requestOptions = new RequestOptions();
+//                                        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+//                                        if (type.equals("application/pdf"))
+//                                            doc2.setImageResource(R.drawable.pdf);
+//                                        else
+//                                            Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
+//                                        doc2.setBackgroundResource(R.drawable.dotted_border);
+//                                        AddFSSAIDocumentApi("123456","s3 url","s3 url","s3 url");
+////                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+////                                        Map<String, Object> data = new HashMap<>();
+////                                        data.put("FSSAIImage2", path2);
+////                                        data.put("FSSAIImageComments", "");
+////                                        data.put("FSSAINumber", edtDocumentNumber.getText().toString());
+////                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+//                                        doc3.setVisibility(View.VISIBLE);
+//                                        l1.setVisibility(View.VISIBLE);
+//                                        l2.setVisibility(View.VISIBLE);
+//                                        l3.setVisibility(View.VISIBLE);
+//                                        progressBar2.setVisibility(View.GONE);
+//                                    } else if (select == 3) {
+//                                        path3 = u[0];
+//                                        RequestOptions requestOptions = new RequestOptions();
+//                                        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
+//                                        if (type.equals("application/pdf"))
+//                                            doc3.setImageResource(R.drawable.pdf);
+//                                        else
+//                                            Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
+//                                        doc3.setBackgroundResource(R.drawable.dotted_border);
+//                                     AddFSSAIDocumentApi("123456","s3 url","s3 url","s3 url");
+////                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+////                                        Map<String, Object> data = new HashMap<>();
+////                                        data.put("FSSAIImage3", path3);
+////                                        data.put("FSSAIImageComments", "");
+////                                        data.put("FSSAINumber", edtDocumentNumber.getText().toString());
+////                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
+//                                        l1.setVisibility(View.VISIBLE);
+//                                        l2.setVisibility(View.VISIBLE);
+//                                        l3.setVisibility(View.VISIBLE);
+//                                        progressBar3.setVisibility(View.GONE);
+//                                    }
+//
+//
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception exception) {
+//                                    // Handle any errors
+//                                }
+//                            });
+//                            if (select == 1) {
+//                                progressBar1.setVisibility(View.GONE);
+//                            } else if (select == 2) {
+//                                progressBar2.setVisibility(View.GONE);
+//                            } else if (select == 3) {
+//                                progressBar3.setVisibility(View.GONE);
+//                            }
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                            // Handle unsuccessful uploads
+//                            Toast.makeText(DocumentUploader1.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                            if (select == 1) {
+//                                progressBar1.setVisibility(View.VISIBLE);
+//                            } else if (select == 2) {
+//                                progressBar2.setVisibility(View.VISIBLE);
+//                            } else if (select == 3) {
+//                                progressBar3.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    });
+//
+//        }
+//    }
+
     private class UploadProThread extends Thread {
+        String mPath;
+        public UploadProThread(String path) {
+            this.mPath=path;
+        }
+
         @SuppressWarnings("deprecation")
         @Override
         public void run() {
             // TODO Auto-generated method stub
-            // public static final String BUCKET_NAME = "alldercare";
+            //   public static final String BUCKET_NAME = "alldercare";
             // using YOUR_S3_ACCESS_KEY, and  YOUR_S3_SECRET
-            int select = selection;
-            String c = "" + System.currentTimeMillis();
+            if (mPath != null) {
 
-            ContentResolver cR = getApplication().getContentResolver();
-            String type = cR.getType(imageHoldUri);
+                AmazonS3Client s3Client = new AmazonS3Client(new BasicAWSCredentials(getInstance().KEY, getInstance().SECRET));
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                PutObjectRequest por = new PutObjectRequest("s3bucket", timeStamp + ".png", new File(mPath));
+//                PutObjectResult result = s3Client.putObject(por);
+                s3Client.putObject(por);
 
-            StorageReference riversRef;
-            if (type.equals("application/pdf"))
-                riversRef = mstorageReference.child("Documents/" + c + ".pdf");
-            else
-                riversRef = mstorageReference.child("Documents/" + c + ".jpg");
+                image_url = "https://dymoqzsv35etf.cloudfront.net/" + timeStamp + ".png";
+                Log.e("imag url", "" + image_url);
 
-            riversRef.putFile(imageHoldUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // Get a URL to the uploaded content
-                            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                            final String[] u = new String[1];
-                            String path = "";
-                            if (type.equals("application/pdf"))
-                                path = "Documents/" + c + ".pdf";
-                            else
-                                path = "Documents/" + c + ".jpg";
-                            storageRef.child(path).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
+            } else {
+                image_url = "";
 
-                                    u[0] = uri.toString();
+            }
 
-                                    if (select == 1) {
-                                        path1 = u[0];
-                                        RequestOptions requestOptions = new RequestOptions();
-                                        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if (type.equals("application/pdf"))
-                                            doc1.setImageResource(R.drawable.pdf);
-                                        else
-                                            Glide.with(getApplicationContext()).load(path1).apply(requestOptions).into(doc1);
-                                        doc1.setBackgroundResource(R.drawable.dotted_border);
-                                        AddFSSAIDocumentApi("123456","s3 url","s3 url","s3 url");
-//                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                                        Map<String, Object> data = new HashMap<>();
-//                                        data.put("FSSAIImage1", path1);
-//                                        data.put("FSSAIImageComments", "");
-//                                        data.put("FSSAINumber", edtDocumentNumber.getText().toString());
-//                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
-                                        doc2.setVisibility(View.VISIBLE);
-                                        l1.setVisibility(View.VISIBLE);
-                                        l2.setVisibility(View.VISIBLE);
-                                        l3.setVisibility(View.VISIBLE);
-                                        progressBar1.setVisibility(View.GONE);
-                                    } else if (select == 2) {
-                                        path2 = u[0];
-                                        RequestOptions requestOptions = new RequestOptions();
-                                        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if (type.equals("application/pdf"))
-                                            doc2.setImageResource(R.drawable.pdf);
-                                        else
-                                            Glide.with(getApplicationContext()).load(path2).apply(requestOptions).into(doc2);
-                                        doc2.setBackgroundResource(R.drawable.dotted_border);
-                                        AddFSSAIDocumentApi("123456","s3 url","s3 url","s3 url");
-//                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                                        Map<String, Object> data = new HashMap<>();
-//                                        data.put("FSSAIImage2", path2);
-//                                        data.put("FSSAIImageComments", "");
-//                                        data.put("FSSAINumber", edtDocumentNumber.getText().toString());
-//                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
-                                        doc3.setVisibility(View.VISIBLE);
-                                        l1.setVisibility(View.VISIBLE);
-                                        l2.setVisibility(View.VISIBLE);
-                                        l3.setVisibility(View.VISIBLE);
-                                        progressBar2.setVisibility(View.GONE);
-                                    } else if (select == 3) {
-                                        path3 = u[0];
-                                        RequestOptions requestOptions = new RequestOptions();
-                                        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(20));
-                                        if (type.equals("application/pdf"))
-                                            doc3.setImageResource(R.drawable.pdf);
-                                        else
-                                            Glide.with(getApplicationContext()).load(path3).apply(requestOptions).into(doc3);
-                                        doc3.setBackgroundResource(R.drawable.dotted_border);
-                                     AddFSSAIDocumentApi("123456","s3 url","s3 url","s3 url");
-//                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                                        Map<String, Object> data = new HashMap<>();
-//                                        data.put("FSSAIImage3", path3);
-//                                        data.put("FSSAIImageComments", "");
-//                                        data.put("FSSAINumber", edtDocumentNumber.getText().toString());
-//                                        db.collection("Vendor").document(session.getusername()).set(data, SetOptions.merge());
-                                        l1.setVisibility(View.VISIBLE);
-                                        l2.setVisibility(View.VISIBLE);
-                                        l3.setVisibility(View.VISIBLE);
-                                        progressBar3.setVisibility(View.GONE);
-                                    }
-
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle any errors
-                                }
-                            });
-                            if (select == 1) {
-                                progressBar1.setVisibility(View.GONE);
-                            } else if (select == 2) {
-                                progressBar2.setVisibility(View.GONE);
-                            } else if (select == 3) {
-                                progressBar3.setVisibility(View.GONE);
-                            }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle unsuccessful uploads
-                            Toast.makeText(DocumentUploader1.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                            if (select == 1) {
-                                progressBar1.setVisibility(View.VISIBLE);
-                            } else if (select == 2) {
-                                progressBar2.setVisibility(View.VISIBLE);
-                            } else if (select == 3) {
-                                progressBar3.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
-
+            UploadproHandler.sendMessage(UploadproHandler.obtainMessage());
         }
     }
+
+    Handler UploadproHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            // removeProgress();
+            // prograss.setVisibility(View.GONE);
+            try {
+                if (!image_url.equals("")) {
+                    AddFSSAIDocumentApi("123456",image_url,image_url,image_url);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+        }
+    };
 
     private void AddFSSAIDocumentApi(String fssaiNo,String fssaiImage1,String fssaiImage2,String fssaiImage3) {
        // progressBar.setVisibility(View.VISIBLE);

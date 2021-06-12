@@ -51,9 +51,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import yummy.one.yummyonevendor.Controller.Activities.Location.LocationActivity;
 import yummy.one.yummyonevendor.Controller.Activities.Login.Login;
 import yummy.one.yummyonevendor.Controller.Activities.Login.OtpActivity;
 import yummy.one.yummyonevendor.Controller.Activities.MainActivity;
+import yummy.one.yummyonevendor.Controller.Activities.Register.RegisterDetails;
 import yummy.one.yummyonevendor.Functionality.VolleySupport.APIConstant;
 import yummy.one.yummyonevendor.Functionality.VolleySupport.AppController;
 import yummy.one.yummyonevendor.R;
@@ -420,16 +422,8 @@ public class SignUp extends AppCompatActivity {
                                 editor.putString("REFRESHTOKEN", dataobject.getJSONObject("tokenInfo").getString("refreshToken"));
                                 editor.apply();
                                 editor.commit();
-                                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(SignUp.this, OtpActivity.class);
-                                intent.putExtra("status", "registered");
-                                intent.putExtra("id", id);
-                                intent.putExtra("mobilenumber",dataobject.getString("mobilenumber"));
-                                intent.putExtra("name", "");
-                                intent.putExtra("dob", "");
-                                intent.putExtra("category", "");
-                                startActivity(intent);
-                                finish();
+                                getApplicationStatus(dataobject.getString("mobilenumber"));
+
                             }else {
                                 Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
                             }
@@ -457,6 +451,74 @@ public class SignUp extends AppCompatActivity {
                 params.put(keyname, keyvalue);
                 //params.put("Accept", "application/json");
                 Log.e("HEADER", "" + getInstance().signUp + params);
+                return params;
+            }
+        };
+        requstQueue.add(jsonobj);
+
+    }
+
+    private void getApplicationStatus(String mobilenumber) {
+        String vendorId=sharedPreferences.getString("VENDERID", "");
+        JSONObject data = new JSONObject();
+        try {
+            data.put("mobilenumber",mobilenumber);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("PARAMETER", "" + getInstance().GETAPPLICATIONSTATUS + data);
+        RequestQueue requstQueue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, getInstance().GETAPPLICATIONSTATUS,data,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject JsonMain) {
+                        try {
+                            progressBar.setVisibility(View.GONE);
+                            Log.e("RESPONSE", "" + APIConstant.getInstance().GETAPPLICATIONSTATUS + JsonMain);
+                            String msg = JsonMain.getString("message");
+                            if (msg.equalsIgnoreCase("SUCCESS")) {
+                                JSONObject dataobject=JsonMain.getJSONObject("data");
+                                String approvalStatus=dataobject.getString("approvalStatus");
+                                String status=dataobject.getString("status");
+                                String vendorId=dataobject.getString("vendorId");
+                                if (approvalStatus.equals("Pending")){
+                                    Intent intent = new Intent(mContext, RegisterDetails.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }else{
+                                    Intent intent = new Intent(mContext, MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+
+                            }else {
+                                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("ERROR", "" + getInstance().GETAPPLICATIONSTATUS + error.toString());
+                    }
+                }
+        ){
+            //here I want to post data to sever
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                String keyname=sharedPreferences.getString("KEYNAME", "");
+                String keyvalue=sharedPreferences.getString("KEYVALUE", "");
+                params.put("Content-Type", "application/json");
+                params.put(keyname, keyvalue);
+                Log.e("HEADER", "" + getInstance().GETAPPLICATIONSTATUS + params);
                 return params;
             }
         };

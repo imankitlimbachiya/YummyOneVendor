@@ -207,10 +207,10 @@ public class Login extends AppCompatActivity {
 //                progressBar.setVisibility(View.VISIBLE);
 //                loader.setVisibility(View.VISIBLE);
                 //SignInWithPhoneNumberApi(edtPhoneNumber.getText().toString());
-                SignInWithPhoneNumberApi("+919632125551");
+
+                //checkPhoneNumberApi("+919632125551");
+                checkPhoneNumberApi(edtPhoneNumber.getText().toString());
                // animation.playAnimation();
-
-
 
                /* animation.addAnimatorListener(new Animator.AnimatorListener() {
                     @Override
@@ -383,9 +383,70 @@ public class Login extends AppCompatActivity {
         loader.setVisibility(View.GONE);
     }
 
-    private void SignInWithPhoneNumberApi(String mobilenumber) {
+    private void checkPhoneNumberApi(String mobilenumber) {
+        String finalMobilenumber=mobilenumber.replace(" ","");
         progressBar.setVisibility(View.VISIBLE);
         loader.setVisibility(View.VISIBLE);
+        Log.e("PARAMETER", "" + APIConstant.getInstance().checkPhoneNumber + finalMobilenumber);
+        RequestQueue requstQueue = Volley.newRequestQueue(mContext);
+        StringRequest jsonobj = new StringRequest(Request.Method.GET, getInstance().checkPhoneNumber+mobilenumber,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.e("RESPONSE", "" + APIConstant.getInstance().checkPhoneNumber + response);
+                            JSONObject JsonMain = new JSONObject(response);
+                            String msg = JsonMain.getString("message");
+                            if (msg.equalsIgnoreCase("SUCCESS")) {
+                                SignInWithPhoneNumberApi(finalMobilenumber);
+                                //Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+                            }else {
+                                progressBar.setVisibility(View.GONE);
+                                loader.setVisibility(View.GONE);
+                                Intent intent = new Intent(Login.this, SignUp.class);
+                                intent.putExtra("status", "notregistered");
+                                intent.putExtra("id", "");
+                                intent.putExtra("mobilenumber",finalMobilenumber);
+                                startActivity(intent);
+                                finish();
+                               // Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+
+
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        loader.setVisibility(View.GONE);
+                        Log.e("ERROR", "" + getInstance().checkPhoneNumber + error.toString());
+                    }
+                }
+        ){
+            //here I want to post data to sever
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                String keyname=sharedPreferences.getString("KEYNAME", "");
+                String keyvalue=sharedPreferences.getString("KEYVALUE", "");
+                String accesstoken=sharedPreferences.getString("ACCESSTOKEN", "");
+                params.put("Authorization", "Bearer "+ accesstoken);
+                params.put("Content-Type", "application/json");
+                params.put(keyname, keyvalue);
+                Log.e("HEADER", "" + getInstance().checkPhoneNumber + params);
+                return params;
+            }
+        };
+        requstQueue.add(jsonobj);
+
+    }
+
+    private void SignInWithPhoneNumberApi(String mobilenumber) {
         JSONObject data = new JSONObject();
         try {
             data.put("mobilenumber",mobilenumber);
@@ -426,7 +487,7 @@ public class Login extends AppCompatActivity {
                                 Intent intent = new Intent(Login.this, OtpActivity.class);
                                 intent.putExtra("status", "registered");
                                 intent.putExtra("id", id);
-                                intent.putExtra("mobilenumber", edtPhoneNumber.getText().toString());
+                                intent.putExtra("mobilenumber", mobilenumber);
                                 intent.putExtra("name", "");
                                 intent.putExtra("dob", "");
                                 intent.putExtra("category", "");
@@ -437,7 +498,7 @@ public class Login extends AppCompatActivity {
                                 Intent intent = new Intent(Login.this, SignUp.class);
                                 intent.putExtra("status", "notregistered");
                                 intent.putExtra("id", "");
-                                intent.putExtra("mobilenumber", edtPhoneNumber.getText().toString().substring(4));
+                                intent.putExtra("mobilenumber", mobilenumber);
                                 startActivity(intent);
                                 finish();
                             }

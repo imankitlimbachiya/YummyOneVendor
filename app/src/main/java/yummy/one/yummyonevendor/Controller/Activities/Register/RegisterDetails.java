@@ -13,8 +13,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +27,9 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -55,6 +60,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.JsonArray;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -77,6 +83,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.core.app.ActivityCompat;
+import yummy.one.yummyonevendor.Controller.Activities.Login.OtpActivity;
 import yummy.one.yummyonevendor.Functionality.Retrofit.APIClient;
 import yummy.one.yummyonevendor.Functionality.Retrofit.APIInterface;
 import yummy.one.yummyonevendor.Functionality.Session;
@@ -116,12 +124,16 @@ public class RegisterDetails extends AppCompatActivity {
     private static final int SELECT_FILE = 2;
     private final int RESULT_CROP = 400;
     private StorageReference mstorageReference;
+    String  Mobilenumber="",category="",latitude="",longitude="";
 
     private int mHour;
     private int mMinute;
 
     SharedPreferences sharedPreferences;
     APIInterface apiInterface;
+    LocationManager locationManager;
+    private static final int REQUEST_LOCATION = 1000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +143,14 @@ public class RegisterDetails extends AppCompatActivity {
         Log.e("Activity", "RegisterDetails");
         apiInterface = APIClient.getClient().create(APIInterface.class);
         sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            OnGPS();
+        } else {
+            getLocation();
+        }
+
         btnLogin = findViewById(R.id.btnLogin);
         progressBar = findViewById(R.id.progressbar);
         edtRestaurantName = findViewById(R.id.edtRestaurantName);
@@ -206,6 +226,8 @@ public class RegisterDetails extends AppCompatActivity {
         txtCategory.setText(session.getcategory() + " Name");
         txtHeading.setText(session.getcategory() + " Details");
         txtHeading1.setText(session.getcategory() + " Details");
+
+        GetRestaurantDetailsApi();
 
         if (RegisterDetails.this.getApplicationContext() != null) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -473,19 +495,20 @@ public class RegisterDetails extends AppCompatActivity {
                 String l[] = session.getloc().split(",");
 
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //FirebaseFirestore db = FirebaseFirestore.getInstance();
                 session.setvendorname(edtRestaurantName.getText().toString());
-                Map<String, Object> user = new HashMap<>();
-                user.put("RestaurantName", edtRestaurantName.getText().toString());
-                user.put("Address", edtAddressLine1.getText().toString());
-                user.put("Email", edtEmail.getText().toString());
-                user.put("City", edtCity.getText().toString());
-                user.put("State", edtState.getText().toString());
-                user.put("PostCode", edtPostcode.getText().toString());
-                user.put("OpenTime", open);
-                user.put("CloseTime", close);
-                user.put("Location", new GeoPoint(Double.parseDouble(l[0]), Double.parseDouble(l[1])));
-                db.collection("Vendor").document(session.getusername()).set(user, SetOptions.merge());
+                AddRestaurantDetailsApi();
+//                Map<String, Object> user = new HashMap<>();
+//                user.put("RestaurantName", edtRestaurantName.getText().toString());
+//                user.put("Address", edtAddressLine1.getText().toString());
+//                user.put("Email", edtEmail.getText().toString());
+//                user.put("City", edtCity.getText().toString());
+//                user.put("State", edtState.getText().toString());
+//                user.put("PostCode", edtPostcode.getText().toString());
+//                user.put("OpenTime", open);
+//                user.put("CloseTime", close);
+//                user.put("Location", new GeoPoint(Double.parseDouble(l[0]), Double.parseDouble(l[1])));
+                //db.collection("Vendor").document(session.getusername()).set(user, SetOptions.merge());
                 stage1.setVisibility(View.GONE);
                 stage2.setVisibility(View.VISIBLE);
                 stage3.setVisibility(View.GONE);
@@ -510,338 +533,338 @@ public class RegisterDetails extends AppCompatActivity {
 
         mstorageReference = FirebaseStorage.getInstance().getReference();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("Vendor").document(session.getusername());
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-//                    try {
-                        int count = 0;
-                        if (documentSnapshot.contains("RestaurantName")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("RestaurantName")).toString())) {
-                                edtRestaurantName.setText(Objects.requireNonNull(documentSnapshot.get("RestaurantName")).toString());
-                                session.settemp(edtRestaurantName.getText().toString());
-                                count++;
-                            }
-                        }
-
-                        if (documentSnapshot.contains("Address")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("Address")).toString())) {
-                                String a = Objects.requireNonNull(documentSnapshot.get("Address")).toString();
-                                edtAddressLine1.setText(a);
-                                count++;
-                                session.setaddress(edtAddressLine1.getText().toString());
-                            }
-                        }
-
-                        if (documentSnapshot.contains("Email")) {
-                            if (!TextUtils.isEmpty(documentSnapshot.get("Email").toString())) {
-                                String a = Objects.requireNonNull(documentSnapshot.get("Email")).toString();
-                                edtEmail.setText(a);
-                                count++;
-                                session.setemail(edtEmail.getText().toString());
-                            }
-                        }
-
-                        if (documentSnapshot.contains("OpenTime")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("OpenTime")).toString())) {
-                                open = Objects.requireNonNull(documentSnapshot.get("OpenTime")).toString();
-                                String a[] = open.split(":");
-                                Time tme = new Time(Integer.parseInt(a[0]), Integer.parseInt(a[1]), 0);//seconds by default set to zero
-                                Format formatter;
-                                formatter = new SimpleDateFormat("h:mm a");
-                                edtOpentime.setText("" + formatter.format(tme));
-                                count++;
-                            }
-                        }
-
-                        if (documentSnapshot.contains("CloseTime")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("CloseTime")).toString())) {
-                                close = Objects.requireNonNull(documentSnapshot.get("CloseTime")).toString();
-                                String a[] = close.split(":");
-                                Time tme = new Time(Integer.parseInt(a[0]), Integer.parseInt(a[1]), 0);//seconds by default set to zero
-                                Format formatter;
-                                formatter = new SimpleDateFormat("h:mm a");
-                                edtClosetime.setText("" + formatter.format(tme));
-                                count++;
-                            }
-                        }
-
-                        if (documentSnapshot.contains("Location")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("Location")).toString())) {
-                                GeoPoint geoPoint = documentSnapshot.getGeoPoint("Location");
-                                session.setloc(geoPoint.getLatitude() + "," + geoPoint.getLongitude());
-                            }
-                        }
-
-//                        if (count == 4) {
-//                            stage1.setVisibility(View.GONE);
-//                            stage2.setVisibility(View.VISIBLE);
-//                            stage3.setVisibility(View.GONE);
-//                            imagerow.setVisibility(View.VISIBLE);
-//                            one.setImageResource(R.drawable.sone);
-//                            line1.setImageResource(R.drawable.sline);
-//                            two.setImageResource(R.drawable.stwo);
-//                            line2.setImageResource(R.drawable.line);
-//                            three.setImageResource(R.drawable.three);
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        DocumentReference docRef = db.collection("Vendor").document(session.getusername());
+//        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                if (documentSnapshot.exists()) {
+////                    try {
+//                        int count = 0;
+//                        if (documentSnapshot.contains("RestaurantName")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("RestaurantName")).toString())) {
+//                                edtRestaurantName.setText(Objects.requireNonNull(documentSnapshot.get("RestaurantName")).toString());
+//                                session.settemp(edtRestaurantName.getText().toString());
+//                                count++;
+//                            }
 //                        }
-
-                        count = 0;
-
-                        if (documentSnapshot.contains("AccountNumber")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("AccountNumber")).toString())) {
-                                edtAccountNumber.setText(Objects.requireNonNull(documentSnapshot.get("AccountNumber")).toString());
-                                count++;
-                            }
-                        }
-
-                        if (documentSnapshot.contains("BranchName")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("BranchName")).toString())) {
-                                edtBankName.setText(Objects.requireNonNull(documentSnapshot.get("BranchName")).toString());
-                                count++;
-                            }
-                        }
-
-                        if (documentSnapshot.contains("IFSCCode")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("IFSCCode")).toString())) {
-                                edtIfsc.setText(Objects.requireNonNull(documentSnapshot.get("IFSCCode")).toString());
-                                count++;
-                            }
-                        }
-
-                        if (documentSnapshot.contains("AccountName")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("AccountName")).toString())) {
-                                edtHolderName.setText(Objects.requireNonNull(documentSnapshot.get("AccountName")).toString());
-                                count++;
-                            }
-                        }
-
-                        int temp = 0;
-                        if (count == 4) {
-//                            r5.setImageResource(R.drawable.right_circle);
-//                            doc5.setBackgroundResource(R.color.success);
-//                            comments5.setVisibility(View.GONE);
-                            temp++;
-                        }
-
-                        count = 0;
-
-
-                        if (documentSnapshot.contains("PancardImage1") && documentSnapshot.contains("PancardImageApproval") && documentSnapshot.contains("PancardImageComments")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImage1")).toString())) {
-                                path1 = Objects.requireNonNull(documentSnapshot.get("PancardImage1")).toString();
-                            }
-
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImageApproval")).toString())) {
-                                if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Pending")) {
-                                    comments1.setVisibility(View.GONE);
-                                    doc1.setBackgroundResource(R.color.pending);
-                                    r1.setImageResource(R.drawable.right_circle);
-                                    comments1.setText("Pending for Approval");
-                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Approved")) {
-                                    comments1.setVisibility(View.GONE);
-                                    doc1.setBackgroundResource(R.color.success);
-                                    r1.setImageResource(R.drawable.right_green);
-                                    count++;
-                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Rejected")) {
-                                    comments1.setVisibility(View.GONE);
-                                    doc1.setBackgroundResource(R.color.warning);
-                                    r1.setImageResource(R.drawable.right_warning);
-                                    if (documentSnapshot.contains("PancardImageComments")) {
-                                        comments1.setText(documentSnapshot.get("PancardImageComments").toString());
-                                    }
-                                }
-                            } else {
-                                comments1.setVisibility(View.GONE);
-                                doc1.setBackgroundResource(R.color.initial);
-                                r1.setImageResource(R.drawable.right_circle);
-                            }
-                        }
-
-
-                        if (documentSnapshot.contains("FSSAIImageApproval")) {
-
-                            if(documentSnapshot.contains("FSSAIImage1")) {
-                                if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString())) {
-                                    path2 = Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString();
-                                }
-                            }
-
-                            if (!TextUtils.isEmpty(documentSnapshot.get("FSSAIImageApproval").toString())) {
-                                if (documentSnapshot.get("FSSAIImageApproval").toString().equalsIgnoreCase("Pending")) {
-                                    comments2.setVisibility(View.GONE);
-                                    doc2.setBackgroundResource(R.color.pending);
-                                    r2.setImageResource(R.drawable.right_circle);
-                                    comments2.setText("Pending for Approval");
-                                } else if (documentSnapshot.get("FSSAIImageApproval").toString().equalsIgnoreCase("Approved")) {
-                                    comments2.setVisibility(View.GONE);
-                                    doc2.setBackgroundResource(R.color.success);
-                                    r2.setImageResource(R.drawable.right_green);
-                                } else if (documentSnapshot.get("FSSAIImageApproval").toString().equalsIgnoreCase("Rejected")) {
-                                    comments2.setVisibility(View.GONE);
-                                    doc2.setBackgroundResource(R.color.warning);
-                                    r2.setImageResource(R.drawable.right_warning);
-                                    if (documentSnapshot.contains("FSSAIImageComments")) {
-                                        comments2.setText(documentSnapshot.get("FSSAIImageComments").toString());
-                                    }
-                                }
-                            } else {
-                                comments2.setVisibility(View.GONE);
-                                doc2.setBackgroundResource(R.color.initial);
-                                r2.setImageResource(R.drawable.right_circle);
-                            }
-                        }
-
-                        if (documentSnapshot.contains("GSTImage1") && documentSnapshot.contains("GSTImageApproval") && documentSnapshot.contains("GSTImageComments")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("GSTImage1")).toString())) {
-                                path3 = Objects.requireNonNull(documentSnapshot.get("GSTImage1")).toString();
-                            }
-
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("GSTImageApproval")).toString())) {
-                                if (documentSnapshot.get("GSTImageApproval").toString().equalsIgnoreCase("Pending")) {
-                                    comments3.setVisibility(View.GONE);
-                                    doc3.setBackgroundResource(R.color.pending);
-                                    r3.setImageResource(R.drawable.right_circle);
-                                    comments3.setText("Pending for Approval");
-                                } else if (documentSnapshot.get("GSTImageApproval").toString().equalsIgnoreCase("Approved")) {
-                                    comments3.setVisibility(View.GONE);
-                                    doc3.setBackgroundResource(R.color.success);
-                                    r3.setImageResource(R.drawable.right_green);
-                                    count++;
-                                } else if (documentSnapshot.get("GSTImageApproval").toString().equalsIgnoreCase("Rejected")) {
-                                    comments3.setVisibility(View.GONE);
-                                    doc3.setBackgroundResource(R.color.warning);
-                                    r3.setImageResource(R.drawable.right_warning);
-                                    if (documentSnapshot.contains("GSTImageComments")) {
-                                        comments3.setText(documentSnapshot.get("GSTImageComments").toString());
-                                    }
-                                }
-                            } else {
-                                comments3.setVisibility(View.GONE);
-                                doc3.setBackgroundResource(R.color.initial);
-                                r3.setImageResource(R.drawable.right_circle);
-                            }
-                        }
-
-                        if (documentSnapshot.contains("LICImage1") && documentSnapshot.contains("LICImageApproval") && documentSnapshot.contains("LICImageComments")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("LICImage1")).toString())) {
-                                path6 = Objects.requireNonNull(documentSnapshot.get("LICImage1")).toString();
-                            }
-
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("LICImageApproval")).toString())) {
-                                if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Pending")) {
-                                    comments6.setVisibility(View.GONE);
-                                    doc6.setBackgroundResource(R.color.pending);
-                                    r6.setImageResource(R.drawable.right_circle);
-                                    comments6.setText("Pending for Approval");
-                                } else if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Approved")) {
-                                    comments6.setVisibility(View.GONE);
-                                    doc6.setBackgroundResource(R.color.success);
-                                    r6.setImageResource(R.drawable.right_green);
-                                    count++;
-                                } else if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Rejected")) {
-                                    comments6.setVisibility(View.GONE);
-                                    doc6.setBackgroundResource(R.color.warning);
-                                    r6.setImageResource(R.drawable.right_warning);
-                                    if (documentSnapshot.contains("LICImageComments")) {
-                                        comments6.setText(documentSnapshot.get("LICImageComments").toString());
-                                    }
-                                }
-                            } else {
-                                comments6.setVisibility(View.GONE);
-                                doc6.setBackgroundResource(R.color.initial);
-                                r6.setImageResource(R.drawable.right_circle);
-                            }
-                        }
-
-                        if (documentSnapshot.contains("RestaurantImage1") && documentSnapshot.contains("RestaurantImageApproval") && documentSnapshot.contains("RestaurantImageComments")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("RestaurantImage1")).toString())) {
-                                path4 = Objects.requireNonNull(documentSnapshot.get("RestaurantImage1")).toString();
-                            }
-
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("RestaurantImageApproval")).toString())) {
-                                if (documentSnapshot.get("RestaurantImageApproval").toString().equalsIgnoreCase("Pending")) {
-                                    comments4.setVisibility(View.GONE);
-                                    doc4.setBackgroundResource(R.color.pending);
-                                    r4.setImageResource(R.drawable.right_circle);
-                                    comments4.setText("Pending for Approval");
-                                } else if (documentSnapshot.get("RestaurantImageApproval").toString().equalsIgnoreCase("Approved")) {
-                                    comments4.setVisibility(View.GONE);
-                                    doc4.setBackgroundResource(R.color.success);
-                                    r4.setImageResource(R.drawable.right_green);
-                                    count++;
-                                } else if (documentSnapshot.get("RestaurantImageApproval").toString().equalsIgnoreCase("Rejected")) {
-                                    comments4.setVisibility(View.GONE);
-                                    doc4.setBackgroundResource(R.color.warning);
-                                    r4.setImageResource(R.drawable.right_warning);
-                                    if (documentSnapshot.contains("RestaurantImageComments")) {
-                                        comments4.setText(documentSnapshot.get("RestaurantImageComments").toString());
-                                    }
-                                }
-                            } else {
-                                comments4.setVisibility(View.GONE);
-                                doc4.setBackgroundResource(R.color.initial);
-                                r4.setImageResource(R.drawable.right_circle);
-                            }
-                        }
-
-                        if (documentSnapshot.contains("PassbookImage1") && documentSnapshot.contains("PassbookImageApproval") && documentSnapshot.contains("PassbookImageComments")) {
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PassbookImage1")).toString())) {
-                                path7 = Objects.requireNonNull(documentSnapshot.get("PassbookImage1")).toString();
-                            }
-
-                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PassbookImageApproval")).toString())) {
-                                if (documentSnapshot.get("PassbookImageApproval").toString().equalsIgnoreCase("Pending")) {
-                                    comments7.setVisibility(View.GONE);
-                                    doc7.setBackgroundResource(R.color.pending);
-                                    r7.setImageResource(R.drawable.right_circle);
-                                    comments7.setText("Pending for Approval");
-                                    r5.setImageResource(R.drawable.right_circle);
-                                    doc5.setBackgroundResource(R.color.pending);
-                                    comments5.setVisibility(View.GONE);
-                                } else if (documentSnapshot.get("PassbookImageApproval").toString().equalsIgnoreCase("Approved")) {
-                                    comments7.setVisibility(View.GONE);
-                                    doc7.setBackgroundResource(R.color.success);
-                                    r7.setImageResource(R.drawable.right_green);
-                                    r5.setImageResource(R.drawable.right_green);
-                                    doc5.setBackgroundResource(R.color.success);
-                                    comments5.setVisibility(View.GONE);
-                                    count++;
-                                } else if (documentSnapshot.get("PassbookImageApproval").toString().equalsIgnoreCase("Rejected")) {
-                                    comments7.setVisibility(View.GONE);
-                                    doc7.setBackgroundResource(R.color.warning);
-                                    r7.setImageResource(R.drawable.right_warning);
-                                    r5.setImageResource(R.drawable.right_warning);
-                                    doc5.setBackgroundResource(R.color.warning);
-                                    comments5.setVisibility(View.GONE);
-                                    if (documentSnapshot.contains("PassbookImageComments")) {
-                                        comments7.setText(documentSnapshot.get("PassbookImageComments").toString());
-                                    }
-                                }
-                            } else {
-                                comments7.setVisibility(View.GONE);
-                                doc7.setBackgroundResource(R.color.initial);
-                                r7.setImageResource(R.drawable.right_circle);
-                            }
-                        }
-
-                        if (count == 6 && temp == 1) {
-                            btnNext1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#c8c8dc")));
-                            buttonSubmit = true;
-                        }
-                        else {
-                            btnNext1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#808080")));
-                            buttonSubmit = false;
-                        }
-
-                        //                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-//                    }
-                }
-            }
-        });
+//
+//                        if (documentSnapshot.contains("Address")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("Address")).toString())) {
+//                                String a = Objects.requireNonNull(documentSnapshot.get("Address")).toString();
+//                                edtAddressLine1.setText(a);
+//                                count++;
+//                                session.setaddress(edtAddressLine1.getText().toString());
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("Email")) {
+//                            if (!TextUtils.isEmpty(documentSnapshot.get("Email").toString())) {
+//                                String a = Objects.requireNonNull(documentSnapshot.get("Email")).toString();
+//                                edtEmail.setText(a);
+//                                count++;
+//                                session.setemail(edtEmail.getText().toString());
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("OpenTime")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("OpenTime")).toString())) {
+//                                open = Objects.requireNonNull(documentSnapshot.get("OpenTime")).toString();
+//                                String a[] = open.split(":");
+//                                Time tme = new Time(Integer.parseInt(a[0]), Integer.parseInt(a[1]), 0);//seconds by default set to zero
+//                                Format formatter;
+//                                formatter = new SimpleDateFormat("h:mm a");
+//                                edtOpentime.setText("" + formatter.format(tme));
+//                                count++;
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("CloseTime")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("CloseTime")).toString())) {
+//                                close = Objects.requireNonNull(documentSnapshot.get("CloseTime")).toString();
+//                                String a[] = close.split(":");
+//                                Time tme = new Time(Integer.parseInt(a[0]), Integer.parseInt(a[1]), 0);//seconds by default set to zero
+//                                Format formatter;
+//                                formatter = new SimpleDateFormat("h:mm a");
+//                                edtClosetime.setText("" + formatter.format(tme));
+//                                count++;
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("Location")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("Location")).toString())) {
+//                                GeoPoint geoPoint = documentSnapshot.getGeoPoint("Location");
+//                                session.setloc(geoPoint.getLatitude() + "," + geoPoint.getLongitude());
+//                            }
+//                        }
+//
+////                        if (count == 4) {
+////                            stage1.setVisibility(View.GONE);
+////                            stage2.setVisibility(View.VISIBLE);
+////                            stage3.setVisibility(View.GONE);
+////                            imagerow.setVisibility(View.VISIBLE);
+////                            one.setImageResource(R.drawable.sone);
+////                            line1.setImageResource(R.drawable.sline);
+////                            two.setImageResource(R.drawable.stwo);
+////                            line2.setImageResource(R.drawable.line);
+////                            three.setImageResource(R.drawable.three);
+////                        }
+//
+//                        count = 0;
+//
+//                        if (documentSnapshot.contains("AccountNumber")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("AccountNumber")).toString())) {
+//                                edtAccountNumber.setText(Objects.requireNonNull(documentSnapshot.get("AccountNumber")).toString());
+//                                count++;
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("BranchName")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("BranchName")).toString())) {
+//                                edtBankName.setText(Objects.requireNonNull(documentSnapshot.get("BranchName")).toString());
+//                                count++;
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("IFSCCode")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("IFSCCode")).toString())) {
+//                                edtIfsc.setText(Objects.requireNonNull(documentSnapshot.get("IFSCCode")).toString());
+//                                count++;
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("AccountName")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("AccountName")).toString())) {
+//                                edtHolderName.setText(Objects.requireNonNull(documentSnapshot.get("AccountName")).toString());
+//                                count++;
+//                            }
+//                        }
+//
+//                        int temp = 0;
+//                        if (count == 4) {
+////                            r5.setImageResource(R.drawable.right_circle);
+////                            doc5.setBackgroundResource(R.color.success);
+////                            comments5.setVisibility(View.GONE);
+//                            temp++;
+//                        }
+//
+//                        count = 0;
+//
+//
+//                        if (documentSnapshot.contains("PancardImage1") && documentSnapshot.contains("PancardImageApproval") && documentSnapshot.contains("PancardImageComments")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImage1")).toString())) {
+//                                path1 = Objects.requireNonNull(documentSnapshot.get("PancardImage1")).toString();
+//                            }
+//
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PancardImageApproval")).toString())) {
+//                                if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Pending")) {
+//                                    comments1.setVisibility(View.GONE);
+//                                    doc1.setBackgroundResource(R.color.pending);
+//                                    r1.setImageResource(R.drawable.right_circle);
+//                                    comments1.setText("Pending for Approval");
+//                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Approved")) {
+//                                    comments1.setVisibility(View.GONE);
+//                                    doc1.setBackgroundResource(R.color.success);
+//                                    r1.setImageResource(R.drawable.right_green);
+//                                    count++;
+//                                } else if (documentSnapshot.get("PancardImageApproval").toString().equalsIgnoreCase("Rejected")) {
+//                                    comments1.setVisibility(View.GONE);
+//                                    doc1.setBackgroundResource(R.color.warning);
+//                                    r1.setImageResource(R.drawable.right_warning);
+//                                    if (documentSnapshot.contains("PancardImageComments")) {
+//                                        comments1.setText(documentSnapshot.get("PancardImageComments").toString());
+//                                    }
+//                                }
+//                            } else {
+//                                comments1.setVisibility(View.GONE);
+//                                doc1.setBackgroundResource(R.color.initial);
+//                                r1.setImageResource(R.drawable.right_circle);
+//                            }
+//                        }
+//
+//
+//                        if (documentSnapshot.contains("FSSAIImageApproval")) {
+//
+//                            if(documentSnapshot.contains("FSSAIImage1")) {
+//                                if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString())) {
+//                                    path2 = Objects.requireNonNull(documentSnapshot.get("FSSAIImage1")).toString();
+//                                }
+//                            }
+//
+//                            if (!TextUtils.isEmpty(documentSnapshot.get("FSSAIImageApproval").toString())) {
+//                                if (documentSnapshot.get("FSSAIImageApproval").toString().equalsIgnoreCase("Pending")) {
+//                                    comments2.setVisibility(View.GONE);
+//                                    doc2.setBackgroundResource(R.color.pending);
+//                                    r2.setImageResource(R.drawable.right_circle);
+//                                    comments2.setText("Pending for Approval");
+//                                } else if (documentSnapshot.get("FSSAIImageApproval").toString().equalsIgnoreCase("Approved")) {
+//                                    comments2.setVisibility(View.GONE);
+//                                    doc2.setBackgroundResource(R.color.success);
+//                                    r2.setImageResource(R.drawable.right_green);
+//                                } else if (documentSnapshot.get("FSSAIImageApproval").toString().equalsIgnoreCase("Rejected")) {
+//                                    comments2.setVisibility(View.GONE);
+//                                    doc2.setBackgroundResource(R.color.warning);
+//                                    r2.setImageResource(R.drawable.right_warning);
+//                                    if (documentSnapshot.contains("FSSAIImageComments")) {
+//                                        comments2.setText(documentSnapshot.get("FSSAIImageComments").toString());
+//                                    }
+//                                }
+//                            } else {
+//                                comments2.setVisibility(View.GONE);
+//                                doc2.setBackgroundResource(R.color.initial);
+//                                r2.setImageResource(R.drawable.right_circle);
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("GSTImage1") && documentSnapshot.contains("GSTImageApproval") && documentSnapshot.contains("GSTImageComments")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("GSTImage1")).toString())) {
+//                                path3 = Objects.requireNonNull(documentSnapshot.get("GSTImage1")).toString();
+//                            }
+//
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("GSTImageApproval")).toString())) {
+//                                if (documentSnapshot.get("GSTImageApproval").toString().equalsIgnoreCase("Pending")) {
+//                                    comments3.setVisibility(View.GONE);
+//                                    doc3.setBackgroundResource(R.color.pending);
+//                                    r3.setImageResource(R.drawable.right_circle);
+//                                    comments3.setText("Pending for Approval");
+//                                } else if (documentSnapshot.get("GSTImageApproval").toString().equalsIgnoreCase("Approved")) {
+//                                    comments3.setVisibility(View.GONE);
+//                                    doc3.setBackgroundResource(R.color.success);
+//                                    r3.setImageResource(R.drawable.right_green);
+//                                    count++;
+//                                } else if (documentSnapshot.get("GSTImageApproval").toString().equalsIgnoreCase("Rejected")) {
+//                                    comments3.setVisibility(View.GONE);
+//                                    doc3.setBackgroundResource(R.color.warning);
+//                                    r3.setImageResource(R.drawable.right_warning);
+//                                    if (documentSnapshot.contains("GSTImageComments")) {
+//                                        comments3.setText(documentSnapshot.get("GSTImageComments").toString());
+//                                    }
+//                                }
+//                            } else {
+//                                comments3.setVisibility(View.GONE);
+//                                doc3.setBackgroundResource(R.color.initial);
+//                                r3.setImageResource(R.drawable.right_circle);
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("LICImage1") && documentSnapshot.contains("LICImageApproval") && documentSnapshot.contains("LICImageComments")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("LICImage1")).toString())) {
+//                                path6 = Objects.requireNonNull(documentSnapshot.get("LICImage1")).toString();
+//                            }
+//
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("LICImageApproval")).toString())) {
+//                                if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Pending")) {
+//                                    comments6.setVisibility(View.GONE);
+//                                    doc6.setBackgroundResource(R.color.pending);
+//                                    r6.setImageResource(R.drawable.right_circle);
+//                                    comments6.setText("Pending for Approval");
+//                                } else if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Approved")) {
+//                                    comments6.setVisibility(View.GONE);
+//                                    doc6.setBackgroundResource(R.color.success);
+//                                    r6.setImageResource(R.drawable.right_green);
+//                                    count++;
+//                                } else if (documentSnapshot.get("LICImageApproval").toString().equalsIgnoreCase("Rejected")) {
+//                                    comments6.setVisibility(View.GONE);
+//                                    doc6.setBackgroundResource(R.color.warning);
+//                                    r6.setImageResource(R.drawable.right_warning);
+//                                    if (documentSnapshot.contains("LICImageComments")) {
+//                                        comments6.setText(documentSnapshot.get("LICImageComments").toString());
+//                                    }
+//                                }
+//                            } else {
+//                                comments6.setVisibility(View.GONE);
+//                                doc6.setBackgroundResource(R.color.initial);
+//                                r6.setImageResource(R.drawable.right_circle);
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("RestaurantImage1") && documentSnapshot.contains("RestaurantImageApproval") && documentSnapshot.contains("RestaurantImageComments")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("RestaurantImage1")).toString())) {
+//                                path4 = Objects.requireNonNull(documentSnapshot.get("RestaurantImage1")).toString();
+//                            }
+//
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("RestaurantImageApproval")).toString())) {
+//                                if (documentSnapshot.get("RestaurantImageApproval").toString().equalsIgnoreCase("Pending")) {
+//                                    comments4.setVisibility(View.GONE);
+//                                    doc4.setBackgroundResource(R.color.pending);
+//                                    r4.setImageResource(R.drawable.right_circle);
+//                                    comments4.setText("Pending for Approval");
+//                                } else if (documentSnapshot.get("RestaurantImageApproval").toString().equalsIgnoreCase("Approved")) {
+//                                    comments4.setVisibility(View.GONE);
+//                                    doc4.setBackgroundResource(R.color.success);
+//                                    r4.setImageResource(R.drawable.right_green);
+//                                    count++;
+//                                } else if (documentSnapshot.get("RestaurantImageApproval").toString().equalsIgnoreCase("Rejected")) {
+//                                    comments4.setVisibility(View.GONE);
+//                                    doc4.setBackgroundResource(R.color.warning);
+//                                    r4.setImageResource(R.drawable.right_warning);
+//                                    if (documentSnapshot.contains("RestaurantImageComments")) {
+//                                        comments4.setText(documentSnapshot.get("RestaurantImageComments").toString());
+//                                    }
+//                                }
+//                            } else {
+//                                comments4.setVisibility(View.GONE);
+//                                doc4.setBackgroundResource(R.color.initial);
+//                                r4.setImageResource(R.drawable.right_circle);
+//                            }
+//                        }
+//
+//                        if (documentSnapshot.contains("PassbookImage1") && documentSnapshot.contains("PassbookImageApproval") && documentSnapshot.contains("PassbookImageComments")) {
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PassbookImage1")).toString())) {
+//                                path7 = Objects.requireNonNull(documentSnapshot.get("PassbookImage1")).toString();
+//                            }
+//
+//                            if (!TextUtils.isEmpty(Objects.requireNonNull(documentSnapshot.get("PassbookImageApproval")).toString())) {
+//                                if (documentSnapshot.get("PassbookImageApproval").toString().equalsIgnoreCase("Pending")) {
+//                                    comments7.setVisibility(View.GONE);
+//                                    doc7.setBackgroundResource(R.color.pending);
+//                                    r7.setImageResource(R.drawable.right_circle);
+//                                    comments7.setText("Pending for Approval");
+//                                    r5.setImageResource(R.drawable.right_circle);
+//                                    doc5.setBackgroundResource(R.color.pending);
+//                                    comments5.setVisibility(View.GONE);
+//                                } else if (documentSnapshot.get("PassbookImageApproval").toString().equalsIgnoreCase("Approved")) {
+//                                    comments7.setVisibility(View.GONE);
+//                                    doc7.setBackgroundResource(R.color.success);
+//                                    r7.setImageResource(R.drawable.right_green);
+//                                    r5.setImageResource(R.drawable.right_green);
+//                                    doc5.setBackgroundResource(R.color.success);
+//                                    comments5.setVisibility(View.GONE);
+//                                    count++;
+//                                } else if (documentSnapshot.get("PassbookImageApproval").toString().equalsIgnoreCase("Rejected")) {
+//                                    comments7.setVisibility(View.GONE);
+//                                    doc7.setBackgroundResource(R.color.warning);
+//                                    r7.setImageResource(R.drawable.right_warning);
+//                                    r5.setImageResource(R.drawable.right_warning);
+//                                    doc5.setBackgroundResource(R.color.warning);
+//                                    comments5.setVisibility(View.GONE);
+//                                    if (documentSnapshot.contains("PassbookImageComments")) {
+//                                        comments7.setText(documentSnapshot.get("PassbookImageComments").toString());
+//                                    }
+//                                }
+//                            } else {
+//                                comments7.setVisibility(View.GONE);
+//                                doc7.setBackgroundResource(R.color.initial);
+//                                r7.setImageResource(R.drawable.right_circle);
+//                            }
+//                        }
+//
+//                        if (count == 6 && temp == 1) {
+//                            btnNext1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#c8c8dc")));
+//                            buttonSubmit = true;
+//                        }
+//                        else {
+//                            btnNext1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#808080")));
+//                            buttonSubmit = false;
+//                        }
+//
+//                        //                    } catch (Exception e) {
+////                        e.printStackTrace();
+////                        Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+////                    }
+//                }
+//            }
+//        });
 
         doc1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1317,6 +1340,61 @@ public class RegisterDetails extends AppCompatActivity {
         });
 
 
+    }
+
+    private void OnGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new  DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                RegisterDetails.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                RegisterDetails.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (locationGPS != null) {
+                double lat = locationGPS.getLatitude();
+                double longi = locationGPS.getLongitude();
+                latitude = String.valueOf(lat);
+                longitude = String.valueOf(longi);
+            } else {
+                Toast.makeText(this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void setupUI(View view) {
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    //hideSoftKeyboard(OtpActivity.this);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
     }
 
     @Override
@@ -1963,6 +2041,149 @@ public class RegisterDetails extends AppCompatActivity {
                 params.put("Content-Type", "application/json");
                 params.put(keyname, keyvalue);
                 Log.e("HEADER", "" + getInstance().addRestaurantDocument + params);
+                return params;
+            }
+        };
+        requstQueue.add(jsonobj);
+
+    }
+
+    private void AddRestaurantDetailsApi() {
+        progressBar.setVisibility(View.VISIBLE);
+        JSONObject data = new JSONObject();
+        try {
+            String mobilenumber=sharedPreferences.getString("MOBILENUMBER", "");
+            data.put("mobilenumber",mobilenumber);
+            data.put("restaurantName", edtRestaurantName.getText().toString());
+            data.put("category",category);
+            data.put("email",edtEmail.getText().toString());
+            data.put("openTime",edtOpentime.getText().toString());
+            data.put("closeTime",edtClosetime.getText().toString());
+            data.put("address",edtAddressLine1.getText().toString());
+            data.put("latitude",latitude);
+            data.put("longitude",longitude);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("PARAMETER", "" + getInstance().ADDRESTAURANTDETSILS + data);
+        RequestQueue requstQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, getInstance().ADDRESTAURANTDETSILS,data,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject JsonMain) {
+                        try {
+                            progressBar.setVisibility(View.GONE);
+                            Log.e("RESPONSE", "" + APIConstant.getInstance().ADDRESTAURANTDETSILS + JsonMain);
+                            String msg = JsonMain.getString("message");
+                            if (msg.equalsIgnoreCase("SUCCESS")) {
+                                JSONObject dataobject=JsonMain.getJSONObject("data");
+                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+
+                            }else {
+                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("ERROR", "" + getInstance().ADDRESTAURANTDETSILS + error.toString());
+                    }
+                }
+        ){
+            //here I want to post data to sever
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                String keyname=sharedPreferences.getString("KEYNAME", "");
+                String keyvalue=sharedPreferences.getString("KEYVALUE", "");
+                String accesstoken=sharedPreferences.getString("ACCESSTOKEN", "");
+                params.put("Authorization", "Bearer "+ accesstoken);
+                params.put("Content-Type", "application/json");
+                params.put(keyname, keyvalue);
+                Log.e("HEADER", "" + getInstance().ADDRESTAURANTDETSILS + params);
+                return params;
+            }
+        };
+        requstQueue.add(jsonobj);
+
+    }
+
+    private void GetRestaurantDetailsApi() {
+        progressBar.setVisibility(View.VISIBLE);
+        String mobilenumber=sharedPreferences.getString("MOBILENUMBER", "");
+        JSONObject data = new JSONObject();
+        try {
+            data.put("mobilenumber",mobilenumber);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("PARAMETER", "" + getInstance().getRestaurantDetails + data);
+        RequestQueue requstQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, getInstance().getRestaurantDetails,data,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject JsonMain) {
+                        try {
+                            progressBar.setVisibility(View.GONE);
+                            Log.e("RESPONSE", "" + APIConstant.getInstance().getRestaurantDetails + JsonMain);
+                            String msg = JsonMain.getString("message");
+                            if (msg.equalsIgnoreCase("SUCCESS")) {
+                                JSONObject dataobject=JsonMain.getJSONObject("data");
+                                String name=dataobject.getString("name");
+                                 Mobilenumber=dataobject.getString("mobilenumber");
+                                String vendorId=dataobject.getString("vendorId");
+                                String restaurantName=dataobject.getString("restaurantName");
+                                String address=dataobject.getString("address");
+                                String latitude=dataobject.getString("latitude");
+                                String longitude=dataobject.getString("longitude");
+                                String openTime=dataobject.getString("openTime");
+                                String closeTime=dataobject.getString("closeTime");
+                                 category=dataobject.getString("category");
+
+
+                                edtRestaurantName.setText(restaurantName);
+                                edtOpentime.setText(openTime);
+                                edtClosetime.setText(closeTime);
+                                edtAddressLine1.setText(address);
+
+
+                            }else {
+                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("ERROR", "" + getInstance().getRestaurantDetails + error.toString());
+                    }
+                }
+        ){
+            //here I want to post data to sever
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                String keyname=sharedPreferences.getString("KEYNAME", "");
+                String keyvalue=sharedPreferences.getString("KEYVALUE", "");
+                String accesstoken=sharedPreferences.getString("ACCESSTOKEN", "");
+                params.put("Authorization", "Bearer "+ accesstoken);
+                params.put("Content-Type", "application/json");
+                params.put(keyname, keyvalue);
+                Log.e("HEADER", "" + getInstance().getRestaurantDetails + params);
                 return params;
             }
         };

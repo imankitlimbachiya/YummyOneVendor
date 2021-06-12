@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,6 +67,8 @@ import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,13 +77,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import yummy.one.yummyonevendor.Functionality.Retrofit.APIClient;
+import yummy.one.yummyonevendor.Functionality.Retrofit.APIInterface;
 import yummy.one.yummyonevendor.Functionality.Session;
 import yummy.one.yummyonevendor.Controller.Activities.Login.Login;
+import yummy.one.yummyonevendor.Functionality.VolleySupport.APIConstant;
 import yummy.one.yummyonevendor.R;
 import yummy.one.yummyonevendor.Models.Videos.Video;
 import yummy.one.yummyonevendor.Models.Videos.VideosAdapter;
 
 import static android.app.Activity.RESULT_OK;
+import static yummy.one.yummyonevendor.Functionality.VolleySupport.APIConstant.getInstance;
 
 public class ProfileFragment extends Fragment {
 
@@ -99,6 +113,10 @@ public class ProfileFragment extends Fragment {
     private final int RESULT_CROP = 400;
     private StorageReference mstorageReference;
     private ProgressBar progressBar2;
+    String  Mobilenumber="",category="";
+    SharedPreferences sharedPreferences;
+    APIInterface apiInterface;
+    ProgressBar progressBar;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -113,8 +131,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+        sharedPreferences = getContext().getSharedPreferences("UserData", getContext().MODE_PRIVATE);
 
         session = new Session(getActivity());
+        progressBar = v.findViewById(R.id.progressbar);
         txtVendorname = v.findViewById(R.id.txtVendorname);
         txtName = v.findViewById(R.id.txtName);
         imgProfilepic = v.findViewById(R.id.imgProfilepic);
@@ -144,7 +165,7 @@ public class ProfileFragment extends Fragment {
         recyclerView = v.findViewById(R.id.recyclerView);
         video.clear();
         videosAdapter = new VideosAdapter(video);
-
+        GetRestaurantDetailsApi();
         getVideos();
 
         if (getActivity() != null) {
@@ -611,5 +632,75 @@ public class ProfileFragment extends Fragment {
                 })
                 .onSameThread()
                 .check();
+    }
+
+    private void GetRestaurantDetailsApi() {
+        progressBar.setVisibility(View.VISIBLE);
+        String mobilenumber=sharedPreferences.getString("MOBILENUMBER", "");
+        JSONObject data = new JSONObject();
+        try {
+            data.put("mobilenumber",mobilenumber);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("PARAMETER", "" + getInstance().getRestaurantDetails + data);
+        RequestQueue requstQueue = Volley.newRequestQueue(getContext());
+        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, getInstance().getRestaurantDetails,data,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject JsonMain) {
+                        try {
+                            progressBar.setVisibility(View.GONE);
+                            Log.e("RESPONSE", "" + APIConstant.getInstance().getRestaurantDetails + JsonMain);
+                            String msg = JsonMain.getString("message");
+                            if (msg.equalsIgnoreCase("SUCCESS")) {
+                                JSONObject dataobject=JsonMain.getJSONObject("data");
+                                String name=dataobject.getString("name");
+                                Mobilenumber=dataobject.getString("mobilenumber");
+                                String vendorId=dataobject.getString("vendorId");
+                                String restaurantName=dataobject.getString("restaurantName");
+                                String address=dataobject.getString("address");
+                                String latitude=dataobject.getString("latitude");
+                                String longitude=dataobject.getString("longitude");
+                                String openTime=dataobject.getString("openTime");
+                                String closeTime=dataobject.getString("closeTime");
+                                category=dataobject.getString("category");
+                                txtVendorname.setText(restaurantName);
+                                txtName.setText(name);
+
+                            }else {
+                                Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("ERROR", "" + getInstance().getRestaurantDetails + error.toString());
+                    }
+                }
+        ){
+            //here I want to post data to sever
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                String keyname=sharedPreferences.getString("KEYNAME", "");
+                String keyvalue=sharedPreferences.getString("KEYVALUE", "");
+                String accesstoken=sharedPreferences.getString("ACCESSTOKEN", "");
+                params.put("Authorization", "Bearer "+ accesstoken);
+                params.put("Content-Type", "application/json");
+                params.put(keyname, keyvalue);
+                Log.e("HEADER", "" + getInstance().getRestaurantDetails + params);
+                return params;
+            }
+        };
+        requstQueue.add(jsonobj);
+
     }
 }

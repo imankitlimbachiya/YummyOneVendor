@@ -38,6 +38,8 @@ import java.util.Map;
 import io.grpc.Server;
 import okhttp3.OkHttpClient;
 import yummy.one.yummyonevendor.Controller.Activities.Login.OtpActivity;
+import yummy.one.yummyonevendor.Controller.Activities.PermissionActivity;
+import yummy.one.yummyonevendor.Controller.Activities.Register.CategorySelection;
 import yummy.one.yummyonevendor.Controller.Activities.Register.DocumentUploader1;
 import yummy.one.yummyonevendor.Controller.Activities.Register.RegisterDetails;
 import yummy.one.yummyonevendor.Controller.Activities.SignUp.SignUp;
@@ -75,6 +77,7 @@ public class SplashScreen extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("KEYNAME", "ApiKey");
         editor.putString("KEYVALUE", "7164ea6006390c67a98172efb82fd007");
+        editor.putString("refreshToken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUm9oYW4iLCJtb2JpbGVudW1iZXIiOiIrOTE5NjMyMTI1NTU0IiwiZGF0ZU9mQmlydGgiOiIxOTk3LzExLzExIiwiaWF0IjoxNjIzMzk1Mzc3LCJleHAiOjE2MjU5ODczNzd9.95fxNhrV6S72cKDkT5pb_qjrr_sn2X2zPXJukdfnp0g");
         editor.apply();
         editor.commit();
         session = new Session(mContext);
@@ -95,8 +98,10 @@ public class SplashScreen extends AppCompatActivity {
                 } catch (Exception ignored) {
 
                 } finally {
+//                    Intent intent = new Intent(mContext, RegisterDetails.class);
+//                    startActivity(intent);
+                    
                     if (VenderID.equals("")) {
-
                         startActivity(new Intent(mContext, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
                     }else {
@@ -320,52 +325,6 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
-    private void checkPhoneNumberApi() {
-        RequestQueue requstQueue = Volley.newRequestQueue(mContext);
-        StringRequest jsonobj = new StringRequest(Request.Method.GET, getInstance().checkPhoneNumber,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            Log.e("RESPONSE", "" + APIConstant.getInstance().checkPhoneNumber + response);
-                            JSONObject JsonMain = new JSONObject(response);
-                            String msg = JsonMain.getString("message");
-                            if (msg.equalsIgnoreCase("SUCCESS")) {
-                                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
-                            }else {
-                                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("ERROR", "" + getInstance().checkPhoneNumber + error.toString());
-                    }
-                }
-        ){
-            //here I want to post data to sever
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                String keyname=sharedPreferences.getString("KEYNAME", "");
-                String keyvalue=sharedPreferences.getString("KEYVALUE", "");
-                String accesstoken=sharedPreferences.getString("ACCESSTOKEN", "");
-                params.put("Authorization", "Bearer "+ accesstoken);
-                params.put("Content-Type", "application/json");
-                params.put(keyname, keyvalue);
-                Log.e("HEADER", "" + getInstance().checkPhoneNumber + params);
-                return params;
-            }
-        };
-        requstQueue.add(jsonobj);
-
-    }
-
     private void YUM16Api() {
         RequestQueue requstQueue = Volley.newRequestQueue(mContext);
         StringRequest jsonobj = new StringRequest(Request.Method.GET, getInstance().YUM16,
@@ -422,7 +381,7 @@ public class SplashScreen extends AppCompatActivity {
 //    editor.putString("KEYNAME", "ApiKey");
 //    editor.putString("KEYVALUE", "7164ea6006390c67a98172efb82fd007");
 //    editor.putString("NAME", dataobject.getString("name"));
-//    editor.putString("MOBILENUMBER", dataobject.getString("name"));
+//    editor.putString("MOBILENUMBER", dataobject.getString("mobilenumber"));
 //    editor.putString("VENDERID", dataobject.getString("vendorId"));
 //    editor.putString("STORENAME", dataobject.getString("storeName"));
 //    editor.putString("ADDRESS", dataobject.getString("address"));

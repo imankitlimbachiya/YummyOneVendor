@@ -224,7 +224,7 @@ public class OtpActivity extends AppCompatActivity {
         }
 
         if (!TextUtils.isEmpty(mobileNumber)) {
-            startPhoneNumberVerification("+91" + mobileNumber);
+            startPhoneNumberVerification(mobileNumber);
         } else {
             Toast.makeText(getApplicationContext(), "Technical Error #2300", Toast.LENGTH_LONG).show();
             return;
@@ -268,7 +268,7 @@ public class OtpActivity extends AppCompatActivity {
         txtResend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resendVerificationCode("+91" + mobileNumber, mResendToken);
+                resendVerificationCode(mobileNumber, mResendToken);
                 txtTimer.setVisibility(View.INVISIBLE);
                 txtResend.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), "OTP Resent", Toast.LENGTH_LONG).show();

@@ -250,6 +250,16 @@
                 android:scrollbars="none"
                 android:visibility="gone" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccent"
+                android:indeterminateTintMode="src_atop"
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/rate"
                 android:layout_width="match_parent"

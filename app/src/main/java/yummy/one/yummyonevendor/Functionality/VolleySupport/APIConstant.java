@@ -55,13 +55,22 @@ public class APIConstant {
     public final String addRestaurantDocument = BASE_URL + "/vendor/addRestaurantDocument";
     public final String addCategory = BASE_URL + "/vendor/addCategory";
     public final String addFood = BASE_URL + "/vendor/addFood";
+    public final String ADDRESTAURANTDETSILS = BASE_URL + "/vendor/addRestaurantDetails";
+    public final String getRestaurantDetails = BASE_URL + "/vendor/getRestaurantDetails";
+    public final String GETNOTIFICATION =  BASE_URL +"/vendor/getNotifications";
+    public final String GETEARNING =  BASE_URL +"/vendor/getEarnings";
+    public final String GETSETTLEMENTS =  BASE_URL +"/vendor/getSettlements";
 
     //APi GET
     public final String renewAccessToken = BASE_URL + "/auth/vendor/renewAuthToken";
     public final String cuisines =  BASE_URL +"/cuisines";
     public final String vendor =  BASE_URL +"/vendor";
-    public final String checkPhoneNumber =  BASE_URL +"/vendor/checkPhoneNumber/+919632125551";
+    public final String checkPhoneNumber =  BASE_URL +"/auth/vendor/checkPhoneNumber/";
     public final String YUM16 =  BASE_URL +"/vendor/food/YUM6";
+    public final String GETFAQ =  BASE_URL +"/vendor/getFAQs";
+    public final String GETVENDORSTATUS =  BASE_URL +"/vendor/getVendorStatus";
+    public final String GETAPPLICATIONSTATUS =  BASE_URL +"/vendor/getApplicationStatus";
+
 
     public void renewAccessTokenApi(Context mContext) {
         RequestQueue requstQueue = Volley.newRequestQueue(mContext);
@@ -105,7 +114,7 @@ public class APIConstant {
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences("UserData", mContext.MODE_PRIVATE);
                 String keyname=sharedPreferences.getString("KEYNAME", "");//Refresh-Token
                 String keyvalue=sharedPreferences.getString("KEYVALUE", "");
-                String accesstoken=sharedPreferences.getString("ACCESSTOKEN", "");
+                String accesstoken=sharedPreferences.getString("refreshToken", "");
                 params.put("Refresh-Token", accesstoken);
                // params.put("Connection", "keep-alive");
                    params.put(keyname, keyvalue);
@@ -302,5 +311,33 @@ public class APIConstant {
 //        AppController.getInstance().getRequestQueue().getCache().remove(APIConstant.getInstance().signInWithPhoneNumber);
 //        AppController.getInstance().addToRequestQueue(stringRequest, req);
 //    }
+
+//S3 Bucket
+//    private class UploadProfileAsyncTask extends AsyncTask<String, Void, String> {
+//        @Override
+//        protected String doInBackground(String... params) {
+//            // TODO Auto-generated method stub
+//            new UploadProThread().start();
+//            return null;
+//        }
+//    }
+//
+
+
+   // call function like this
+//            if (mPath != null) {
+//        if (Consts.isNetworkAvailable(Edit_ProfileActivity.this)) {
+//            //  progress.setVisibility(View.VISIBLE);
+//            dialog.show();
+//            new UploadProfileAsyncTask().execute();
+//        } else {
+//            Toast.makeText(Edit_ProfileActivity.this, R.string.networkcheck, Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+
+//
+//    accesskey secret key and bucket key tane api side thi malse and tare url bi nakhavi padase
+
 }
 
